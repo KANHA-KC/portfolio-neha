@@ -1,28 +1,32 @@
 import Link from "next/link";
-import WorkList from "@/components/work/WorkList";
-import { projectsData } from "@/data/portfolioData";
+import WorkGallery from "@/components/work/WorkGallery";
+import { getCategories, getProjects } from "@/content";
 
 export const metadata = {
   title: "Work",
-  description: "Selected UX & product design case studies by Neha Ondhia — fintech, healthtech and enterprise design systems."
+  description: "UX case studies, logo design, branding, packaging and illustration by Neha Ondhia."
 };
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const [projects, categories] = await Promise.all([getProjects(), getCategories()]);
+
   return (
     <section className="page work-page">
-      <header className="page-head">
-        <p className="eyebrow">Index — {projectsData.length} case studies</p>
+      <header className="page-head work-head">
+        <p className="eyebrow">Index — {projects.length} projects across {categories.length} disciplines</p>
         <h1 className="page-title">
-          Selected <em>work</em>
-          <sup>({String(projectsData.length).padStart(2, "0")})</sup>
+          The <em>work</em>
+          <sup>({String(projects.length).padStart(2, "0")})</sup>
         </h1>
         <p className="page-lede">
-          A handful of projects where research, systems thinking and a lot of sticky notes turned into products people
-          rely on every day.
+          Research-led product case studies alongside logos, identities and things you can hold. Pick a lens below — or
+          just wander.
         </p>
-        <span className="hand page-hand">hover a row — something peeks out ↓</span>
+        <span className="hand page-hand">tap a sticker to filter ↓</span>
       </header>
-      <WorkList />
+
+      <WorkGallery projects={projects} categories={categories} />
+
       <aside className="nda-note">
         <span className="sticker sticker--gold">psst</span>
         <p>

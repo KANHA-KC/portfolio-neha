@@ -2,9 +2,10 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import LocalTime from "@/components/LocalTime";
 import CopyEmail from "@/components/CopyEmail";
-import { site } from "@/data/portfolioData";
+import { getProfile } from "@/content";
 
-export default function Footer() {
+export default async function Footer() {
+  const site = await getProfile();
   return (
     <footer className="footer">
       <div className="footer-top">
@@ -18,7 +19,7 @@ export default function Footer() {
           (I reply within a day ✿)
         </span>
         <div className="footer-cta">
-          <CopyEmail />
+          <CopyEmail email={site.email} />
           <Link href="/contact" className="btn btn--aqua" data-cursor="say hi">
             Start a project <span aria-hidden="true">→</span>
           </Link>
@@ -44,7 +45,7 @@ export default function Footer() {
         <div>
           <p className="footer-label">Based in</p>
           <span>{site.location}</span>
-          <LocalTime prefix="Local time" />
+          <LocalTime prefix="Local time" timezone={site.timezone} />
         </div>
         <div className="footer-colophon">
           <p className="footer-label">Colophon</p>

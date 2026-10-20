@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
+import { getProfile, getProjects } from "@/content";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -25,37 +26,32 @@ const caveat = Caveat({
   display: "swap"
 });
 
-export const metadata = {
-  title: {
-    default: "Neha Ondhia — UX & Product Designer",
-    template: "%s — Neha Ondhia"
-  },
-  description:
-    "Neha Ondhia is a UX & product designer in Mumbai crafting research-led, accessible digital products across fintech, healthtech and enterprise SaaS.",
-  keywords: ["UX Designer", "Product Designer", "Design Systems", "User Research", "Accessibility", "Mumbai"],
-  authors: [{ name: "Neha Ondhia" }],
-  icons: { icon: "/brand/monogram.png" },
-  openGraph: {
-    title: "Neha Ondhia — UX & Product Designer",
-    description: "Designing human things for digital places.",
-    type: "website",
-    locale: "en_US",
-    images: ["/brand/logo.png"]
-  }
-};
+export async function generateMetadata() {
+  const p = await getProfile();
+  const title = `${p.name} — ${p.role}`;
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+    title: { default: title, template: `%s — ${p.name}` },
+    description: p.intro,
+    authors: [{ name: p.name }],
+    icons: { icon: "/brand/monogram.png" },
+    openGraph: { title, description: p.headline, type: "website", locale: "en_US", images: ["/brand/logo.png"] }
+  };
+}
 
 export const viewport = {
   themeColor: "#FCFAF6"
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const [profile, projects] = await Promise.all([getProfile(), getProjects()]);
   return (
     <html lang="en" className={`${fraunces.variable} ${jakarta.variable} ${caveat.variable}`}>
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <Preloader />
         <Cursor />
-        <Nav />
+        <Nav profile={profile} workCount={projects.length} />
         <main id="main">{children}</main>
         <Footer />
         <div className="grain" aria-hidden="true" />

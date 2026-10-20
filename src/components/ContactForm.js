@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { site } from "@/data/portfolioData";
 
-const topics = ["Product design", "UX research", "Design system", "Accessibility audit", "Something else"];
+const topics = ["Product design", "UX research", "Logo design", "Branding", "Packaging & print", "Something else"];
 
 // No backend: the form validates, then hands a pre-written message to the visitor's email app.
-export default function ContactForm() {
+export default function ContactForm({ email }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [picked, setPicked] = useState(["Product design"]);
   const [errors, setErrors] = useState({});
@@ -30,7 +29,7 @@ export default function ContactForm() {
 
     const subject = `Hello from ${form.name} — ${picked.join(", ") || "a project"}`;
     const body = `${form.message}\n\n— ${form.name} (${form.email})`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   };
 
@@ -41,7 +40,7 @@ export default function ContactForm() {
         <h2>Your email app should be opening…</h2>
         <p>
           Hit send there and I’ll reply within a day. If nothing opened, write to{" "}
-          <a className="link-underline" href={`mailto:${site.email}`}>{site.email}</a>.
+          <a className="link-underline" href={`mailto:${email}`}>{email}</a>.
         </p>
         <button type="button" className="link-underline" onClick={() => setSent(false)}>Edit message</button>
       </div>

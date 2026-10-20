@@ -109,11 +109,11 @@ function System() {
 const covers = { finance: Finance, health: Health, system: System };
 
 export default function ProjectCover({ project, className = "" }) {
-  const Cover = covers[project.cover];
+  const Cover = covers[project.illustration];
   const { wash, frame, ink, spark } = project.palette;
   return (
     <div
-      className={`pc pc--${project.cover} ${className}`}
+      className={`pc pc--${project.illustration} ${className}`}
       style={{ "--wash": wash, "--frame": frame, "--ink": ink, "--spark": spark }}
       role="img"
       aria-label={`Illustration for ${project.title}`}

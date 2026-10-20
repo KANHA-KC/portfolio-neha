@@ -4,10 +4,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { Draggable } from "gsap/Draggable";
+import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText, Draggable, useGSAP);
+  gsap.registerPlugin(ScrollTrigger, SplitText, Draggable, Flip, useGSAP);
 }
 
 export const prefersReducedMotion = () =>
@@ -24,4 +25,4 @@ export const afterIntro = (cb) => {
   return () => window.removeEventListener("intro:done", cb);
 };
 
-export { gsap, ScrollTrigger, SplitText, Draggable, useGSAP };
+export { gsap, ScrollTrigger, SplitText, Draggable, Flip, useGSAP };

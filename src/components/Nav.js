@@ -6,15 +6,15 @@ import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
 import LocalTime from "@/components/LocalTime";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { site } from "@/data/portfolioData";
 
-const links = [
-  { href: "/work", label: "Work", n: "03" },
+const baseLinks = [
+  { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
 ];
 
-export default function Nav() {
+export default function Nav({ profile, workCount = 0 }) {
+  const links = baseLinks.map((l) => (l.href === "/work" ? { ...l, n: String(workCount).padStart(2, "0") } : l));
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -61,16 +61,16 @@ export default function Nav() {
   return (
     <header className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""}`}>
       <div className="nav-inner">
-        <Link href="/" className="nav-mark" aria-label="Neha Ondhia — home" data-cursor="home">
+        <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home">
           <Logo variant="monogram" height={30} />
           <span className="nav-name">
-            Neha Ondhia
-            <em>{site.role}</em>
+            {profile.name}
+            <em>{profile.role}</em>
           </span>
         </Link>
 
         <div className="nav-time">
-          <LocalTime />
+          <LocalTime prefix={profile.location.split(",")[0]} timezone={profile.timezone} />
         </div>
 
         <nav aria-label="Main" className="nav-links">
@@ -107,13 +107,13 @@ export default function Nav() {
           ))}
         </nav>
         <div className="menu-foot">
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
           <div className="menu-socials">
-            {site.socials.map((s) => (
+            {profile.socials.map((s) => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">{s.label} ↗</a>
             ))}
           </div>
-          <LocalTime />
+          <LocalTime prefix={profile.location.split(",")[0]} timezone={profile.timezone} />
         </div>
         <Logo variant="monogram" height="40vw" className="menu-bg-mark" />
       </div>

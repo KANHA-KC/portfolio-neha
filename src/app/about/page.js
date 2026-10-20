@@ -3,36 +3,35 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Marquee from "@/components/Marquee";
 import Experience from "@/components/home/Experience";
-import { loves } from "@/data/portfolioData";
+import { getExperience, getProfile, getServices } from "@/content";
 
-export const metadata = {
-  title: "About",
-  description: "Neha Ondhia is a UX & product designer in Mumbai who designs calm, accessible products — research first, pixels second."
-};
-
-const principles = [
-  { t: "Listen before drawing", d: "The first week of any project is mostly questions. The best design decisions are hiding in what people already told you." },
-  { t: "Accessible by default", d: "Contrast, focus states and plain language aren’t a final checklist — they shape the very first sketch." },
-  { t: "Systems over screens", d: "I design the rules behind the pixels so teams can keep shipping good work long after I’ve left the room." }
-];
+export async function generateMetadata() {
+  const p = await getProfile();
+  return { title: "About", description: p.intro };
+}
 
 const tints = ["#FFF3DC", "#EDF7F4", "#FBECE6", "#E7EFF0", "#C8E8E2", "#F8CC78", "#EDA18A", "#9ED4CB"];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [profile, services, experience] = await Promise.all([getProfile(), getServices(), getExperience()]);
+  const [lead, ...rest] = profile.bio;
+  const groups = [
+    { key: "ux", title: "UX & Product", tag: "the thinking", items: services.filter((s) => s.group === "ux") },
+    { key: "brand", title: "Brand & Identity", tag: "the making", items: services.filter((s) => s.group === "brand") }
+  ];
+
   return (
     <div className="page about">
+      {/* ---- hello ---- */}
       <section className="about-hero">
         <div className="about-hero-copy">
-          <p className="eyebrow">About</p>
+          <p className="eyebrow">About — {profile.role}</p>
           <h1 className="page-title about-title">
-            Hello, I’m <em>Neha</em>
+            Hello, I’m <em>{profile.firstName}</em>
             <span className="about-wave" aria-hidden="true">✿</span>
           </h1>
-          <p className="page-lede">
-            I’m a UX & product designer based in Mumbai. I’ve spent the last few years helping fintech, healthcare and
-            enterprise teams turn tangled, high-stakes flows into products that feel calm and obvious.
-          </p>
-          <span className="hand about-hand">currently: consulting independently & always sketching</span>
+          <p className="page-lede">{profile.intro}</p>
+          <span className="hand about-hand">{profile.availability.toLowerCase()} — say hi!</span>
         </div>
 
         <div className="about-photo">
@@ -40,72 +39,118 @@ export default function AboutPage() {
           <span className="tape tape--tr" />
           <div className="about-photo-bg" aria-hidden="true" />
           <Image
-            src="/brand/neha-cutout.webp"
-            alt="Neha Ondhia smiling, wearing a camel coat, with long dark hair dipped in teal"
+            src={profile.portrait?.src || "/brand/neha-cutout.webp"}
+            alt={`${profile.name}, smiling`}
             width={653}
             height={870}
             preload
-            sizes="(max-width: 760px) 80vw, 36vw"
+            sizes="(max-width: 900px) 80vw, 36vw"
           />
           <span className="sticker sticker--gold about-sticker-a">hi there!</span>
           <span className="sticker sticker--aqua about-sticker-b">the teal is on brand</span>
         </div>
       </section>
 
-      <section className="about-story">
-        <Reveal as="p" className="story-big">
-          I started out as an <em>interaction designer</em> obsessing over the tiny moments between taps. Somewhere along
-          the way I fell for the messy, human side — interviews, card sorts, the moment someone says
-          <span className="hand"> “oh, that’s what I wanted!”</span>
-        </Reveal>
-        <div className="story-cols">
-          <Reveal as="p" delay={80}>
-            Today I lead projects end to end: framing the problem with stakeholders, running research, prototyping in
-            Figma and code, and building the design systems that keep it all consistent. I’m happiest in the gap between
-            design and engineering, where good intentions usually get lost.
-          </Reveal>
-          <Reveal as="p" delay={160}>
-            Outside of work you’ll find me hunting for hand-lettered shop signs, filling notebooks with diagrams nobody
-            asked for, and mentoring younger designers who are just finding their voice.
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="principles" aria-labelledby="pr-title">
+      {/* ---- two hats ---- */}
+      <section className="hats-section" aria-labelledby="hats-title">
         <header className="section-head">
-          <p className="eyebrow"><span className="eyebrow-num">(✦)</span> How I work</p>
-          <h2 id="pr-title" className="section-title">Three little <em>rules</em></h2>
+          <p className="eyebrow"><span className="eyebrow-num">(01)</span> What I do</p>
+          <h2 id="hats-title" className="section-title">
+            I wear <em>two hats</em>
+            <span className="hand section-hand">(sometimes at the same time)</span>
+          </h2>
         </header>
-        <div className="principle-list">
-          {principles.map((p, i) => (
-            <Reveal key={p.t} className={`principle principle--${i + 1}`} delay={i * 100}>
-              <span className="principle-n">0{i + 1}</span>
-              <h3>{p.t}</h3>
-              <p>{p.d}</p>
+        <div className="hats-big">
+          {groups.map((g, gi) => (
+            <Reveal key={g.key} className={`hat-big hat-big--${g.key}`} delay={gi * 140}>
+              <span className="hat-tag hand">{g.tag}</span>
+              <h3>{g.title}</h3>
+              <ol>
+                {g.items.map((s, i) => (
+                  <li key={s.title}>
+                    <span className="hat-n">{String(i + 1).padStart(2, "0")}</span>
+                    <div>
+                      <b>{s.title}</b>
+                      <p>{s.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <Link href={`/work#type=${g.key === "ux" ? "ux-ui" : "branding"}`} className="link-underline">
+                See {g.title.toLowerCase()} work →
+              </Link>
             </Reveal>
           ))}
+          <span className="hats-plus" aria-hidden="true">+</span>
         </div>
       </section>
 
+      {/* ---- story ---- */}
+      {lead && (
+        <section className="about-story">
+          <p className="eyebrow"><span className="eyebrow-num">(02)</span> The longer story</p>
+          <Reveal as="p" className="story-big">{lead}</Reveal>
+          {rest.length > 0 && (
+            <div className="story-cols">
+              {rest.map((para, i) => (
+                <Reveal as="p" key={i} delay={80 * (i + 1)}>{para}</Reveal>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ---- principles ---- */}
+      {profile.principles.length > 0 && (
+        <section className="principles" aria-labelledby="pr-title">
+          <header className="section-head">
+            <p className="eyebrow"><span className="eyebrow-num">(03)</span> How I work</p>
+            <h2 id="pr-title" className="section-title">A few little <em>rules</em></h2>
+          </header>
+          <div className="principle-list">
+            {profile.principles.map((p, i) => (
+              <Reveal key={p.title} className={`principle principle--${(i % 3) + 1}`} delay={i * 100}>
+                <span className="principle-n">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{p.title}</h3>
+                <p>{p.description}</p>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="tilt-band tilt-band--paprika">
-        <Marquee reverse items={["Research", "Empathy", "Systems", "Clarity", "Kindness", "Craft"]} />
+        <Marquee reverse items={["Research", "Empathy", "Logos", "Systems", "Clarity", "Kindness", "Craft"]} />
       </div>
 
-      <section className="loves" aria-labelledby="loves-title">
-        <h2 id="loves-title" className="section-title">
-          Things I <em>love</em>
-          <span className="hand section-hand">in no particular order</span>
-        </h2>
-        <ul className="loves-cloud">
-          {loves.map((l, i) => (
-            <li key={l} style={{ "--bg": tints[i % tints.length], "--r": `${(i % 2 ? 1 : -1) * (2 + (i % 4))}deg` }}>
-              {l}
-            </li>
-          ))}
-        </ul>
+      {/* ---- toolbox + loves ---- */}
+      <section className="desk" aria-label="Tools and things I love">
+        {profile.tools.length > 0 && (
+          <div className="desk-tools">
+            <h2 className="section-title">My <em>toolbox</em></h2>
+            <ul className="tool-list">
+              {profile.tools.map((t, i) => (
+                <li key={t} style={{ "--r": `${((i * 37) % 9) - 4}deg` }}>{t}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {profile.loves.length > 0 && (
+          <div className="loves">
+            <h2 className="section-title">
+              Things I <em>love</em>
+              <span className="hand section-hand">in no particular order</span>
+            </h2>
+            <ul className="loves-cloud">
+              {profile.loves.map((l, i) => (
+                <li key={l} style={{ "--bg": tints[i % tints.length], "--r": `${(i % 2 ? 1 : -1) * (2 + (i % 4))}deg` }}>{l}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
-      <Experience id="about-exp-title" />
+      <Experience items={experience} id="about-exp-title" num="(04)" />
 
       <section className="about-cta">
         <p className="hand">Still reading? Let’s just talk.</p>

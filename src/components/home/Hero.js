@@ -4,9 +4,10 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import Emph from "@/components/Emph";
 import { gsap, useGSAP, afterIntro, prefersReducedMotion } from "@/lib/gsap";
 
-export default function Hero() {
+export default function Hero({ profile }) {
   const root = useRef(null);
 
   useGSAP(
@@ -68,18 +69,18 @@ export default function Hero() {
 
   return (
     <section ref={root} className="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title" className="sr-only">Neha Ondhia — UX & Product Designer</h1>
+      <h1 id="hero-title" className="sr-only">{profile.name} — {profile.role}</h1>
 
       <p className="hero-kicker hero-fade">
-        <span className="dot" aria-hidden="true" /> Portfolio — UX & Product Design
+        <span className="dot" aria-hidden="true" /> Portfolio — {profile.role}
       </p>
 
       <div className="hero-stage" aria-hidden="true">
         <div className="hero-word hero-word--a">
-          <span data-depth="-14">{split("neha")}</span>
+          <span data-depth="-14">{split(profile.firstName.toLowerCase())}</span>
         </div>
         <div className="hero-word hero-word--b">
-          <span data-depth="-22">{split("ondhia")}</span>
+          <span data-depth="-22">{split(profile.lastName.toLowerCase())}</span>
         </div>
 
         <div className="hero-cutout-wrap" data-depth="18">
@@ -87,7 +88,7 @@ export default function Hero() {
             <span className="tape tape--tl" />
             <span className="tape tape--br" />
             <Image
-              src="/brand/neha-cutout.webp"
+              src={profile.portrait?.src || "/brand/neha-cutout.webp"}
               alt=""
               width={653}
               height={870}
@@ -119,7 +120,7 @@ export default function Hero() {
           </svg>
         </div>
 
-        <span className="sticker sticker--gold hero-pop" data-rot="-8" data-depth="40">UX × UI</span>
+        <span className="sticker sticker--gold hero-pop" data-rot="-8" data-depth="40">UX × Brand</span>
         <span className="sticker sticker--paprika hero-pop" data-rot="7" data-depth="34">research first ✿</span>
         <span className="blob blob--aqua hero-pop" data-rot="0" data-depth="12" />
         <span className="star hero-pop" data-rot="12" data-depth="46">✦</span>
@@ -131,8 +132,7 @@ export default function Hero() {
 
       <div className="hero-copy">
         <p className="hero-lede hero-fade">
-          Hi, I’m <strong>Neha</strong> — a UX & product designer in Mumbai. I make complicated things feel{" "}
-          <em>calm</em> for people in fintech, health & enterprise software.
+          Hi, I’m <strong>{profile.firstName}</strong> — <Emph text={profile.heroIntro} />
         </p>
         <div className="hero-actions hero-fade">
           <Link href="/work" className="btn btn--teal" data-cursor="peek">
@@ -143,7 +143,7 @@ export default function Hero() {
       </div>
 
       <div className="hero-meta hero-fade">
-        <span><span className="pulse" aria-hidden="true" /> Available for select projects</span>
+        <span><span className="pulse" aria-hidden="true" /> {profile.availability}</span>
         <span className="hero-scroll" aria-hidden="true">scroll <i /></span>
       </div>
     </section>

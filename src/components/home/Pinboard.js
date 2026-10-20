@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { gsap, useGSAP, Draggable, prefersReducedMotion } from "@/lib/gsap";
-import { expertiseData } from "@/data/portfolioData";
 
 // Starting spots on the board (percentages) and tilts.
 const spots = [
@@ -11,10 +10,13 @@ const spots = [
   { x: 58, y: 10, r: -3 },
   { x: 12, y: 52, r: 5 },
   { x: 42, y: 48, r: -5 },
-  { x: 70, y: 54, r: 3 }
+  { x: 70, y: 54, r: 3 },
+  { x: 76, y: 4, r: 6 },
+  { x: 24, y: 70, r: -2 }
 ];
+const tints = ["#FFF3DC", "#EDF7F4", "#FBECE6", "#E7EFF0", "#C8E8E2", "#F8CC78", "#EDA18A", "#9ED4CB"];
 
-export default function Pinboard() {
+export default function Pinboard({ services }) {
   const root = useRef(null);
   const [moved, setMoved] = useState(0);
 
@@ -61,7 +63,7 @@ export default function Pinboard() {
       <header className="section-head section-head--split">
         <div>
           <p className="eyebrow">
-            <span className="eyebrow-num">(03)</span> What I bring
+            <span className="eyebrow-num">(04)</span> What I bring
           </p>
           <h2 id="pin-title" className="section-title">
             A tidy-ish <em>toolkit</em>
@@ -73,20 +75,23 @@ export default function Pinboard() {
       </header>
 
       <div className="board">
-        {expertiseData.map((e, i) => (
+        {services.map((e, i) => {
+          const spot = spots[i % spots.length];
+          return (
           <div
             key={e.title}
             className="note"
             data-cursor="drag"
-            style={{ "--x": `${spots[i].x}%`, "--y": `${spots[i].y}%`, "--r": `${spots[i].r}deg`, "--bg": e.color }}
+            style={{ "--x": `${spot.x}%`, "--y": `${spot.y}%`, "--r": `${spot.r}deg`, "--bg": tints[i % tints.length] }}
           >
             <span className="pin" aria-hidden="true" />
-            <span className="note-num">0{i + 1}</span>
+            <span className="note-num">{String(i + 1).padStart(2, "0")} · {e.group === "brand" ? "brand" : "ux"}</span>
             <h3>{e.title}</h3>
-            <p>{e.desc}</p>
+            <p>{e.description}</p>
           </div>
-        ))}
-        <span className="board-doodle hand" aria-hidden="true">✎ plus: workshops, mentoring & a lot of sticky notes</span>
+          );
+        })}
+        <span className="board-doodle hand" aria-hidden="true">✎ plus: workshops, mentoring & a lot of sketchbooks</span>
       </div>
     </section>
   );

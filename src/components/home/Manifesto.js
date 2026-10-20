@@ -2,9 +2,10 @@
 
 import { useRef } from "react";
 import Logo from "@/components/Logo";
+import Emph from "@/components/Emph";
 import { gsap, useGSAP, SplitText, prefersReducedMotion } from "@/lib/gsap";
 
-export default function Manifesto() {
+export default function Manifesto({ text }) {
   const root = useRef(null);
 
   useGSAP(
@@ -40,9 +41,7 @@ export default function Manifesto() {
         <span className="eyebrow-num">(01)</span> The short version
       </p>
       <p className="manifesto-text">
-        I believe good interfaces behave like a <em>kind friend</em> — they listen first, explain things gently, and
-        never make you feel lost. I turn research into calm, accessible products that people actually <em>enjoy</em>{" "}
-        using, and design systems that teams enjoy building.
+        <Emph text={text} />
       </p>
       <span className="mf-pop mf-pop--a" aria-hidden="true"><Logo variant="monogram" height={28} color="#fff" /></span>
       <span className="mf-pop mf-pop--b hand" aria-hidden="true">since 2018</span>
