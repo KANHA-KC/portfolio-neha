@@ -112,11 +112,11 @@ export default function Hero({ profile }) {
           <Logo variant="monogram" height={34} color="var(--teal)" className="hero-badge-mark" />
         </div>
 
-        <div className="hero-note hero-pop" data-rot="-6" data-depth="26">
+        <div className="hero-note hero-pop" data-rot="-4" data-depth="26">
           <span className="hand">that’s me!</span>
           <span className="hand hand--sm">(the teal hair is a design decision)</span>
-          <svg className="draw hero-arrow" viewBox="0 0 120 90">
-            <path pathLength="1" d="M8 8 C 40 4, 80 18, 92 52 S 88 80, 70 84 M70 84 L 84 70 M70 84 L 88 88" />
+          <svg className="draw hero-arrow" viewBox="0 0 100 70">
+            <path pathLength="1" d="M8 55 C 32 55, 60 42, 82 16 M82 16 L 68 15 M82 16 L 79 28" />
           </svg>
         </div>
 

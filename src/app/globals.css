@@ -800,8 +800,8 @@ em {
 .hero-note {
   position: absolute;
   z-index: 4;
-  left: max(var(--g), calc(50% - min(38vw, 64svh) * 0.42 - 250px));
-  top: 44%;
+  left: max(var(--g), calc(50% - min(38vw, 64svh) * 0.42 - 165px));
+  top: 54%;
   display: grid;
   justify-items: end;
   color: var(--teal);
@@ -818,9 +818,9 @@ em {
   margin-top: 2px;
 }
 .hero-arrow {
-  width: 86px;
-  margin-right: -64px;
-  margin-top: -6px;
+  width: 82px;
+  margin-right: -42px;
+  margin-top: -2px;
 }
 .draw path {
   fill: none;
