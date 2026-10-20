@@ -681,9 +681,10 @@ em {
   position: absolute;
   width: 46vw;
   aspect-ratio: 1;
-  left: 65%;
+  right: 0;
+  left: auto;
   top: 54%;
-  translate: -40% -50%;
+  translate: 0 -50%;
   background: radial-gradient(closest-side, var(--light-aqua), rgba(200, 232, 226, 0) 70%);
   z-index: -1;
 }
@@ -754,10 +755,11 @@ em {
 .hero-cutout-wrap {
   position: absolute;
   z-index: 2;
-  left: 65%;
+  right: calc(var(--g) + 1vw);
+  left: auto;
   bottom: -2%;
   width: min(38vw, 64svh);
-  translate: -42% 0;
+  translate: 0 0;
 }
 .hero-cutout {
   position: relative;
@@ -853,8 +855,9 @@ em {
   translate: -50% -50%;
 }
 .hero-stage .sticker--paprika {
-  right: 3%;
-  top: 52%;
+  left: 54%;
+  right: auto;
+  top: 48%;
 }
 .blob {
   position: absolute;
