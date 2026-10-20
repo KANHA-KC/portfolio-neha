@@ -71,10 +71,6 @@ export default function Hero({ profile }) {
     <section ref={root} className="hero" aria-labelledby="hero-title">
       <h1 id="hero-title" className="sr-only">{profile.name} — {profile.role}</h1>
 
-      <p className="hero-kicker hero-fade">
-        <span className="dot" aria-hidden="true" /> Portfolio — {profile.role}
-      </p>
-
       <div className="hero-stage" aria-hidden="true">
         <div className="hero-word hero-word--a">
           <span data-depth="-14">{split(profile.firstName.toLowerCase())}</span>
@@ -96,31 +92,18 @@ export default function Hero({ profile }) {
               sizes="(max-width: 760px) 70vw, 34vw"
               className="hero-img"
             />
+            <span className="sticker sticker--gold hero-pop" data-rot="-8">UX × Brand</span>
           </div>
         </div>
 
-        {/* Collage bits */}
-        <div className="hero-badge hero-pop" data-rot="0" data-depth="30">
-          <svg viewBox="0 0 200 200">
-            <defs>
-              <path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
-            </defs>
-            <text>
-              <textPath href="#circ" textLength="486" lengthAdjust="spacing">designing human things ✦ for digital places ✦ </textPath>
-            </text>
-          </svg>
-          <Logo variant="monogram" height={34} color="var(--teal)" className="hero-badge-mark" />
-        </div>
-
-        <div className="hero-note hero-pop" data-rot="-4" data-depth="26">
+        <div className="hero-note hero-pop" data-rot="3" data-depth="26">
           <span className="hand">that’s me!</span>
           <span className="hand hand--sm">(the teal hair is a design decision)</span>
           <svg className="draw hero-arrow" viewBox="0 0 100 70">
-            <path pathLength="1" d="M8 55 C 32 55, 60 42, 82 16 M82 16 L 68 15 M82 16 L 79 28" />
+            <path pathLength="1" d="M85 10 C 60 12, 35 30, 15 55 M15 55 L 30 50 M15 55 L 20 38" />
           </svg>
         </div>
 
-        <span className="sticker sticker--gold hero-pop" data-rot="-8" data-depth="40">UX × Brand</span>
         <span className="sticker sticker--paprika hero-pop" data-rot="7" data-depth="34">research first ✿</span>
         <span className="blob blob--aqua hero-pop" data-rot="0" data-depth="12" />
         <span className="star hero-pop" data-rot="12" data-depth="46">✦</span>

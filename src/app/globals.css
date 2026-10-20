@@ -681,7 +681,7 @@ em {
   position: absolute;
   width: 46vw;
   aspect-ratio: 1;
-  left: 50%;
+  left: 65%;
   top: 54%;
   translate: -40% -50%;
   background: radial-gradient(closest-side, var(--light-aqua), rgba(200, 232, 226, 0) 70%);
@@ -754,7 +754,7 @@ em {
 .hero-cutout-wrap {
   position: absolute;
   z-index: 2;
-  left: 50%;
+  left: 65%;
   bottom: -2%;
   width: min(38vw, 64svh);
   translate: -42% 0;
@@ -770,7 +770,7 @@ em {
   position: absolute;
   z-index: 4;
   right: calc(var(--g) + 2vw);
-  top: 17%;
+  top: 29%;
   width: clamp(120px, 12vw, 180px);
   aspect-ratio: 1;
   display: grid;
@@ -800,10 +800,11 @@ em {
 .hero-note {
   position: absolute;
   z-index: 4;
-  left: max(var(--g), calc(50% - min(38vw, 64svh) * 0.42 - 165px));
-  top: 54%;
+  left: auto;
+  right: calc(var(--g) + 2.5vw);
+  top: 10%;
   display: grid;
-  justify-items: end;
+  justify-items: start;
   color: var(--teal);
   width: 210px;
 }
@@ -813,14 +814,14 @@ em {
 .hero-note .hand--sm {
   font-size: 1.15rem;
   color: var(--burnt);
-  text-align: right;
+  text-align: left;
   max-width: 180px;
   margin-top: 2px;
 }
 .hero-arrow {
-  width: 82px;
-  margin-right: -42px;
-  margin-top: -2px;
+  width: 86px;
+  margin-left: -26px;
+  margin-top: 2px;
 }
 .draw path {
   fill: none;
@@ -844,13 +845,16 @@ em {
   position: absolute;
   z-index: 4;
 }
-.hero-stage .sticker--gold {
-  right: 26%;
+.hero-cutout .sticker--gold {
+  position: absolute;
+  z-index: 4;
+  left: 54%;
   top: 31%;
+  translate: -50% -50%;
 }
 .hero-stage .sticker--paprika {
-  right: 9%;
-  top: 48%;
+  right: 3%;
+  top: 52%;
 }
 .blob {
   position: absolute;
