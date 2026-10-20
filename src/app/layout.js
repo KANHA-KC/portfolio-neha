@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import { Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
@@ -6,23 +5,6 @@ import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
 import { getProfile, getProjects } from "@/content";
-
-const cralika = localFont({
-  src: [
-    {
-      path: "../fonts/Cralika.woff2",
-      weight: "400",
-      style: "normal"
-    },
-    {
-      path: "../fonts/Cralika-Italic.woff2",
-      weight: "400",
-      style: "italic"
-    }
-  ],
-  variable: "--font-cralika",
-  display: "swap"
-});
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -56,7 +38,7 @@ export const viewport = {
 export default async function RootLayout({ children }) {
   const [profile, projects] = await Promise.all([getProfile(), getProjects()]);
   return (
-    <html lang="en" className={`${cralika.variable} ${jakarta.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${jakarta.variable} ${caveat.variable}`}>
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <Preloader />
