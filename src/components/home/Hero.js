@@ -92,7 +92,8 @@ export default function Hero({ profile }) {
               sizes="(max-width: 760px) 70vw, 34vw"
               className="hero-img"
             />
-            <span className="sticker sticker--gold hero-pop" data-rot="-8">UX × Brand</span>
+            <span className="sticker sticker--gold hero-pop" data-rot="-6">UX × Brand</span>
+            <span className="sticker sticker--paprika hero-pop" data-rot="6">research first ✿</span>
           </div>
         </div>
 
@@ -104,7 +105,6 @@ export default function Hero({ profile }) {
           </svg>
         </div>
 
-        <span className="sticker sticker--paprika hero-pop" data-rot="7" data-depth="34">research first ✿</span>
         <span className="blob blob--aqua hero-pop" data-rot="0" data-depth="12" />
         <span className="star hero-pop" data-rot="12" data-depth="46">✦</span>
 

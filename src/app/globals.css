@@ -681,10 +681,9 @@ em {
   position: absolute;
   width: 46vw;
   aspect-ratio: 1;
-  right: 0;
-  left: auto;
+  left: 50%;
   top: 54%;
-  translate: 0 -50%;
+  translate: -50% -50%;
   background: radial-gradient(closest-side, var(--light-aqua), rgba(200, 232, 226, 0) 70%);
   z-index: -1;
 }
@@ -753,13 +752,14 @@ em {
   will-change: transform;
 }
 .hero-cutout-wrap {
+  --cut-w: min(36vw, 68svh);
   position: absolute;
   z-index: 2;
-  right: calc(var(--g) + 1vw);
-  left: auto;
+  /* centred in the hero; margin (not translate) so GSAP transforms can't undo it */
+  left: 50%;
+  margin-left: calc(var(--cut-w) / -2);
   bottom: -2%;
-  width: min(38vw, 64svh);
-  translate: 0 0;
+  width: var(--cut-w);
 }
 .hero-cutout {
   position: relative;
@@ -802,9 +802,10 @@ em {
 .hero-note {
   position: absolute;
   z-index: 4;
-  left: auto;
-  right: calc(var(--g) + 2.5vw);
-  top: 10%;
+  /* just right of her face; the arrow points back at her */
+  left: calc(50% + min(36vw, 68svh) * 0.3);
+  right: auto;
+  top: 16%;
   display: grid;
   justify-items: start;
   color: var(--teal);
@@ -850,14 +851,16 @@ em {
 .hero-cutout .sticker--gold {
   position: absolute;
   z-index: 4;
-  left: 54%;
-  top: 31%;
+  left: 8%;
+  top: 63%;
   translate: -50% -50%;
 }
-.hero-stage .sticker--paprika {
-  left: 54%;
-  right: auto;
-  top: 48%;
+.hero-cutout .sticker--paprika {
+  position: absolute;
+  z-index: 4;
+  left: 90%;
+  top: 49%;
+  translate: -50% -50%;
 }
 .blob {
   position: absolute;
@@ -885,7 +888,8 @@ em {
   z-index: 5;
   left: var(--g);
   bottom: 84px;
-  max-width: 400px;
+  /* stop just short of the centred photo */
+  max-width: clamp(260px, calc(50% - min(36vw, 68svh) / 2 - var(--g) - 16px), 400px);
 }
 .hero-lede {
   font-size: 1.12rem;
@@ -3430,9 +3434,8 @@ a:hover .media-icon {
     right: var(--g);
   }
   .hero-cutout-wrap {
-    width: 74vw;
+    --cut-w: 74vw;
     bottom: 0;
-    translate: -50% 0;
   }
   .hero-badge {
     width: 96px;
@@ -3447,9 +3450,10 @@ a:hover .media-icon {
     width: 40px !important;
   }
   .hero-note {
-    left: 2%;
-    top: 36%;
-    width: 140px;
+    left: auto;
+    right: 2%;
+    top: 30%;
+    width: 130px;
   }
   .hero-note .hand {
     font-size: 1.5rem;
