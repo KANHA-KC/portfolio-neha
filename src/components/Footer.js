@@ -49,7 +49,7 @@ export default async function Footer() {
         </div>
         <div className="footer-colophon">
           <p className="footer-label">Colophon</p>
-          <span>Set in Fraunces, Plus Jakarta Sans & Caveat. Built with Next.js & GSAP.</span>
+          <span>Set in Cralika, Plus Jakarta Sans & Caveat. Built with Next.js & GSAP.</span>
         </div>
       </div>
 
