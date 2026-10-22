@@ -386,6 +386,16 @@ em {
 .cursor {
   display: none;
 }
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+  html.has-cursor input:not([type="submit"]):not([type="button"]),
+  html.has-cursor textarea {
+    cursor: text !important;
+  }
+}
 .has-cursor .cursor {
   display: block;
   position: fixed;
@@ -912,20 +922,33 @@ em {
   max-width: clamp(260px, calc(50% - min(36vw, 68svh) / 2 - var(--g) - 16px), 400px);
 }
 .hero-lede {
-  font-size: 1.12rem;
+  font-size: 1.05rem;
   line-height: 1.55;
   background: rgba(252, 250, 246, 0.82);
   backdrop-filter: blur(6px);
   border-radius: var(--r-lg);
   padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
 }
 .hero-lede strong {
   color: var(--teal);
+  font-weight: 700;
 }
 .hero-lede em {
   font-family: var(--f-display);
   font-size: 1.25em;
   color: var(--pap);
+  font-style: italic;
+}
+.hero-lede .hand {
+  font-family: var(--f-hand);
+  font-size: 1.35em;
+  color: var(--burnt);
+  font-weight: 600;
+  vertical-align: -0.06em;
+  padding: 0 1px;
 }
 .hero-actions {
   display: flex;
@@ -1064,24 +1087,96 @@ em {
   display: grid;
   place-items: center;
 }
+.mf-side-wrap {
+  position: absolute;
+  right: clamp(16px, 7vw, 100px);
+  top: clamp(80px, 12vw, 150px);
+  width: 220px;
+  height: 720px;
+  pointer-events: none;
+  z-index: 3;
+}
+.mf-side-wrap .mf-pop {
+  pointer-events: auto;
+}
 .mf-pop--a {
-  right: 12%;
-  top: 22%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 190px;
+  height: 190px;
+}
+.mf-badge {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+}
+.mf-badge-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: spin 18s linear infinite;
+  transform-origin: center center;
+}
+.mf-badge-text {
+  font-family: var(--f-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--pap);
+}
+.mf-badge-circle {
   width: 84px;
   height: 84px;
   background: var(--teal);
   border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 10px 26px -6px rgba(11, 79, 94, 0.4);
   transform: rotate(-10deg);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.mf-badge:hover .mf-badge-circle {
+  transform: rotate(0deg) scale(1.06);
+  box-shadow: 0 14px 32px -6px rgba(11, 79, 94, 0.5);
+}
+.mf-line-track {
+  position: absolute;
+  top: 160px;
+  left: 30px;
+  width: 155px;
+  height: 490px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.mf-dashed-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 155px;
+  height: 490px;
+  display: block;
+}
+.mf-dashed-line path {
+  stroke: rgba(24, 47, 52, 0.22);
 }
 .mf-pop--b {
-  right: 6%;
-  bottom: 28%;
-  font-size: 2.4rem;
+  position: absolute;
+  top: 650px;
+  right: 8px;
+  font-size: 2.3rem;
   color: var(--ink);
   background: var(--soft-gold);
   padding: 4px 18px 8px;
   border-radius: 12px;
   transform: rotate(6deg);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
 }
 .mf-pop--c {
   left: 46%;
@@ -3516,14 +3611,11 @@ a:hover .media-icon {
   .manifesto-text {
     text-indent: 0;
   }
-  .mf-pop--a {
-    width: 60px;
-    height: 60px;
-    top: 7%;
-  }
-  .mf-pop--b {
-    font-size: 1.7rem;
-    bottom: 5%;
+  .mf-side-wrap {
+    right: 4px;
+    top: 10px;
+    transform: scale(0.5);
+    transform-origin: top right;
   }
   .mf-pop--c {
     display: none;

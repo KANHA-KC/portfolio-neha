@@ -16,9 +16,15 @@ export default function Cursor() {
     const xTo = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3" });
     const yTo = gsap.quickTo(el, "y", { duration: 0.45, ease: "power3" });
 
+    let hasMoved = false;
     const move = (e) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
+      if (!hasMoved) {
+        gsap.set(el, { x: e.clientX, y: e.clientY });
+        hasMoved = true;
+      } else {
+        xTo(e.clientX);
+        yTo(e.clientY);
+      }
       const target = e.target.closest?.("[data-cursor], a, button, input, textarea, label");
       const label = target?.getAttribute("data-cursor");
       if (label && label !== "home") {
@@ -30,7 +36,10 @@ export default function Cursor() {
         el.dataset.state = "";
       }
     };
-    const leave = () => (el.dataset.state = "gone");
+    const leave = () => {
+      el.dataset.state = "gone";
+      hasMoved = false;
+    };
     const down = () => el.classList.add("is-down");
     const up = () => el.classList.remove("is-down");
 
@@ -48,7 +57,7 @@ export default function Cursor() {
   }, []);
 
   return (
-    <div ref={ref} className="cursor" aria-hidden="true">
+    <div ref={ref} className="cursor" data-state="gone" aria-hidden="true">
       <span className="cursor-blob">
         <span ref={labelRef} className="cursor-label" />
       </span>

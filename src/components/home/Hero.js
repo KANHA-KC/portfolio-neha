@@ -114,9 +114,17 @@ export default function Hero({ profile }) {
       </div>
 
       <div className="hero-copy">
-        <p className="hero-lede hero-fade">
-          Hi, I’m <strong>{profile.firstName}</strong> — <Emph text={profile.heroIntro} />
-        </p>
+        <div className="hero-lede hero-fade">
+          <p>
+            Hi 👋, I am <strong>{profile.name || "Neha Ondhia"}</strong>.
+          </p>
+          <p>
+            A fashion designer turned self learnt <em>graphic designer</em>. I’ve worked with major Indian & global brands in the last <strong>6 years</strong>.
+          </p>
+          <p>
+            I love everything <em>fun</em>, <span className="hand">quirky</span> and <em>bright</em>. I am <em>not</em> a minimal design person.
+          </p>
+        </div>
         <div className="hero-actions hero-fade">
           <Link href="/work" className="btn btn--teal" data-cursor="peek">
             See the work <span aria-hidden="true">↘</span>
@@ -126,7 +134,11 @@ export default function Hero({ profile }) {
       </div>
 
       <div className="hero-meta hero-fade">
-        <span><span className="pulse" aria-hidden="true" /> {profile.availability}</span>
+        {profile.availability ? (
+          <span><span className="pulse" aria-hidden="true" /> {profile.availability}</span>
+        ) : (
+          <span />
+        )}
         <span className="hero-scroll" aria-hidden="true">scroll <i /></span>
       </div>
     </section>

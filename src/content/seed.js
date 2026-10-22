@@ -7,8 +7,8 @@ export const profile = {
   name: "Neha Ondhia",
   role: "UX, Brand & Visual Designer",
   headline: "Designing human things for digital places.",
-  // *asterisks* mark the words shown in italic accent colour.
-  heroIntro: "a UX & brand designer in Mumbai. I make complicated products feel *calm* — and small brands feel *unforgettable*.",
+  heroIntro:
+    "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
     "I believe good design behaves like a *kind friend* — it listens first, explains things gently, and never makes you feel lost. Whether it’s a product people *rely on* or a logo they *remember*, I start with the humans and work my way to the pixels.",
   intro:
@@ -21,7 +21,7 @@ export const profile = {
   email: "neha@nehaondhia.com",
   location: "Mumbai, India",
   timezone: "Asia/Kolkata",
-  availability: "Available for select projects",
+  // availability: "Available for select projects",
   portrait: "/brand/neha-cutout.webp",
   socials: ["LinkedIn | https://linkedin.com/in/nehaondhia", "Dribbble | https://dribbble.com/nehaondhia"],
   principles: [
