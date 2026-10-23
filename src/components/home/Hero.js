@@ -81,8 +81,6 @@ export default function Hero({ profile }) {
 
         <div className="hero-cutout-wrap" data-depth="18">
           <div className="hero-cutout">
-            <span className="tape tape--tl" />
-            <span className="tape tape--br" />
             <Image
               src={profile.portrait?.src || "/brand/neha-cutout.webp"}
               alt=""
@@ -92,8 +90,9 @@ export default function Hero({ profile }) {
               sizes="(max-width: 760px) 70vw, 34vw"
               className="hero-img"
             />
-            <span className="sticker sticker--gold hero-pop" data-rot="-6">UX × Brand</span>
-            <span className="sticker sticker--paprika hero-pop" data-rot="6">research first ✿</span>
+            <span className="sticker sticker--gold hero-pop" data-rot="-6">Branding</span>
+            <span className="sticker sticker--paprika hero-pop" data-rot="6">Illustration</span>
+            <span className="sticker sticker--aqua hero-pop" data-rot="-4">AI</span>
           </div>
         </div>
 
@@ -105,7 +104,6 @@ export default function Hero({ profile }) {
           </svg>
         </div>
 
-        <span className="blob blob--aqua hero-pop" data-rot="0" data-depth="12" />
         <span className="star hero-pop" data-rot="12" data-depth="46">✦</span>
 
         <svg className="draw hero-squiggle" viewBox="0 0 300 60">
@@ -126,7 +124,7 @@ export default function Hero({ profile }) {
           </p>
         </div>
         <div className="hero-actions hero-fade">
-          <Link href="/work" className="btn btn--teal" data-cursor="peek">
+          <Link href="/work" className="btn btn--aqua" data-cursor="peek">
             See the work <span aria-hidden="true">↘</span>
           </Link>
           <Link href="/about" className="link-underline">More about me</Link>

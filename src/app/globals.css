@@ -412,7 +412,8 @@ em {
   height: 12px;
   margin: -6px 0 0 -6px;
   border-radius: 50%;
-  background: var(--teal);
+  /* paprika reads on both the cream pages and the teal hero */
+  background: var(--pap);
   display: grid;
   place-items: center;
   transition: width 0.45s var(--ease), height 0.45s var(--ease), margin 0.45s var(--ease), background 0.3s, opacity 0.3s;
@@ -524,6 +525,29 @@ em {
   border-bottom: 1px solid rgba(214, 225, 222, 0.7);
   opacity: 0;
   transition: opacity 0.4s;
+}
+.nav--on-dark .nav-mark,
+.nav--on-dark .nav-name,
+.nav--on-dark .nav-link {
+  color: var(--canvas);
+}
+.nav--on-dark .nav-link sup {
+  color: var(--soft-gold);
+}
+.nav--on-dark .nav-name em,
+.nav--on-dark .nav-time {
+  color: var(--pearl);
+}
+.nav--on-dark .nav-link:not(.is-active):hover {
+  background: rgba(158, 212, 203, 0.18);
+}
+.nav--on-dark .nav-link.is-active {
+  background: var(--canvas);
+  color: var(--teal);
+}
+.nav--on-dark .menu-btn:not(.is-open) {
+  background: var(--pearl);
+  color: var(--ink);
 }
 .nav.is-scrolled::before {
   opacity: 1;
@@ -700,21 +724,25 @@ em {
 /* ---------- hero ---------- */
 .hero {
   position: relative;
-  min-height: max(100svh, 680px);
+  /* a little shorter than the screen so the marquee band peeks in at the bottom */
+  min-height: max(calc(100svh - 40px), 660px);
   padding: 104px var(--g) 28px;
   overflow: clip;
   isolation: isolate;
 }
+.hero {
+  background: var(--teal);
+  color: var(--mist);
+}
 .hero::before {
-  /* soft aqua puddle behind her */
+  /* soft light behind her + faint dot texture so the teal isn't flat */
   content: "";
   position: absolute;
-  width: 46vw;
-  aspect-ratio: 1;
-  left: 50%;
-  top: 54%;
-  translate: -50% -50%;
-  background: radial-gradient(closest-side, var(--light-aqua), rgba(200, 232, 226, 0) 70%);
+  inset: 0;
+  background:
+    radial-gradient(38% 55% at 50% 58%, rgba(158, 212, 203, 0.28), transparent 70%),
+    radial-gradient(45% 50% at 100% 0%, rgba(6, 54, 65, 0.7), transparent 70%),
+    radial-gradient(circle at 1px 1px, rgba(158, 212, 203, 0.14) 1.2px, transparent 1.6px) 0 0 / 22px 22px;
   z-index: -1;
 }
 .hero-kicker {
@@ -745,7 +773,7 @@ em {
   font-weight: 500;
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   line-height: 0.78;
-  letter-spacing: -0.055em;
+  letter-spacing: 0.03em;
   white-space: nowrap;
   user-select: none;
 }
@@ -753,21 +781,21 @@ em {
   display: inline-block;
 }
 .hero-word--a {
-  font-size: clamp(120px, 24vw, 400px);
-  color: var(--teal);
+  font-size: clamp(96px, 17vw, 280px);
+  color: var(--canvas);
   left: calc(var(--g) - 0.04em);
   top: 15%;
   z-index: 1;
 }
 .hero-word--b {
-  font-size: clamp(100px, 19vw, 330px);
+  font-size: clamp(80px, 14vw, 230px);
   font-style: italic;
   font-weight: 400;
   right: calc(var(--g) - 0.04em);
   bottom: 13%;
   z-index: 3;
   color: transparent;
-  -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--pap);
+  -webkit-text-stroke: clamp(2px, 0.22vw, 3.5px) var(--gold);
 }
 .ch-mask {
   display: inline-block;
@@ -796,7 +824,7 @@ em {
 }
 .hero-img {
   width: 100%;
-  filter: drop-shadow(0 30px 40px rgba(6, 54, 65, 0.25));
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.35));
 }
 .hero-badge {
   position: absolute;
@@ -832,6 +860,7 @@ em {
 .hero-note {
   position: absolute;
   z-index: 4;
+  color: var(--canvas) !important;
   /* just right of her face; the arrow points back at her */
   left: calc(50% + min(36vw, 68svh) * 0.3);
   right: auto;
@@ -842,11 +871,11 @@ em {
   width: 210px;
 }
 .hero-note .hand {
-  font-size: 2.1rem;
+  font-size: 1.7rem;
 }
 .hero-note .hand--sm {
-  font-size: 1.15rem;
-  color: var(--burnt);
+  font-size: 0.95rem;
+  color: var(--soft-gold);
   text-align: left;
   max-width: 180px;
   margin-top: 2px;
@@ -878,6 +907,11 @@ em {
   position: absolute;
   z-index: 4;
 }
+.hero-cutout .sticker {
+  width: max-content;
+  font-size: 0.72rem;
+  padding: 6px 13px;
+}
 .hero-cutout .sticker--gold {
   position: absolute;
   z-index: 4;
@@ -890,6 +924,13 @@ em {
   z-index: 4;
   left: 90%;
   top: 49%;
+  translate: -50% -50%;
+}
+.hero-cutout .sticker--aqua {
+  position: absolute;
+  z-index: 4;
+  left: 16%;
+  top: 36%;
   translate: -50% -50%;
 }
 .blob {
@@ -917,35 +958,33 @@ em {
   position: absolute;
   z-index: 5;
   left: var(--g);
-  bottom: 84px;
+  bottom: 108px;
   /* stop just short of the centred photo */
-  max-width: clamp(260px, calc(50% - min(36vw, 68svh) / 2 - var(--g) - 16px), 400px);
+  max-width: clamp(260px, calc(50% - min(36vw, 68svh) / 2 - var(--g) - 16px), 360px);
 }
 .hero-lede {
-  font-size: 1.05rem;
-  line-height: 1.55;
-  background: rgba(252, 250, 246, 0.82);
-  backdrop-filter: blur(6px);
-  border-radius: var(--r-lg);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--mist);
   padding: 4px 0;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 .hero-lede strong {
-  color: var(--teal);
+  color: var(--canvas);
   font-weight: 700;
 }
 .hero-lede em {
   font-family: var(--f-display);
-  font-size: 1.25em;
-  color: var(--pap);
+  font-size: 1.15em;
+  color: var(--gold);
   font-style: italic;
 }
 .hero-lede .hand {
   font-family: var(--f-hand);
-  font-size: 1.35em;
-  color: var(--burnt);
+  font-size: 1.25em;
+  color: var(--gold);
   font-weight: 600;
   vertical-align: -0.06em;
   padding: 0 1px;
@@ -962,12 +1001,15 @@ em {
   z-index: 5;
   left: var(--g);
   right: var(--g);
-  bottom: 24px;
+  bottom: 52px;
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--muted);
+  color: var(--pearl);
+}
+.hero .link-underline {
+  color: var(--soft-gold);
 }
 .hero-scroll {
   display: inline-flex;
@@ -979,7 +1021,7 @@ em {
 .hero-scroll i {
   width: 1.5px;
   height: 30px;
-  background: var(--line);
+  background: rgba(158, 212, 203, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -987,7 +1029,7 @@ em {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--teal);
+  background: var(--gold);
   animation: scrollhint 1.8s var(--ease) infinite;
 }
 @keyframes scrollhint {
@@ -1001,11 +1043,11 @@ em {
 
 /* ---------- marquee band ---------- */
 .tilt-band {
-  background: var(--teal);
-  color: var(--canvas);
+  background: var(--gold);
+  color: var(--teal-0);
   transform: rotate(-2deg);
-  margin: 0 -4vw;
-  padding: 18px 0;
+  margin: -34px -4vw 0;
+  padding: 8px 0;
   position: relative;
   z-index: 6;
   box-shadow: 0 20px 40px -30px rgba(6, 54, 65, 0.8);
@@ -1034,7 +1076,7 @@ em {
   font-family: var(--f-display);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-style: italic;
-  font-size: clamp(1.6rem, 3.6vw, 3rem);
+  font-size: clamp(1.1rem, 2vw, 1.75rem);
   line-height: 1.2;
   padding-right: 0.6em;
   display: inline-flex;
@@ -1046,6 +1088,9 @@ em {
   font-style: normal;
   font-size: 0.6em;
   color: var(--gold);
+}
+.tilt-band .marquee-sep {
+  color: var(--pap);
 }
 .tilt-band--paprika .marquee-sep {
   color: var(--soft-gold);
@@ -3539,18 +3584,31 @@ a:hover .media-icon {
     top: 40%;
   }
   .hero-word--a {
-    font-size: 33vw;
+    font-size: 28vw;
     top: 2%;
     left: var(--g);
   }
   .hero-word--b {
-    font-size: 26vw;
+    font-size: 22vw;
     bottom: 10%;
     right: var(--g);
   }
   .hero-cutout-wrap {
     --cut-w: 74vw;
     bottom: 0;
+  }
+  /* the note sits on the teal on phones, so it switches to light ink */
+  .hero-note {
+    color: var(--canvas);
+  }
+  .hero-note .hand--sm {
+    color: var(--soft-gold);
+  }
+  .hero-cutout .sticker--paprika {
+    left: 68%;
+  }
+  .hero {
+    padding-bottom: 60px;
   }
   .hero-badge {
     width: 96px;

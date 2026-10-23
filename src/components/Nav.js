@@ -56,10 +56,13 @@ export default function Nav({ profile, workCount = 0 }) {
     setOpen(false);
   }
 
+  // The home hero is teal, so the bar uses light ink until it gets its cream background on scroll.
+  const onDark = pathname === "/" && !scrolled && !open;
+
   const isActive = (href) => pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <header className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""}`}>
+    <header className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""} ${onDark ? "nav--on-dark" : ""}`}>
       <div className="nav-inner">
         <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home">
           <Logo variant="monogram" height={30} />
