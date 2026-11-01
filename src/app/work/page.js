@@ -1,18 +1,29 @@
 import Link from "next/link";
 import WorkGallery from "@/components/work/WorkGallery";
-import { getCategories, getProjects } from "@/content";
+import DisciplineLinks from "@/components/work/DisciplineLinks";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import JsonLd from "@/components/JsonLd";
+import { getCategories, getProfile, getProjects } from "@/content";
+import { collectionSchema } from "@/lib/seo";
 
-export const metadata = {
-  title: "Work",
-  description: "UX case studies, logo design, branding, packaging and illustration by Neha Ondhia."
-};
+export async function generateMetadata() {
+  const p = await getProfile();
+  const description = `Portfolio of ${p.name}: UX case studies, logo design, brand identity, packaging and illustration work for Indian and global brands.`;
+  return {
+    title: "Work — UX, Logo & Brand Design Portfolio",
+    description,
+    alternates: { canonical: "/work" },
+    openGraph: { title: `Work — ${p.name}`, description, url: "/work" }
+  };
+}
 
 export default async function WorkPage() {
-  const [projects, categories] = await Promise.all([getProjects(), getCategories()]);
+  const [projects, categories, profile] = await Promise.all([getProjects(), getCategories(), getProfile()]);
 
   return (
     <section className="page work-page">
       <header className="page-head work-head">
+        <Breadcrumbs items={[{ name: "Work", href: "/work" }]} />
         <p className="eyebrow">Index — {projects.length} projects across {categories.length} disciplines</p>
         <h1 className="page-title">
           The <em>work</em>
@@ -27,6 +38,10 @@ export default async function WorkPage() {
 
       <WorkGallery projects={projects} categories={categories} />
 
+      <div className="cat-foot">
+        <DisciplineLinks categories={categories} />
+      </div>
+
       <aside className="nda-note">
         <span className="sticker sticker--gold">psst</span>
         <p>
@@ -34,6 +49,14 @@ export default async function WorkPage() {
           <Link href="/contact" className="link-underline">just ask</Link>.
         </p>
       </aside>
+      <JsonLd
+        data={collectionSchema({
+          name: `Work — ${profile.name}`,
+          description: "UX case studies, logo design, branding, packaging and illustration.",
+          path: "/work",
+          projects
+        })}
+      />
     </section>
   );
 }

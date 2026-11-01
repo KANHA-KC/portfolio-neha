@@ -2,10 +2,11 @@ import Link from "next/link";
 import Logo from "@/components/Logo";
 import LocalTime from "@/components/LocalTime";
 import CopyEmail from "@/components/CopyEmail";
-import { getProfile } from "@/content";
+import { getCategories, getProfile } from "@/content";
+import { categoryPath } from "@/lib/seo";
 
 export default async function Footer() {
-  const site = await getProfile();
+  const [site, categories] = await Promise.all([getProfile(), getCategories()]);
   return (
     <footer className="footer">
       <div className="footer-top">
@@ -27,13 +28,19 @@ export default async function Footer() {
       </div>
 
       <div className="footer-grid">
-        <div>
+        <nav aria-label="Footer">
           <p className="footer-label">Pages</p>
           <Link href="/">Home</Link>
           <Link href="/work">Work</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
-        </div>
+        </nav>
+        <nav aria-label="Disciplines">
+          <p className="footer-label">Disciplines</p>
+          {categories.map((c) => (
+            <Link key={c.slug} href={categoryPath(c.slug)}>{c.title}</Link>
+          ))}
+        </nav>
         <div>
           <p className="footer-label">Elsewhere</p>
           {site.socials.map((s) => (

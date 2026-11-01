@@ -3,11 +3,19 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Marquee from "@/components/Marquee";
 import Experience from "@/components/home/Experience";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import JsonLd from "@/components/JsonLd";
+import { absolute, categoryPath } from "@/lib/seo";
 import { getExperience, getProfile, getServices } from "@/content";
 
 export async function generateMetadata() {
   const p = await getProfile();
-  return { title: "About", description: p.intro };
+  return {
+    title: { absolute: `About ${p.name} — ${p.role}` },
+    description: p.intro,
+    alternates: { canonical: "/about" },
+    openGraph: { title: `About ${p.name}`, description: p.intro, url: "/about", type: "profile" }
+  };
 }
 
 const tints = ["#FFF3DC", "#EDF7F4", "#FBECE6", "#E7EFF0", "#C8E8E2", "#F8CC78", "#EDA18A", "#9ED4CB"];
@@ -25,6 +33,7 @@ export default async function AboutPage() {
       {/* ---- hello ---- */}
       <section className="about-hero">
         <div className="about-hero-copy">
+          <Breadcrumbs items={[{ name: "About", href: "/about" }]} />
           <p className="eyebrow">About — {profile.role}</p>
           <h1 className="page-title about-title">
             Hello, I’m <em>{profile.firstName}</em>
@@ -76,7 +85,7 @@ export default async function AboutPage() {
                   </li>
                 ))}
               </ol>
-              <Link href={`/work#type=${g.key === "ux" ? "ux-ui" : "branding"}`} className="link-underline">
+              <Link href={categoryPath(g.key === "ux" ? "ux-ui" : "branding")} className="link-underline">
                 See {g.title.toLowerCase()} work →
               </Link>
             </Reveal>
@@ -158,6 +167,8 @@ export default async function AboutPage() {
           Say hello <span aria-hidden="true">→</span>
         </Link>
       </section>
+
+      <JsonLd data={{ "@type": "ProfilePage", url: absolute("/about"), name: `About ${profile.name}`, mainEntity: { "@id": absolute("/#person") } }} />
     </div>
   );
 }

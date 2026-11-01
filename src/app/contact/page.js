@@ -1,18 +1,28 @@
 import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
 import LocalTime from "@/components/LocalTime";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import JsonLd from "@/components/JsonLd";
 import { getProfile } from "@/content";
+import { absolute } from "@/lib/seo";
 
-export const metadata = {
-  title: "Contact",
-  description: "Get in touch with Neha Ondhia for UX & product design projects, consulting and collaborations."
-};
+export async function generateMetadata() {
+  const p = await getProfile();
+  const description = `Hire ${p.name} for UX, logo design, branding and graphic design projects. Based in ${p.location}, working worldwide.`;
+  return {
+    title: "Contact — Hire a UX & Brand Designer",
+    description,
+    alternates: { canonical: "/contact" },
+    openGraph: { title: `Contact ${p.name}`, description, url: "/contact" }
+  };
+}
 
 export default async function ContactPage() {
   const site = await getProfile();
   return (
     <div className="page contact">
       <section className="contact-head">
+        <Breadcrumbs items={[{ name: "Contact", href: "/contact" }]} />
         <p className="eyebrow">Contact</p>
         <h1 className="page-title contact-title">
           Say <em>hi</em>
@@ -47,6 +57,7 @@ export default async function ContactPage() {
           </div>
         </aside>
       </div>
+      <JsonLd data={{ "@type": "ContactPage", url: absolute("/contact"), name: `Contact ${site.name}`, mainEntity: { "@id": absolute("/#person") } }} />
     </div>
   );
 }

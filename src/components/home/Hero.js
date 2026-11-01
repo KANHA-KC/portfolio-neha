@@ -83,7 +83,7 @@ export default function Hero({ profile }) {
           <div className="hero-cutout">
             <Image
               src={profile.portrait?.src || "/brand/neha-cutout.webp"}
-              alt=""
+              alt={`${profile.name}, ${profile.role} based in ${profile.location}`}
               width={653}
               height={870}
               preload

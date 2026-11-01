@@ -963,9 +963,10 @@ em {
   max-width: clamp(260px, calc(50% - min(36vw, 68svh) / 2 - var(--g) - 16px), 360px);
 }
 .hero-lede {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--mist);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--canvas);
   padding: 4px 0;
   display: flex;
   flex-direction: column;
@@ -977,15 +978,19 @@ em {
 }
 .hero-lede em {
   font-family: var(--f-display);
-  font-size: 1.15em;
-  color: var(--gold);
+  font-size: 1.2em;
+  /* soft gold: ~6:1 on teal (the brighter gold was ~4.3:1) */
+  color: var(--soft-gold);
   font-style: italic;
+  /* the display italic is hairline-thin; a stroke in its own colour thickens it */
+  -webkit-text-stroke: 0.4px currentColor;
+  letter-spacing: 0.01em;
 }
 .hero-lede .hand {
   font-family: var(--f-hand);
-  font-size: 1.25em;
-  color: var(--gold);
-  font-weight: 600;
+  font-size: 1.3em;
+  color: var(--soft-gold);
+  font-weight: 700;
   vertical-align: -0.06em;
   padding: 0 1px;
 }
@@ -1996,13 +2001,14 @@ em {
   max-width: var(--max);
   margin: clamp(60px, 10vw, 120px) auto 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 32px;
   padding-top: 32px;
   border-top: 1px solid rgba(158, 212, 203, 0.2);
   font-size: 0.95rem;
 }
-.footer-grid > div {
+.footer-grid > div,
+.footer-grid > nav {
   display: grid;
   gap: 8px;
   align-content: start;
@@ -2839,6 +2845,103 @@ em {
   transform: rotate(-3deg);
 }
 
+/* ---------- breadcrumbs ---------- */
+.crumbs {
+  margin-bottom: 18px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--muted);
+}
+.crumbs li + li::before {
+  content: "/";
+  margin-right: 6px;
+  opacity: 0.5;
+}
+.crumbs a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 3px;
+}
+.crumbs a:hover {
+  color: var(--deep-pap);
+}
+.crumbs [aria-current] {
+  color: var(--ink);
+}
+.case-crumbs {
+  margin-bottom: 36px;
+}
+
+/* ---------- discipline links + related work ---------- */
+.cat-foot {
+  max-width: var(--max);
+  margin: clamp(48px, 7vw, 90px) auto 0;
+  padding: 0 var(--g);
+  display: grid;
+  gap: 20px;
+}
+.disc-links {
+  display: grid;
+  gap: 12px;
+}
+.disc-links-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--deep-pap);
+}
+.disc-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.disc-chip.is-on {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+.related {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(60px, 8vw, 110px) var(--g);
+}
+.related-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.related-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.4vw, 32px);
+}
+.related-card {
+  display: grid;
+  gap: 10px;
+  background: var(--paper);
+  padding: 12px 12px 18px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  transition: transform 0.8s var(--ease);
+}
+.related-card:hover {
+  transform: translateY(-6px) rotate(-1deg);
+}
+.related-card .gcard-cat,
+.related-card .gcard-title {
+  padding: 0 6px;
+}
+
 /* ---------- media + placeholder card ---------- */
 .media {
   position: relative;
@@ -3471,6 +3574,9 @@ a:hover .media-icon {
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .related-list {
+    grid-template-columns: 1fr;
   }
   .case-block {
     grid-template-columns: 1fr;

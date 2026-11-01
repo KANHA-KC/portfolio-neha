@@ -54,7 +54,7 @@ export default function SelectedWork({ projects, categories }) {
         </div>
         <nav className="disc-index" aria-label="Browse work by discipline">
           {categories.map((c) => (
-            <Link key={c.slug} href={`/work#type=${c.slug}`} className="disc-chip" data-cursor="browse">
+            <Link key={c.slug} href={`/work/category/${c.slug}`} className="disc-chip" data-cursor="browse">
               <span aria-hidden="true">{c.icon}</span> {c.title}
               <sup>{c.count}</sup>
             </Link>

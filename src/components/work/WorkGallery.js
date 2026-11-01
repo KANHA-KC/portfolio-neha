@@ -15,7 +15,7 @@ const readHash = () => new URLSearchParams(window.location.hash.slice(1)).get("t
 // Card footprint on the wall, by format.
 const span = (p) => (p.kind === "case-study" ? "xl" : { wide: "lg", landscape: "md", portrait: "md", tall: "sm", square: "sm" }[p.aspect] || "md");
 
-export default function WorkGallery({ projects, categories }) {
+export default function WorkGallery({ projects, categories, showFilters = true }) {
   const root = useRef(null);
   const flipState = useRef(null);
   const active = useSyncExternalStore(subscribe, readHash, () => "all");
@@ -55,26 +55,30 @@ export default function WorkGallery({ projects, categories }) {
 
   return (
     <div ref={root} className="gallery">
-      <div className="filters" role="toolbar" aria-label="Filter work by discipline">
-        <button type="button" className={`filter ${filter === "all" ? "is-on" : ""}`} aria-pressed={filter === "all"} onClick={() => choose("all")}>
-          Everything <sup>{projects.length}</sup>
-        </button>
-        {categories.map((c) => (
-          <button
-            key={c.slug}
-            type="button"
-            className={`filter ${filter === c.slug ? "is-on" : ""}`}
-            aria-pressed={filter === c.slug}
-            onClick={() => choose(c.slug)}
-          >
-            <span aria-hidden="true">{c.icon}</span> {c.title} <sup>{c.count}</sup>
-          </button>
-        ))}
-      </div>
+      {showFilters && (
+        <>
+          <div className="filters" role="toolbar" aria-label="Filter work by discipline">
+            <button type="button" className={`filter ${filter === "all" ? "is-on" : ""}`} aria-pressed={filter === "all"} onClick={() => choose("all")}>
+              Everything <sup>{projects.length}</sup>
+            </button>
+            {categories.map((c) => (
+              <button
+                key={c.slug}
+                type="button"
+                className={`filter ${filter === c.slug ? "is-on" : ""}`}
+                aria-pressed={filter === c.slug}
+                onClick={() => choose(c.slug)}
+              >
+                <span aria-hidden="true">{c.icon}</span> {c.title} <sup>{c.count}</sup>
+              </button>
+            ))}
+          </div>
 
-      <p className="filter-desc hand" aria-live="polite">
-        {current ? current.description : "everything, in no particular order (okay, a little order)"}
-      </p>
+          <p className="filter-desc hand" aria-live="polite">
+            {current ? current.description : "everything, in no particular order (okay, a little order)"}
+          </p>
+        </>
+      )}
 
       <ul className="wall">
         {visible.map((p, i) => (

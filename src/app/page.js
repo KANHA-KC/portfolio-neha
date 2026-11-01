@@ -6,6 +6,10 @@ import Pinboard from "@/components/home/Pinboard";
 import Marquee from "@/components/Marquee";
 import { getCategories, getProfile, getProjects, getServices } from "@/content";
 
+export const metadata = {
+  alternates: { canonical: "/" }
+};
+
 export default async function HomePage() {
   const [profile, featured, categories, services] = await Promise.all([
     getProfile(),
