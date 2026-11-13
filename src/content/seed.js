@@ -5,12 +5,15 @@
 
 export const profile = {
   name: "Neha Ondhia",
-  role: "UX, Brand & Visual Designer",
+  role: "Illustrator, Brand and Graphic Designer",
   headline: "Designing human things for digital places.",
+  resume: "/resume.pdf",
+  // TODO: replace with the real Calendly event link
+  calendly: "https://calendly.com/nehaondhia/chai-chat",
   heroIntro:
     "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
-    "I believe good design behaves like a *kind friend* — it listens first, explains things gently, and never makes you feel lost. Whether it’s a product people *rely on* or a logo they *remember*, I start with the humans and work my way to the pixels.",
+    "Design is never just what meets the eye.\n\nGood design behaves like a *kind friend* — it listens first, explains things gently, and never makes you feel lost.\n\nBehind every identity you *recognize* or package you *hold* lies a deeper question: how did it make you feel?\n\nBecause while good design looks good, great design *tells a story*. That is why I always start with the humans before working my way down to the pixels.",
   intro:
     "I’m a designer based in Mumbai. I work across UX and brand — from research-led product flows for fintech and health, to logos and identities that give small businesses a confident voice.",
   bio: [
@@ -30,6 +33,16 @@ export const profile = {
     "Systems over screens | Whether it’s a product or a brand, I design the rules behind the pixels so teams keep shipping good work."
   ],
   tools: ["Figma", "Illustrator", "Photoshop", "InDesign", "Procreate", "After Effects", "FigJam", "Framer"],
+  marquee: [
+    "Logo Design",
+    "Brand Identity",
+    "Corporate Collateral",
+    "Social Media Graphics",
+    "Print & Digital Media",
+    "Packaging & Labels",
+    "Presentation Design",
+    "Signage & Spatial Visuals"
+  ],
   loves: [
     "teal everything",
     "hand-lettered shop signs",

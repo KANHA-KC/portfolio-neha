@@ -101,7 +101,7 @@ export function normalizeProfile(raw, image) {
     name,
     firstName: name.split(" ")[0],
     lastName: name.split(" ").slice(1).join(" "),
-    role: str(raw.role),
+    role: str(raw.role, "Illustrator, Brand and Graphic Designer"),
     headline: str(raw.headline),
     heroIntro: str(raw.heroIntro),
     manifesto: str(raw.manifesto),
@@ -111,10 +111,13 @@ export function normalizeProfile(raw, image) {
     location: str(raw.location),
     timezone: str(raw.timezone, "Asia/Kolkata"),
     availability: str(raw.availability),
+    resume: str(raw.resume, "/resume.pdf"),
+    calendly: str(raw.calendly),
     portrait: image(raw.portrait, name),
     socials: pairs(raw.socials, "label", "href"),
     principles: pairs(raw.principles, "title", "description"),
     tools: list(raw.tools).map(String),
+    marquee: list(raw.marquee).map(String),
     loves: list(raw.loves).map(String)
   };
 }

@@ -10,20 +10,30 @@ export default async function Footer() {
   return (
     <footer className="footer">
       <div className="footer-top">
-        <p className="eyebrow eyebrow--light">Got a messy problem?</p>
         <h2 className="footer-title">
-          Let’s make
+          That’s the end of
           <br />
-          something <em>kind.</em>
+          the <em>portfolio.</em> <span className="footer-smile" aria-hidden="true">🙂</span>
         </h2>
         <span className="hand footer-hand" aria-hidden="true">
-          (I reply within a day ✿)
+          (Sad, I know.)
         </span>
+        <p className="footer-lede">
+          But the conversation doesn’t have to be. If something here caught your eye, let’s talk it over a cup of chai.
+        </p>
         <div className="footer-cta">
-          <CopyEmail email={site.email} />
-          <Link href="/contact" className="btn btn--aqua" data-cursor="say hi">
-            Start a project <span aria-hidden="true">→</span>
-          </Link>
+          {site.calendly ? (
+            <div className="footer-book">
+              <a href={site.calendly} target="_blank" rel="noopener noreferrer" className="btn btn--aqua" data-cursor="book">
+                Book a chai chat <span aria-hidden="true">↗</span>
+              </a>
+              <span className="hand footer-book-note">(20 minutes, no pressure)</span>
+            </div>
+          ) : null}
+        </div>
+        <div className="footer-write">
+          <span className="footer-or">or write to me:</span>
+          <CopyEmail email={site.email} quiet />
         </div>
       </div>
 

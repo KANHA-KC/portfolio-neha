@@ -69,8 +69,6 @@ export default function Hero({ profile }) {
 
   return (
     <section ref={root} className="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title" className="sr-only">{profile.name} — {profile.role}</h1>
-
       <div className="hero-stage" aria-hidden="true">
         <div className="hero-word hero-word--a">
           <span data-depth="-14">{split(profile.firstName.toLowerCase())}</span>
@@ -113,21 +111,47 @@ export default function Hero({ profile }) {
 
       <div className="hero-copy">
         <div className="hero-lede hero-fade">
-          <p>
-            Hi 👋, I am <strong>{profile.name || "Neha Ondhia"}</strong>.
-          </p>
-          <p>
-            A fashion designer turned self learnt <em>graphic designer</em>. I’ve worked with major Indian & global brands in the last <strong>6 years</strong>.
-          </p>
-          <p>
-            I love everything <em>fun</em>, <span className="hand">quirky</span> and <em>bright</em>. I am <em>not</em> a minimal design person.
-          </p>
+          <div className="hero-heading-block">
+            <h1 id="hero-title" className="hero-greeting">Hi, I’m {profile.firstName || "Neha"}</h1>
+            <p className="hero-role">Illustrator, Brand and Graphic Designer.</p>
+          </div>
+
+          <div className="hero-hook-block">
+            <p className="hero-bold-line">Self-taught. Agency-sharpened.</p>
+            <p className="hero-bold-line">Designing since before AI.</p>
+            <p className="hero-ctrlz-line">
+              <span className="hero-ctrlz-desktop">
+                (Eons ago, when my thumb and index finger were inseparable from CTRL+Z.)
+              </span>
+              <span className="hero-ctrlz-mobile">
+                (Back when CTRL+Z was my best friend.)
+              </span>
+            </p>
+          </div>
+
+          <div className="hero-stats-row">
+            <span>5+ years</span>
+            <span className="hero-stats-sep" aria-hidden="true">·</span>
+            <span>50 brands</span>
+            <span className="hero-stats-sep" aria-hidden="true">·</span>
+            <span>20+ industries</span>
+          </div>
         </div>
+
         <div className="hero-actions hero-fade">
           <Link href="/work" className="btn btn--aqua" data-cursor="peek">
             See the work <span aria-hidden="true">↘</span>
           </Link>
-          <Link href="/about" className="link-underline">More about me</Link>
+          <a
+            href={profile.resume || "/resume.pdf"}
+            download="Neha-Ondhia-Resume.pdf"
+            className="btn btn--outline"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="download"
+          >
+            Download résumé <span aria-hidden="true">↓</span>
+          </a>
         </div>
       </div>
 

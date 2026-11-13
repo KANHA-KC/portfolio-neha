@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Logo from "@/components/Logo";
 import Emph from "@/components/Emph";
-import { gsap, useGSAP, SplitText, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, SplitText, ScrollTrigger, afterIntro, prefersReducedMotion } from "@/lib/gsap";
 
 export default function Manifesto({ text }) {
   const root = useRef(null);
@@ -11,17 +11,33 @@ export default function Manifesto({ text }) {
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-      const split = SplitText.create(root.current.querySelector(".manifesto-text"), { type: "words", wordsClass: "mw" });
-      gsap.fromTo(
-        split.words,
-        { opacity: 0.14 },
-        {
-          opacity: 1,
-          stagger: 0.08,
-          ease: "none",
-          scrollTrigger: { trigger: root.current, start: "top 75%", end: "bottom 60%", scrub: true }
-        }
-      );
+      const textContainer = root.current?.querySelector(".manifesto-text");
+      if (!textContainer) return;
+
+      const split = SplitText.create(textContainer, {
+        type: "words",
+        wordsClass: "mw",
+        tag: "span"
+      });
+
+      if (split.words && split.words.length) {
+        gsap.fromTo(
+          split.words,
+          { opacity: 0.14 },
+          {
+            opacity: 1,
+            stagger: 0.05,
+            ease: "none",
+            scrollTrigger: {
+              trigger: root.current,
+              start: "top 75%",
+              end: "bottom 60%",
+              scrub: true
+            }
+          }
+        );
+      }
+
       gsap.from(root.current.querySelectorAll(".mf-pop"), {
         scale: 0,
         rotate: -30,
@@ -30,6 +46,7 @@ export default function Manifesto({ text }) {
         duration: 0.8,
         scrollTrigger: { trigger: root.current, start: "top 60%" }
       });
+
       const track = root.current.querySelector(".mf-line-track");
       if (track) {
         gsap.fromTo(
@@ -47,19 +64,39 @@ export default function Manifesto({ text }) {
           }
         );
       }
-      return () => split.revert();
+
+      const off = afterIntro(() => {
+        ScrollTrigger.refresh();
+      });
+
+      return () => {
+        off();
+        split.revert();
+      };
     },
-    { scope: root }
+    { scope: root, dependencies: [text], revertOnUpdate: true }
   );
+
+  const paragraphs = typeof text === "string" ? text.split(/\n\s*\n/).filter(Boolean) : [];
 
   return (
     <section ref={root} className="manifesto" aria-label="Approach">
       <p className="eyebrow">
         <span className="eyebrow-num">(01)</span> The short version
       </p>
-      <p className="manifesto-text">
-        <Emph text={text} />
-      </p>
+      <div className="manifesto-text">
+        {paragraphs.length > 0 ? (
+          paragraphs.map((para, i) => (
+            <p key={i} className="manifesto-p">
+              <Emph text={para} />
+            </p>
+          ))
+        ) : (
+          <p className="manifesto-p">
+            <Emph text={text} />
+          </p>
+        )}
+      </div>
 
       <div className="mf-side-wrap" aria-hidden="true">
         <div className="mf-pop mf-pop--a">

@@ -1,5 +1,6 @@
 import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
+import ContactKeys from "@/components/ContactKeys";
 import LocalTime from "@/components/LocalTime";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
@@ -22,6 +23,7 @@ export default async function ContactPage() {
   return (
     <div className="page contact">
       <section className="contact-head">
+        <div className="contact-head-text">
         <Breadcrumbs items={[{ name: "Contact", href: "/contact" }]} />
         <p className="eyebrow">Contact</p>
         <h1 className="page-title contact-title">
@@ -32,6 +34,8 @@ export default async function ContactPage() {
           A new product, a tricky redesign, a logo or a whole brand that needs love — or just a coffee chat about
           design. My inbox is open.
         </p>
+        </div>
+        <ContactKeys email={site.email} socials={site.socials} resume={site.resume} />
       </section>
 
       <div className="contact-grid">
@@ -41,14 +45,6 @@ export default async function ContactPage() {
           <div className="contact-card contact-card--teal">
             <p className="footer-label">Prefer email?</p>
             <CopyEmail email={site.email} />
-          </div>
-          <div className="contact-card contact-card--gold">
-            <p className="footer-label">Find me</p>
-            {site.socials.map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="link-underline">
-                {s.label} ↗
-              </a>
-            ))}
           </div>
           <div className="contact-card contact-card--aqua">
             <p className="footer-label">Right now in {site.location.split(",")[0]}</p>

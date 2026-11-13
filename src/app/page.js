@@ -22,7 +22,23 @@ export default async function HomePage() {
     <>
       <Hero profile={profile} />
       <div className="tilt-band">
-        <Marquee items={[...services.map((s) => s.title), "Workshops"]} />
+        <Marquee
+          items={
+            profile.marquee?.length
+              ? profile.marquee
+              : [
+                  "Logo Design",
+                  "Brand Identity",
+                  "Corporate Collateral",
+                  "Social Media Graphics",
+                  "Print & Digital Media",
+                  "Packaging & Labels",
+                  "Presentation Design",
+                  "Signage & Spatial Visuals"
+                ]
+          }
+          sep="·"
+        />
       </div>
       <Manifesto text={profile.manifesto} />
       <SelectedWork projects={featured} categories={categories} />
