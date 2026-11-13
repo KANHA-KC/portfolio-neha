@@ -6,7 +6,8 @@ import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 // Counts the numeric part of a value like "42%", "150k+" or "−35%" up from zero when it scrolls into view.
 export default function StatCount({ value }) {
   const ref = useRef(null);
-  const match = value.match(/^([^\d]*)(\d+)(.*)$/);
+  // Only animate plain numbers; values like "1,200+" or "2.5x" are shown as-is.
+  const match = /^[^\d]*\d+[^\d,.]*$/.test(value) ? value.match(/^([^\d]*)(\d+)(.*)$/) : null;
 
   useGSAP(
     () => {

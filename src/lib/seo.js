@@ -4,6 +4,16 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3
 
 export const absolute = (path = "/") => (/^https?:\/\//.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`);
 
+// Search results show ~155 characters; cut longer text at a word boundary.
+export const clip = (text = "", max = 155) => {
+  const t = String(text).replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  return t.slice(0, t.lastIndexOf(" ", max - 1)).replace(/[,;:—–-]$/, "") + "…";
+};
+
+// Pages that set their own `openGraph` replace the layout's, so they re-add the generated site card (app/opengraph-image.js).
+export const SITE_OG_IMAGES = [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Neha Ondhia — portfolio" }];
+
 export const categoryPath = (slug) => `/work/category/${slug}`;
 export const projectPath = (slug) => `/work/${slug}`;
 
@@ -50,7 +60,7 @@ export function projectSchema(project) {
     headline: project.title,
     description: project.summary || project.subtitle,
     url: absolute(projectPath(project.slug)),
-    image: project.cover?.src ? absolute(project.cover.src) : undefined,
+    image: (project.cover || project.thumbnail)?.src ? absolute((project.cover || project.thumbnail).src) : undefined,
     genre: project.categoryTitle,
     keywords: [project.categoryTitle, ...project.tags].filter(Boolean).join(", "),
     dateCreated: project.year || undefined,

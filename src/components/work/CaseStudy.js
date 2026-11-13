@@ -22,9 +22,10 @@ export default function CaseStudy({ project: p, next }) {
         meta={[["Role", p.role], ["Client", p.client], ["Timeline", p.timeline], ["Platform", p.platform]]}
       />
 
-      <Reveal className="case-cover">
+      {/* Not wrapped in <Reveal>: this is the page's largest image, so it must paint immediately. */}
+      <div className="case-cover">
         <ProjectVisual project={p} sizes="(max-width: 1200px) 100vw, 1200px" preload />
-      </Reveal>
+      </div>
 
       {p.challenge && (
         <section className="case-block">

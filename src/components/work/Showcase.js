@@ -14,9 +14,10 @@ export default function Showcase({ project: p, next }) {
         meta={[["Client", p.client], ["Year", p.year], ["Role", p.role], ["Discipline", p.categoryTitle]]}
       />
 
-      <Reveal className="case-cover showcase-cover">
+      {/* Not wrapped in <Reveal>: this is the page's largest image, so it must paint immediately. */}
+      <div className="case-cover showcase-cover">
         <ProjectVisual project={p} sizes="(max-width: 1200px) 100vw, 1200px" preload />
-      </Reveal>
+      </div>
 
       {(p.brief || p.summary) && (
         <section className="case-block">

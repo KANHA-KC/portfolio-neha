@@ -53,10 +53,12 @@ export default function AboutSnapshot({ profile, services }) {
           <Link href="/about" className="btn btn--teal" data-cursor="hi!">
             The longer story <span aria-hidden="true">→</span>
           </Link>
-          <span className="snap-avail">
-            <span className="pulse" aria-hidden="true" />
-            {profile.availability}
-          </span>
+          {profile.availability && (
+            <span className="snap-avail">
+              <span className="pulse" aria-hidden="true" />
+              {profile.availability}
+            </span>
+          )}
         </div>
       </div>
     </section>

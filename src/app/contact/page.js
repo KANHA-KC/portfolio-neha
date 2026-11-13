@@ -5,16 +5,16 @@ import LocalTime from "@/components/LocalTime";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getProfile } from "@/content";
-import { absolute } from "@/lib/seo";
+import { absolute, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateMetadata() {
   const p = await getProfile();
-  const description = `Hire ${p.name} for UX, logo design, branding and graphic design projects. Based in ${p.location}, working worldwide.`;
+  const description = clip(`Hire ${p.name} for UX, logo design, branding and graphic design projects. Based in ${p.location}, working worldwide.`);
   return {
     title: "Contact — Hire a UX & Brand Designer",
     description,
     alternates: { canonical: "/contact" },
-    openGraph: { title: `Contact ${p.name}`, description, url: "/contact" }
+    openGraph: { title: `Contact ${p.name}`, description, url: "/contact", images: SITE_OG_IMAGES }
   };
 }
 

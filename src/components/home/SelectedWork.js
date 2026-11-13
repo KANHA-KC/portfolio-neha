@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import ProjectVisual from "@/components/ProjectVisual";
+import { categoryPath } from "@/lib/seo";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 // Loose "desk" layout. Slots repeat, so any number of featured projects can be placed.
@@ -54,7 +55,7 @@ export default function SelectedWork({ projects, categories }) {
         </div>
         <nav className="disc-index" aria-label="Browse work by discipline">
           {categories.map((c) => (
-            <Link key={c.slug} href={`/work/category/${c.slug}`} className="disc-chip" data-cursor="browse">
+            <Link key={c.slug} href={categoryPath(c.slug)} className="disc-chip" data-cursor="browse">
               <span aria-hidden="true">{c.icon}</span> {c.title}
               <sup>{c.count}</sup>
             </Link>
@@ -74,7 +75,7 @@ export default function SelectedWork({ projects, categories }) {
             >
               <Link href={`/work/${p.slug}`} className="wcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
                 <div className="wcard-media">
-                  <ProjectVisual project={p} sizes="(max-width: 900px) 100vw, 55vw" />
+                  <ProjectVisual project={p} card sizes="(max-width: 900px) 100vw, 55vw" />
                   {p.note && (
                     <span className="wcard-note hand" style={{ "--tape": p.palette.frame }}>
                       {p.note}

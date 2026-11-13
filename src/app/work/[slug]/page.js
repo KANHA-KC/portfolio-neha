@@ -5,7 +5,7 @@ import Showcase from "@/components/work/Showcase";
 import RelatedWork from "@/components/work/RelatedWork";
 import JsonLd from "@/components/JsonLd";
 import { getProfile, getProject, getProjects } from "@/content";
-import { projectPath, projectSchema } from "@/lib/seo";
+import { clip, projectPath, projectSchema } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return (await getProjects()).map((p) => ({ slug: p.slug }));
@@ -17,15 +17,17 @@ export async function generateMetadata({ params }) {
   if (!found) return { title: "Project not found", robots: { index: false } };
   const { project: p } = found;
   const title = p.kind === "case-study" ? `${p.title} — UX Case Study` : `${p.title} — ${p.categoryTitle}`;
-  const description = p.summary || `${p.categoryTitle} project by ${profile.name}.`;
-  const images = p.cover?.src ? [{ url: p.cover.src, alt: p.cover.alt || p.title }] : undefined;
+  // Short summaries get padded with context so every project has a useful, unique description.
+  const context = `${p.title}: ${p.categoryTitle.toLowerCase()} work by ${profile.name}, ${profile.role.toLowerCase()} in ${profile.location}.`;
+  const description = clip(p.summary && p.summary.length >= 90 ? p.summary : [p.summary, context].filter(Boolean).join(" "));
   return {
     title,
     description,
     keywords: [p.categoryTitle, ...p.tags, p.client, profile.name].filter(Boolean),
     alternates: { canonical: projectPath(slug) },
-    openGraph: { title, description, url: projectPath(slug), type: "article", images },
-    twitter: { card: "summary_large_image", title, description, images: images?.map((i) => i.url) }
+    // Share image comes from ./opengraph-image.js (the cover, or a branded title card).
+    openGraph: { title, description, url: projectPath(slug), type: "article" },
+    twitter: { card: "summary_large_image", title, description }
   };
 }
 

@@ -4,16 +4,16 @@ import DisciplineLinks from "@/components/work/DisciplineLinks";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getCategories, getProfile, getProjects } from "@/content";
-import { collectionSchema } from "@/lib/seo";
+import { collectionSchema, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateMetadata() {
   const p = await getProfile();
-  const description = `Portfolio of ${p.name}: UX case studies, logo design, brand identity, packaging and illustration work for Indian and global brands.`;
+  const description = clip(`Portfolio of ${p.name}: UX case studies, logo design, brand identity, packaging and illustration work for Indian and global brands.`);
   return {
     title: "Work — UX, Logo & Brand Design Portfolio",
     description,
     alternates: { canonical: "/work" },
-    openGraph: { title: `Work — ${p.name}`, description, url: "/work" }
+    openGraph: { title: `Work — ${p.name}`, description, url: "/work", images: SITE_OG_IMAGES }
   };
 }
 

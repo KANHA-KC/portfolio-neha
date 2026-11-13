@@ -25,6 +25,17 @@ const pairs = (v, a, b) =>
 
 const aspectOf = (v, d = "landscape") => (aspects[v] ? v : d);
 
+// Pick the closest card shape for an uploaded image so gallery tiles match the real photo.
+const aspectFromSize = (img) => {
+  if (!img?.width || !img?.height) return null;
+  const r = img.width / img.height;
+  if (r >= 1.55) return "wide";
+  if (r >= 1.15) return "landscape";
+  if (r >= 0.9) return "square";
+  if (r >= 0.77) return "portrait";
+  return "tall";
+};
+
 export function normalizeCategory(raw) {
   return {
     slug: str(raw.slug),
@@ -56,16 +67,22 @@ export function normalizeProject(raw, image) {
     accent,
     palette: palettes[accent],
     illustration: str(raw.illustration) || null,
-    cover: image(raw.cover, raw.title),
+    // Cover = top of the project page; thumbnail = card image on Home / Work / related projects.
+    // Each falls back to the other, so uploading just one is enough.
+    cover: image(raw.cover, raw.title) || image(raw.thumbnail, raw.title),
+    thumbnail: image(raw.thumbnail, raw.title) || image(raw.cover, raw.title),
     aspect: aspectOf(raw.aspect),
     tags: list(raw.tags).map(String),
     // showcase
     brief: str(raw.brief),
-    gallery: list(raw.gallery).map((g) => ({
-      image: image(g.src ?? g.image, g.title || g.alt),
-      caption: str(g.title ?? g.caption),
-      aspect: aspectOf(g.aspect, "landscape")
-    })),
+    gallery: list(raw.gallery).map((g) => {
+      const img = image(g.src ?? g.image, g.description || g.title || g.alt || raw.title);
+      return {
+        image: img,
+        caption: str(g.title ?? g.caption),
+        aspect: aspects[g.aspect] ? g.aspect : aspectFromSize(img) || "landscape"
+      };
+    }),
     // case study
     challenge: str(raw.challenge),
     solution: str(raw.solution),

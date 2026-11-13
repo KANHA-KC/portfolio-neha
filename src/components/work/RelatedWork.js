@@ -18,7 +18,7 @@ export default function RelatedWork({ projects, category }) {
         {projects.map((p) => (
           <li key={p.slug}>
             <Link href={projectPath(p.slug)} className="related-card" data-cursor="view">
-              <ProjectVisual project={p} aspect="landscape" sizes="(max-width: 760px) 100vw, 33vw" />
+              <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 760px) 100vw, 33vw" />
               <span className="gcard-cat">
                 <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
               </span>

@@ -6,7 +6,7 @@ import DisciplineLinks from "@/components/work/DisciplineLinks";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getCategories, getProfile, getProjects } from "@/content";
-import { categoryPath, collectionSchema } from "@/lib/seo";
+import { categoryPath, collectionSchema, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return (await getCategories()).map((c) => ({ category: c.slug }));
@@ -26,12 +26,12 @@ export async function generateMetadata({ params }) {
   if (!data) return { title: "Not found", robots: { index: false } };
   const { category, profile } = data;
   const title = `${category.title} Portfolio`;
-  const description = `${category.title} by ${profile.name}, ${profile.role.toLowerCase()} based in ${profile.location}. ${category.description}`;
+  const description = clip(`${category.title} by ${profile.name}, ${profile.role.toLowerCase()} based in ${profile.location}. ${category.description}`);
   return {
     title,
     description,
     alternates: { canonical: categoryPath(slug) },
-    openGraph: { title: `${title} — ${profile.name}`, description, url: categoryPath(slug) }
+    openGraph: { title: `${title} — ${profile.name}`, description, url: categoryPath(slug), images: SITE_OG_IMAGES }
   };
 }
 

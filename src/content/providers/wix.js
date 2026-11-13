@@ -26,7 +26,10 @@ export const image = (v, alt) => {
     const img = media.getImageUrl(v);
     return { src: img.url, width: img.width || 0, height: img.height || 0, alt: img.altText || alt || "" };
   }
-  if (/^(https?:)?\//.test(v)) return { src: v, width: 0, height: 0, alt: alt || "" };
+  // Local files (/brand/…) and Wix-hosted URLs only — next.config only allows static.wixstatic.com,
+  // so any other pasted URL would crash the page. Upload images to Wix Media instead.
+  if (v.startsWith("/") && !v.startsWith("//")) return { src: v, width: 0, height: 0, alt: alt || "" };
+  if (/^https:\/\/static\.wixstatic\.com\//.test(v)) return { src: v, width: 0, height: 0, alt: alt || "" };
   return null;
 };
 

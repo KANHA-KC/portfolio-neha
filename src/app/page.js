@@ -5,10 +5,18 @@ import AboutSnapshot from "@/components/home/AboutSnapshot";
 import Pinboard from "@/components/home/Pinboard";
 import Marquee from "@/components/Marquee";
 import { getCategories, getProfile, getProjects, getServices } from "@/content";
+import { clip } from "@/lib/seo";
 
-export const metadata = {
-  alternates: { canonical: "/" }
-};
+export async function generateMetadata() {
+  const p = await getProfile();
+  const description = clip(`${p.name} — ${p.role} in ${p.location}. ${p.headline} Logo design, brand identity, packaging and UX case studies.`);
+  return {
+    description,
+    alternates: { canonical: "/" },
+    openGraph: { description, url: "/" },
+    twitter: { description }
+  };
+}
 
 export default async function HomePage() {
   const [profile, featured, categories, services] = await Promise.all([

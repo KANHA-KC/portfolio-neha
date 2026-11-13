@@ -9,7 +9,8 @@
 //   WIX_SITE_ID=…
 // The site itself keeps reading with WIX_CLIENT_ID; the admin key is only used by this script.
 //
-// Safe to re-run: existing collections are left alone, and items are only imported into empty collections.
+// Safe to re-run: existing collections only get missing fields added / wrong types fixed (your own extra
+// fields are left alone), and items are only imported into empty collections.
 
 import { createClient, ApiKeyStrategy } from "@wix/sdk";
 import { collections as collectionsApi, items } from "@wix/data";
@@ -80,11 +81,12 @@ const SCHEMA = {
       TAGS("tags", "Tags"),
       T("accent", "Accent (gold / aqua / paprika / teal)"),
       T("illustration", "Illustration"),
-      IMG("cover", "Cover"),
+      IMG("thumbnail", "Thumbnail (card image)"),
+      IMG("cover", "Cover (top of project page)"),
       T("aspect", "Card aspect"),
       T("note", "Sticky note"),
       T("brief", "Brief"),
-      GALLERY("gallery", "Gallery"),
+      GALLERY("gallery", "Gallery (images inside the project)"),
       T("challenge", "Challenge"),
       T("solution", "Solution"),
       T("process", "Process (Step | What happened per line)"),
@@ -161,11 +163,38 @@ async function exists(wix, id) {
   }
 }
 
+// Bring an existing collection in line with SCHEMA: add missing fields and fix wrong types.
+// Fields not in SCHEMA (anything you added yourself in Wix) are never touched.
+// Types are changed in place, which keeps the stored values.
+async function syncFields(wix, s) {
+  const current = await wix.collectionsApi.getDataCollection(s.id);
+  const have = Object.fromEntries(current.fields.map((f) => [f.key, f]));
+  for (const f of s.fields) {
+    const existing = have[f.key];
+    if (!existing) {
+      await wix.collectionsApi.createDataCollectionField(s.id, { field: f });
+      console.log(`  + added ${f.key} (${f.type})`);
+    } else if (existing.type !== f.type) {
+      await wix.collectionsApi.updateDataCollectionField(s.id, { field: f });
+      console.log(`  ~ ${f.key}: ${existing.type} → ${f.type}`);
+    }
+  }
+}
+
 async function insertAll(wix, id, docs) {
   try {
-    await wix.items.bulkInsert(id, docs);
+    // bulkInsert reports per-item failures in its result instead of throwing.
+    const res = await wix.items.bulkInsert(id, docs);
+    const errors = res?.errors || [];
+    if (errors.length) {
+      const reasons = [...new Set(errors.map((r) => r.message || r.code || "unknown"))];
+      throw new Error(`${errors.length} of ${docs.length} failed: ${reasons.join("; ")}`);
+    }
+    const total = await wix.items.query(id).count();
+    if (total === 0) throw new Error("Wix accepted the insert but the collection is still empty");
     return { ok: docs.length, skipped: [] };
   } catch (e) {
+    if (/WDE0027|permission/i.test(errMsg(e))) throw new Error(`No permission to write to ${id}. Give the API key "Wix Data" permissions in Wix → API Keys, then re-run.`);
     // Fall back to one-by-one so a single bad value (e.g. an image path Wix rejects) doesn't block the rest.
     console.warn(`    bulk insert failed (${errMsg(e)}); retrying item by item`);
     let ok = 0;
@@ -206,7 +235,8 @@ async function main() {
   for (const [name, s] of Object.entries(SCHEMA)) {
     process.stdout.write(`${s.id}: `);
     if (await exists(wix, s.id)) {
-      console.log("already exists — left as is");
+      console.log("exists");
+      await syncFields(wix, s);
     } else {
       await wix.collectionsApi.createDataCollection({
         _id: s.id,

@@ -6,7 +6,7 @@ import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
 import JsonLd from "@/components/JsonLd";
 import { getProfile, getProjects } from "@/content";
-import { SITE_URL, personSchema, websiteSchema } from "@/lib/seo";
+import { SITE_URL, clip, personSchema, websiteSchema } from "@/lib/seo";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -26,7 +26,7 @@ export async function generateMetadata() {
   return {
     metadataBase: new URL(SITE_URL),
     title: { default: title, template: `%s — ${p.name}` },
-    description: p.intro,
+    description: clip(p.intro),
     applicationName: `${p.name} Portfolio`,
     authors: [{ name: p.name, url: SITE_URL }],
     creator: p.name,
@@ -45,14 +45,13 @@ export async function generateMetadata() {
     icons: { icon: "/brand/monogram.png", apple: "/brand/monogram.png" },
     openGraph: {
       title,
-      description: p.headline || p.intro,
+      description: clip(p.headline || p.intro),
       url: "/",
       siteName: `${p.name} — Portfolio`,
       type: "website",
-      locale: "en_IN",
-      images: [{ url: "/brand/logo.png", alt: `${p.name} logo` }]
+      locale: "en_IN"
     },
-    twitter: { card: "summary_large_image", title, description: p.headline || p.intro, images: ["/brand/logo.png"] }
+    twitter: { card: "summary_large_image", title, description: clip(p.headline || p.intro) }
   };
 }
 

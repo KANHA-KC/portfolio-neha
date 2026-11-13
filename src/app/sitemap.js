@@ -14,7 +14,7 @@ export default async function sitemap() {
       url: absolute(projectPath(p.slug)),
       changeFrequency: "monthly",
       priority: p.featured ? 0.8 : 0.7,
-      ...(p.cover?.src && { images: [absolute(p.cover.src)] })
+      ...((p.cover || p.thumbnail)?.src && { images: [absolute((p.cover || p.thumbnail).src)] })
     }))
   ];
 }

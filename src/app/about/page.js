@@ -5,23 +5,24 @@ import Marquee from "@/components/Marquee";
 import Experience from "@/components/home/Experience";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
-import { absolute, categoryPath } from "@/lib/seo";
-import { getExperience, getProfile, getServices } from "@/content";
+import { absolute, categoryPath, clip, SITE_OG_IMAGES } from "@/lib/seo";
+import { getCategories, getExperience, getProfile, getServices } from "@/content";
 
 export async function generateMetadata() {
   const p = await getProfile();
   return {
     title: { absolute: `About ${p.name} — ${p.role}` },
-    description: p.intro,
+    description: clip(p.intro),
     alternates: { canonical: "/about" },
-    openGraph: { title: `About ${p.name}`, description: p.intro, url: "/about", type: "profile" }
+    openGraph: { title: `About ${p.name}`, description: clip(p.intro), url: "/about", type: "profile", images: SITE_OG_IMAGES }
   };
 }
 
 const tints = ["#FFF3DC", "#EDF7F4", "#FBECE6", "#E7EFF0", "#C8E8E2", "#F8CC78", "#EDA18A", "#9ED4CB"];
 
 export default async function AboutPage() {
-  const [profile, services, experience] = await Promise.all([getProfile(), getServices(), getExperience()]);
+  const [profile, services, experience, categories] = await Promise.all([getProfile(), getServices(), getExperience(), getCategories()]);
+  const hasCategory = (slug) => categories.some((c) => c.slug === slug);
   const [lead, ...rest] = profile.bio;
   const groups = [
     { key: "ux", title: "UX & Product", tag: "the thinking", items: services.filter((s) => s.group === "ux") },
@@ -40,7 +41,7 @@ export default async function AboutPage() {
             <span className="about-wave" aria-hidden="true">✿</span>
           </h1>
           <p className="page-lede">{profile.intro}</p>
-          <span className="hand about-hand">{profile.availability.toLowerCase()} — say hi!</span>
+          {profile.availability && <span className="hand about-hand">{profile.availability.toLowerCase()} — say hi!</span>}
         </div>
 
         <div className="about-photo">
@@ -85,9 +86,11 @@ export default async function AboutPage() {
                   </li>
                 ))}
               </ol>
-              <Link href={categoryPath(g.key === "ux" ? "ux-ui" : "branding")} className="link-underline">
-                See {g.title.toLowerCase()} work →
-              </Link>
+              {hasCategory(g.key === "ux" ? "ux-ui" : "branding") && (
+                <Link href={categoryPath(g.key === "ux" ? "ux-ui" : "branding")} className="link-underline">
+                  See {g.title.toLowerCase()} work →
+                </Link>
+              )}
             </Reveal>
           ))}
           <span className="hats-plus" aria-hidden="true">+</span>

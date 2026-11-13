@@ -84,7 +84,7 @@ export default function WorkGallery({ projects, categories, showFilters = true }
         {visible.map((p, i) => (
           <li key={p.slug} className={`gcard gcard--${span(p)}`} data-flip-id={p.slug} style={{ "--i": i % 6 }}>
             <Link href={`/work/${p.slug}`} className="gcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
-              <ProjectVisual project={p} sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+              <ProjectVisual project={p} card sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw" />
               <div className="gcard-cap">
                 <div>
                   <p className="gcard-cat">
