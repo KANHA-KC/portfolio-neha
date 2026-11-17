@@ -15,7 +15,7 @@ export const profile = {
   manifesto:
     "Design is never just what meets the eye.\n\nBehind every identity you *recognize* or package you *hold* lies a deeper question: how did it make you feel?\n\nBecause while good design looks good, great design *tells a story*. That is why I always start with the humans before working my way down to the pixels.",
   intro:
-    "I’m a designer based in Mumbai. I work across UX and brand — from research-led product flows for fintech and health, to logos and identities that give small businesses a confident voice.",
+    "a self-taught illustrator and brand designer based in Mumbai. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
   bio: [
     "I started out as an interaction designer, obsessing over the tiny moments between taps. Somewhere along the way I fell for both sides of the craft: the messy, human research — and the quiet precision of a well-drawn logo.",
     "Today I lead projects end to end: framing problems with stakeholders, running research, prototyping, and building the design systems and brand guidelines that keep it all consistent.",
