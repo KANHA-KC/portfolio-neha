@@ -19,7 +19,6 @@ export default function Hero({ profile }) {
       gsap.set(q(".hero-cutout"), { y: 120, rotate: 6, opacity: 0 });
       gsap.set(q(".hero-pop"), { scale: 0, rotate: -20 });
       gsap.set(q(".hero-fade"), { opacity: 0, y: 24 });
-      gsap.set(q(".draw path"), { strokeDasharray: 1, strokeDashoffset: 1 });
 
       const intro = () =>
         gsap
@@ -27,8 +26,7 @@ export default function Hero({ profile }) {
           .to(q(".hero-word .ch"), { yPercent: 0, duration: 1.3, stagger: 0.045 })
           .to(q(".hero-cutout"), { y: 0, rotate: 0, opacity: 1, duration: 1.4 }, 0.25)
           .to(q(".hero-pop"), { scale: 1, rotate: (i, el) => Number(el.dataset.rot || 0), duration: 0.9, stagger: 0.08, ease: "back.out(2)" }, 0.8)
-          .to(q(".hero-fade"), { opacity: 1, y: 0, duration: 1, stagger: 0.08 }, 0.7)
-          .to(q(".draw path"), { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut", stagger: 0.15 }, 1);
+          .to(q(".hero-fade"), { opacity: 1, y: 0, duration: 1, stagger: 0.08 }, 0.7);
 
       const off = afterIntro(intro);
 
@@ -97,16 +95,7 @@ export default function Hero({ profile }) {
         <div className="hero-note hero-pop" data-rot="3" data-depth="26">
           <span className="hand">that’s me!</span>
           <span className="hand hand--sm">(the teal hair is a design decision)</span>
-          <svg className="draw hero-arrow" viewBox="0 0 100 70">
-            <path pathLength="1" d="M85 10 C 60 12, 35 30, 15 55 M15 55 L 30 50 M15 55 L 20 38" />
-          </svg>
         </div>
-
-        <span className="star hero-pop" data-rot="12" data-depth="46">✦</span>
-
-        <svg className="draw hero-squiggle" viewBox="0 0 300 60">
-          <path pathLength="1" d="M4 40 C 30 4, 50 56, 78 30 S 120 4, 146 30 S 196 58, 222 26 S 270 10, 296 34" />
-        </svg>
       </div>
 
       <div className="hero-copy">

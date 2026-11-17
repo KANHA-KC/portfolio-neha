@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /* ---------- icons ---------- */
 const Icons = {
@@ -56,12 +56,12 @@ const Icons = {
 
 // Brand-palette tone + handwritten note per known network.
 const SOCIAL_META = {
-  linkedin: { icon: "linkedin", tone: "teal", note: "where I keep things\nprofessional-ish" },
-  dribbble: { icon: "dribbble", tone: "pink", note: "shots, sketches &\nwork in progress" },
-  instagram: { icon: "instagram", tone: "pink", note: "I’m most real here" },
-  behance: { icon: "behance", tone: "teal", note: "full case studies\nlive here" },
-  x: { icon: "x", tone: "ink", note: "trying to be\nactive here" },
-  twitter: { icon: "x", tone: "ink", note: "trying to be\nactive here" }
+  linkedin: { icon: "linkedin", tone: "teal", shortcut: "L", note: "where I keep things\nprofessional-ish" },
+  dribbble: { icon: "dribbble", tone: "pink", shortcut: "D", note: "shots, sketches &\nwork in progress" },
+  instagram: { icon: "instagram", tone: "pink", shortcut: "I", note: "I’m most real here" },
+  behance: { icon: "behance", tone: "teal", shortcut: "B", note: "full case studies\nlive here" },
+  x: { icon: "x", tone: "ink", shortcut: "X", note: "trying to be\nactive here" },
+  twitter: { icon: "x", tone: "ink", shortcut: "X", note: "trying to be\nactive here" }
 };
 
 /* ---------- mechanical switch sound ----------
@@ -196,15 +196,18 @@ function Arrow({ dir }) {
   );
 }
 
-function Key({ href, label, icon, tone, note, notePos, download, external }) {
+function Key({ href, label, icon, tone, note, notePos, download, external, shortcut, modSymbol = "⌥" }) {
   const [down, setDown] = useState(false);
   const pressed = useRef(false);
+  const anchorRef = useRef(null);
+
   const press = () => {
     if (pressed.current) return;
     pressed.current = true;
     setDown(true);
     play("down");
   };
+
   const release = () => {
     if (!pressed.current) return;
     pressed.current = false;
@@ -212,12 +215,68 @@ function Key({ href, label, icon, tone, note, notePos, download, external }) {
     play("up");
   };
 
+  useEffect(() => {
+    if (!shortcut) return;
+    const targetCodes = [`Key${shortcut.toUpperCase()}`];
+    if (shortcut.toUpperCase() === "M") targetCodes.push("KeyE");
+    if (shortcut.toUpperCase() === "L") targetCodes.push("KeyI");
+
+    const matchesKey = (e) => {
+      if (e.repeat) return false;
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement ||
+        e.target?.isContentEditable
+      ) {
+        return false;
+      }
+      // Require Option / Alt key without Cmd or Ctrl to avoid conflicting with generic browser/OS shortcuts
+      if (!e.altKey || e.metaKey || e.ctrlKey) return false;
+
+      return targetCodes.includes(e.code);
+    };
+
+    const onKeyDown = (e) => {
+      if (matchesKey(e)) {
+        e.preventDefault();
+        press();
+      }
+    };
+
+    const onKeyUp = (e) => {
+      if (matchesKey(e)) {
+        e.preventDefault();
+        release();
+        if (external) {
+          window.open(href, "_blank", "noopener,noreferrer");
+        } else if (href.startsWith("mailto:")) {
+          window.location.href = href;
+        } else {
+          anchorRef.current?.click();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, [shortcut, href, external]);
+
+  const shortcutLabel = `${modSymbol}${shortcut}`;
+
   return (
     <li className={`ckey ckey--${tone} ckey--note-${notePos}`}>
       <a
+        ref={anchorRef}
         href={href}
         className={`ckey-btn${down ? " is-down" : ""}`}
-        aria-label={label}
+        aria-label={`${label} (${shortcutLabel})`}
+        aria-keyshortcuts={`Alt+${shortcut}`}
+        title={`${label} — Shortcut: ${shortcutLabel}`}
         data-cursor={label.toLowerCase()}
         {...(download ? { download: "" } : {})}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -230,7 +289,15 @@ function Key({ href, label, icon, tone, note, notePos, download, external }) {
         onBlur={release}
       >
         <span className="ckey-cap">
-          <span className="ckey-top">{Icons[icon] ?? Icons.link}</span>
+          <span className="ckey-top">
+            {shortcut && (
+              <span className="ckey-engraved" aria-hidden="true">
+                <span className="ckey-mod">{modSymbol}</span>
+                <span>{shortcut}</span>
+              </span>
+            )}
+            {Icons[icon] ?? Icons.link}
+          </span>
         </span>
       </a>
       <span className="ckey-note hand" aria-hidden="true">
@@ -242,20 +309,28 @@ function Key({ href, label, icon, tone, note, notePos, download, external }) {
 }
 
 export default function ContactKeys({ email, socials = [], resume }) {
+  const [modSymbol] = useState(() => {
+    if (typeof navigator !== "undefined") {
+      const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.userAgent || navigator.platform || "");
+      return isMac ? "⌥" : "Alt + ";
+    }
+    return "⌥";
+  });
+
   const keys = [
-    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "pap", note: `projects / collabs /\ncoffee chats ✿\n${email}` },
+    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "pap", shortcut: "M", note: `projects / collabs /\ncoffee chats ✿\n${email}` },
     ...socials.map((s) => {
-      const meta = SOCIAL_META[s.label.toLowerCase()] ?? { icon: "link", tone: "aqua", note: `find me on ${s.label}` };
+      const meta = SOCIAL_META[s.label.toLowerCase()] ?? { icon: "link", tone: "aqua", shortcut: s.label.charAt(0).toUpperCase(), note: `find me on ${s.label}` };
       return { href: s.href, label: s.label, external: true, ...meta };
     }),
-    ...(resume ? [{ href: resume, label: "Download resume", icon: "download", tone: "gold", download: true, note: "download resume /\nATS & AI friendly" }] : [])
+    ...(resume ? [{ href: resume, label: "Download resume", icon: "download", tone: "gold", download: true, shortcut: "R", note: "download resume /\nATS & AI friendly" }] : [])
   ];
 
   return (
     <div className="ckeys" role="group" aria-label="Contact shortcuts">
       <ul className="ckeys-row">
         {keys.map((k, i) => (
-          <Key key={k.label} {...k} notePos={i % 2 ? "top" : "bottom"} />
+          <Key key={k.label} {...k} modSymbol={modSymbol} notePos={i % 2 ? "top" : "bottom"} />
         ))}
       </ul>
     </div>

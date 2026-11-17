@@ -2,12 +2,24 @@
 
 import { useState } from "react";
 
-const topics = ["Product design", "UX research", "Logo design", "Branding", "Packaging & print", "Something else"];
+const DEFAULT_TOPICS = [
+  "Logo",
+  "Brand identity",
+  "Illustration",
+  "Packaging",
+  "Marketing",
+  "AI Videos",
+  "Something else"
+];
 
 // No backend: the form validates, then hands a pre-written message to the visitor's email app.
-export default function ContactForm({ email }) {
+export default function ContactForm({ email, categories = [] }) {
+  const topics = categories.length > 0
+    ? [...categories.map((c) => c.title), "Something else"]
+    : DEFAULT_TOPICS;
+
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [picked, setPicked] = useState(["Product design"]);
+  const [picked, setPicked] = useState([topics[0]]);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
 

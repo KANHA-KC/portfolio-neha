@@ -7,14 +7,15 @@ import { categoryPath } from "@/lib/seo";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 // Loose "desk" layout. Slots repeat, so any number of featured projects can be placed.
+// Every card spans 5 columns to match the standard size of cards 2 and 3.
 // col = grid columns on the 12-col desktop grid, mt = nudge down, rot = tilt, speed = scroll parallax.
 const slots = [
-  { col: "1 / 8", mt: "0", rot: -2.5, speed: -60 },
-  { col: "8 / 13", mt: "28vh", rot: 2, speed: 90 },
-  { col: "2 / 7", mt: "-4vh", rot: 1.5, speed: -10 },
+  { col: "1 / 6", mt: "0", rot: -2.5, speed: -50 },
+  { col: "8 / 13", mt: "20vh", rot: 2, speed: 70 },
+  { col: "2 / 7", mt: "-6vh", rot: 1.5, speed: -15 },
   { col: "8 / 13", mt: "14vh", rot: -1.5, speed: 50 },
-  { col: "1 / 9", mt: "2vh", rot: -1, speed: -30 },
-  { col: "9 / 13", mt: "22vh", rot: 3, speed: 70 }
+  { col: "1 / 6", mt: "-2vh", rot: -1.5, speed: -30 },
+  { col: "8 / 13", mt: "18vh", rot: 2, speed: 60 }
 ];
 
 export default function SelectedWork({ projects, categories }) {
@@ -49,15 +50,18 @@ export default function SelectedWork({ projects, categories }) {
             <span className="eyebrow-num">(02)</span> Selected work
           </p>
           <h2 id="work-title" className="section-title">
-            Things I’ve <em>shaped</em>
-            <span className="hand section-hand">products, marks & brand worlds ↓</span>
+            Brands I’ve given a <em>voice</em>
+            <span className="hand section-hand">A few of the 50 ↓</span>
           </h2>
         </div>
         <nav className="disc-index" aria-label="Browse work by discipline">
+          <Link href="/work" className="disc-chip" data-cursor="browse">
+            All <sup>{categories.reduce((n, c) => n + c.count, 0) || projects.length}</sup>
+          </Link>
           {categories.map((c) => (
             <Link key={c.slug} href={categoryPath(c.slug)} className="disc-chip" data-cursor="browse">
               <span aria-hidden="true">{c.icon}</span> {c.title}
-              <sup>{c.count}</sup>
+              {c.count > 0 && <sup>{c.count}</sup>}
             </Link>
           ))}
         </nav>
@@ -75,7 +79,7 @@ export default function SelectedWork({ projects, categories }) {
             >
               <Link href={`/work/${p.slug}`} className="wcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
                 <div className="wcard-media">
-                  <ProjectVisual project={p} card sizes="(max-width: 900px) 100vw, 55vw" />
+                  <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
                   {p.note && (
                     <span className="wcard-note hand" style={{ "--tape": p.palette.frame }}>
                       {p.note}
@@ -89,10 +93,12 @@ export default function SelectedWork({ projects, categories }) {
                   <div>
                     <p className="wcard-cat">
                       <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
+                      {p.sector && <span className="wcard-sector"> · {p.sector}</span>}
                     </p>
                     <h3 className="wcard-title">{p.title}</h3>
+                    {p.workedOn && <p className="wcard-work">{p.workedOn}</p>}
                     <p className="wcard-meta">
-                      {[p.client, p.year].filter(Boolean).join(" · ")}
+                      {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
                     </p>
                   </div>
                   <span className="wcard-arrow" aria-hidden="true">↗</span>

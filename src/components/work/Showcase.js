@@ -11,13 +11,30 @@ export default function Showcase({ project: p, next }) {
       <ProjectHero
         project={p}
         num={p.categoryIcon}
-        meta={[["Client", p.client], ["Year", p.year], ["Role", p.role], ["Discipline", p.categoryTitle]]}
+        meta={[
+          ["Client", p.client],
+          ["Sector", p.sector],
+          ["Project Type", p.projectType],
+          ["Year", p.year],
+          ["Feeling", p.feeling || p.note],
+          ["Role", p.role],
+          ["Discipline", p.categoryTitle]
+        ]}
       />
 
       {/* Not wrapped in <Reveal>: this is the page's largest image, so it must paint immediately. */}
       <div className="case-cover showcase-cover">
         <ProjectVisual project={p} sizes="(max-width: 1200px) 100vw, 1200px" preload />
       </div>
+
+      {p.workedOn && (
+        <section className="case-block">
+          <Reveal className="case-label"><span>✦</span> What I worked on</Reveal>
+          <div className="brief">
+            <Reveal as="p" className="case-lead" delay={80}>{p.workedOn}</Reveal>
+          </div>
+        </section>
+      )}
 
       {(p.brief || p.summary) && (
         <section className="case-block">

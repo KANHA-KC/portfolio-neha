@@ -59,7 +59,7 @@ export default function WorkGallery({ projects, categories, showFilters = true }
         <>
           <div className="filters" role="toolbar" aria-label="Filter work by discipline">
             <button type="button" className={`filter ${filter === "all" ? "is-on" : ""}`} aria-pressed={filter === "all"} onClick={() => choose("all")}>
-              Everything <sup>{projects.length}</sup>
+              All <sup>{projects.length}</sup>
             </button>
             {categories.map((c) => (
               <button
@@ -89,11 +89,15 @@ export default function WorkGallery({ projects, categories, showFilters = true }
                 <div>
                   <p className="gcard-cat">
                     <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
+                    {p.sector && <span> · {p.sector}</span>}
                     {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
                   </p>
                   <h2 className="gcard-title">{p.title}</h2>
+                  {p.workedOn && <p className="gcard-work">{p.workedOn}</p>}
                 </div>
-                <p className="gcard-meta">{[p.client, p.year].filter(Boolean).join(" · ")}</p>
+                <p className="gcard-meta">
+                  {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
+                </p>
               </div>
               {p.note && <span className="gcard-note hand">{p.note}</span>}
             </Link>
