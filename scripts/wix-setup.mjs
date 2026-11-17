@@ -40,6 +40,11 @@ const SCHEMA = {
       T("manifesto", "Manifesto"),
       T("intro", "Intro"),
       T("bio", "Bio (one paragraph per line)"),
+      T("storyTitle", "Story title (*word* = handwritten accent)"),
+      T("story", "Story (one paragraph per line)"),
+      T("storyStats", "Story stats (Number | Label per line)"),
+      T("workWith", "Working with me (Title | Description per line)"),
+      T("workProcess", "How I work steps (Step | Description per line)"),
       T("email", "Email"),
       T("location", "Location"),
       T("timezone", "Timezone"),
@@ -49,7 +54,8 @@ const SCHEMA = {
       IMG("portrait", "Portrait"),
       T("socials", "Socials (Label | URL per line)"),
       T("principles", "Principles (Title | Description per line)"),
-      TAGS("tools", "Tools"),
+      TAGS("designTools", "Design toolkit (add \"(learning)\" after a name for a note)"),
+      TAGS("aiTools", "AI toolkit"),
       TAGS("marquee", "Marquee"),
       TAGS("loves", "Loves")
     ]
@@ -75,6 +81,11 @@ const SCHEMA = {
       N("order", "Order"),
       T("client", "Client"),
       T("year", "Year"),
+      T("cardName", "Card name (e.g. 01.psd)"),
+      T("projectType", "Project type"),
+      T("sector", "Sector"),
+      T("workedOn", "What I worked on"),
+      T("feeling", "Feeling"),
       T("role", "Role"),
       T("timeline", "Timeline"),
       T("platform", "Platform"),
@@ -106,6 +117,18 @@ const SCHEMA = {
     displayName: "Experience",
     displayField: "role",
     fields: [T("role", "Role"), T("company", "Company"), T("period", "Period"), T("location", "Location"), N("order", "Order")]
+  },
+  testimonials: {
+    id: ids.testimonials,
+    displayName: "Testimonials",
+    displayField: "author",
+    fields: [
+      T("quote", "Quote"),
+      T("author", "Name"),
+      T("role", "Role & company"),
+      T("tile", "Tile colour (gold / aqua / paprika / teal)"),
+      N("order", "Order")
+    ]
   }
 };
 
@@ -114,7 +137,7 @@ const PERMISSIONS = { read: "ANYONE", insert: "ADMIN", update: "ADMIN", remove: 
 /* ---------- seed → CMS item shape ---------- */
 // Multi-line text fields are easier to edit in Wix than arrays; normalize.js reads both.
 const lines = (v) => (Array.isArray(v) ? v.join("\n") : v);
-const MULTILINE = new Set(["bio", "socials", "principles", "process", "stats", "deliverables", "brief"]);
+const MULTILINE = new Set(["bio", "story", "storyStats", "workWith", "workProcess", "socials", "principles", "process", "stats", "deliverables", "brief"]);
 
 function toItem(collection, raw) {
   const keys = new Set(SCHEMA[collection].fields.map((f) => f.key));
@@ -137,7 +160,8 @@ const SEED = {
   categories: seed.categories,
   projects: seed.projects,
   services: seed.services,
-  experience: seed.experience
+  experience: seed.experience,
+  testimonials: seed.testimonials
 };
 
 /* ---------- run ---------- */

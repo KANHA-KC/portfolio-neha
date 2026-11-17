@@ -5,15 +5,16 @@ Everything you see on the site — your profile, projects, categories, services 
 
 **Where:** manage.wix.com → your site **nehaondhia.com** → **CMS** (left sidebar).
 
-You'll see five collections:
+You'll see six collections:
 
 | Collection | What it controls |
 | --- | --- |
 | **Profile** | One item: your name, intro, bio, email, socials, portrait, resume & Calendly links |
 | **Projects** | One item per project — cards on Home / Work and the full project pages |
-| **Categories** | The disciplines (UX / UI, Logo design, Branding…) used for filters and category pages |
+| **Categories** | The disciplines (Logo, Brand identity, Illustration, Packaging, Marketing, AI Videos) used for filters and category pages |
 | **Services** | The skills listed in the "two hats" sections on Home and About |
 | **Experience** | Your work history on the About page |
+| **Testimonials** | The quote cards in the "Kind words" marquee on Home |
 
 ---
 
@@ -24,7 +25,7 @@ You'll see five collections:
    - **Title** — the project name.
    - **Slug** — the web address, lowercase with dashes: `my-new-brand` → `nehaondhia.com/work/my-new-brand`. Must be unique; don't change it after publishing (old links would break).
    - **Kind** — `showcase` for visual work (logos, branding, packaging, illustration) or `case-study` for long-form UX.
-   - **Category slug** — one of: `ux-ui`, `logo-design`, `branding`, `visual-design`, `illustration` (or a new category you created — see below).
+   - **Category slug** — one of: `logo`, `brand-identity`, `illustration`, `packaging`, `marketing`, `ai-videos` (or a new category you created — see below).
    - **Summary** — 1–2 sentences. This is also what Google shows, so aim for **90–155 characters**.
    - **Order** — lower numbers appear first.
 3. Add images (see next section).
@@ -57,10 +58,11 @@ Each project has three image fields:
 
 CMS → **Profile** → the single item. Don't add a second item — the site only reads the first.
 
-- **Bio** — one paragraph per line; the first line is shown large.
+- **Story title / Story** — the "longer story" on the About page. Story is one paragraph per line; the first is shown large. Wrap words in `*asterisks*` to set them in the handwritten accent (e.g. `*(Yes, really.)*`). Leave empty to use the built-in copy.
+- **Story stats** — the little tiles beside the story, one per line: `120 | creatives a month`.
+- **Working with me / How I work steps** — the two About-page cards, one per line: `Title | Description`. Steps are numbered in order.
 - **Socials** — one per line: `LinkedIn | https://linkedin.com/in/…`. New lines automatically become keycap buttons on the Contact page (LinkedIn, Dribbble, Instagram, Behance and X have their own icons).
-- **Principles** — one per line: `Title | Description`.
-- **Tools / Loves / Marquee** — tags; type a word and press Enter.
+- **Design toolkit / AI toolkit / Loves** — tags; type a word and press Enter. Toolkit names get their logo automatically (Photoshop, Illustrator, InDesign, Figma, Wix.com, Claude, ChatGPT, Recraft, Kling AI, Leonardo.Ai, Midjourney, Adobe Firefly, Gemini); any other name shows its first letter. Add a note in brackets, e.g. `Figma (learning)`. Logos live in `public/tools/`. (**Marquee** is no longer shown — the band under the hero is now the brand-logo strip. To add or swap a logo, send the PNG to your developer: it lives in `public/logo-marquee/` and the list in `src/components/home/LogoMarquee.js`.)
 - **Availability** — e.g. "Available for select projects". Leave empty to hide the badge.
 - **Calendly link** — your real Calendly event link (currently a placeholder!). Leave empty to hide the "Book a chai chat" button.
 - **Resume link** — `/resume.pdf` uses the file in the website itself. To change the CV, ask your developer to replace `public/resume.pdf` (a Wix-hosted PDF would open in a tab instead of downloading).
@@ -72,6 +74,10 @@ CMS → **Categories** → **+ Add Item**: **Title** (shown on filters), **Slug*
 
 - A category only appears on the site once at least one project uses its slug.
 - Renaming a **slug** changes its web address — update the **Category slug** of its projects to match.
+
+## Testimonials
+
+CMS → **Testimonials** → **+ Add Item**: **Quote** (no need to type the quote marks), **Name**, **Role & company**, **Order** (lower numbers first) and optionally **Tile colour** — `gold`, `aqua`, `paprika` or `teal` (leave empty and the colours alternate). Keep quotes around 50–60 words so the cards stay even. Delete every item to hide the section.
 
 ## Services & Experience
 

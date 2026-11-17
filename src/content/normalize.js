@@ -49,6 +49,7 @@ export function normalizeCategory(raw) {
 export function normalizeProject(raw, image) {
   const accent = palettes[raw.accent] ? raw.accent : "teal";
   const kind = raw.kind === "case-study" ? "case-study" : "showcase";
+  const feeling = str(raw.feeling || raw.note);
   return {
     slug: str(raw.slug),
     title: str(raw.title, "Untitled project"),
@@ -60,10 +61,15 @@ export function normalizeProject(raw, image) {
     timeline: str(raw.timeline || raw.year),
     client: str(raw.client),
     role: str(raw.role),
+    projectType: str(raw.projectType),
+    cardName: str(raw.cardName),
+    sector: str(raw.sector),
+    workedOn: str(raw.workedOn),
+    feeling,
     platform: str(raw.platform),
-    summary: str(raw.summary),
+    summary: str(raw.summary || raw.workedOn || raw.brief),
     subtitle: str(raw.subtitle),
-    note: str(raw.note),
+    note: feeling,
     accent,
     palette: palettes[accent],
     illustration: str(raw.illustration) || null,
@@ -112,6 +118,18 @@ export function normalizeExperience(raw) {
   };
 }
 
+const TILES = ["gold", "aqua", "paprika", "teal"];
+export function normalizeTestimonial(raw) {
+  const tile = str(raw.tile).toLowerCase();
+  return {
+    quote: str(raw.quote).replace(/^["“]+|["”]+$/g, ""),
+    author: str(raw.author),
+    role: str(raw.role),
+    tile: TILES.includes(tile) ? tile : "",
+    order: num(raw.order, 99)
+  };
+}
+
 export function normalizeProfile(raw, image) {
   const name = str(raw.name, "Neha Ondhia");
   return {
@@ -124,6 +142,11 @@ export function normalizeProfile(raw, image) {
     manifesto: str(raw.manifesto),
     intro: str(raw.intro),
     bio: list(raw.bio),
+    storyTitle: str(raw.storyTitle),
+    story: list(raw.story).map(String),
+    storyStats: pairs(raw.storyStats, "value", "label"),
+    workWith: pairs(raw.workWith, "title", "description"),
+    workProcess: pairs(raw.workProcess, "title", "description"),
     email: str(raw.email),
     location: str(raw.location),
     timezone: str(raw.timezone, "Asia/Kolkata"),
@@ -133,7 +156,8 @@ export function normalizeProfile(raw, image) {
     portrait: image(raw.portrait, name),
     socials: pairs(raw.socials, "label", "href"),
     principles: pairs(raw.principles, "title", "description"),
-    tools: list(raw.tools).map(String),
+    designTools: list(raw.designTools).map(String),
+    aiTools: list(raw.aiTools).map(String),
     marquee: list(raw.marquee).map(String),
     loves: list(raw.loves).map(String)
   };

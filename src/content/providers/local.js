@@ -14,6 +14,7 @@ export async function fetchRaw() {
     projects: seed.projects,
     categories: seed.categories,
     services: seed.services,
-    experience: seed.experience
+    experience: seed.experience,
+    testimonials: seed.testimonials
   };
 }

@@ -13,13 +13,35 @@ export const profile = {
   heroIntro:
     "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
-    "Design is never just what meets the eye.\n\nGood design behaves like a *kind friend* — it listens first, explains things gently, and never makes you feel lost.\n\nBehind every identity you *recognize* or package you *hold* lies a deeper question: how did it make you feel?\n\nBecause while good design looks good, great design *tells a story*. That is why I always start with the humans before working my way down to the pixels.",
+    "Design is never just what meets the eye.\n\nBehind every identity you *recognize* or package you *hold* lies a deeper question: how did it make you feel?\n\nBecause while good design looks good, great design *tells a story*. That is why I always start with the humans before working my way down to the pixels.",
   intro:
     "I’m a designer based in Mumbai. I work across UX and brand — from research-led product flows for fintech and health, to logos and identities that give small businesses a confident voice.",
   bio: [
     "I started out as an interaction designer, obsessing over the tiny moments between taps. Somewhere along the way I fell for both sides of the craft: the messy, human research — and the quiet precision of a well-drawn logo.",
     "Today I lead projects end to end: framing problems with stakeholders, running research, prototyping, and building the design systems and brand guidelines that keep it all consistent.",
     "Outside of work you’ll find me hunting for hand-lettered shop signs, filling notebooks with diagrams nobody asked for, and mentoring younger designers who are just finding their voice."
+  ],
+  // About page story. Wrap words in *asterisks* to set them in the handwritten accent.
+  storyTitle: "I came to design through *clothes*.",
+  story: [
+    "I studied fashion design at [[Pearl Academy]] in [[Mumbai]] (2015 to 2019) and fell in love with the city. Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
+    "Then Covid hit and left everything hanging. I moved back to my hometown and, since I can’t sit still, taught myself design software. Three graphic design internships later, I landed my first agency job in 2021.",
+    "Five years on, I’ve worked at The Social Lions, Schbang and Webenza, on brands like HDFC Life, Amazon, Airtel Business and Salesforce. At Webenza I grew from Graphic Designer to Senior Graphic Designer over four years, produced around 120 creatives a month, trained three junior designers and stepped in as art director when needed. Alongside agency work, I also ran my own small design studio, The Design Bar, for three years, from 2020–2023.",
+    "I’ve been designing since before AI. Today I use it daily for research and mockups, and the thinking is still mine.",
+    "*Off the screen:* 10K and half marathons in Bangalore and Kolkata, travel, chai, and anything that gets my hands dirty."
+  ],
+  storyStats: ["5+ | years in agencies", "~120 | creatives a month", "3 | junior designers trained", "1 | dog in a sherwani"],
+  workWith: [
+    "Clear and responsive | You’ll always know where things stand.",
+    "On time | Deliverables arrive when I said they would.",
+    "Calm under pressure | Always up for a chat, and good at lightening a stressful week."
+  ],
+  workProcess: [
+    "Listen | A call to understand the brand: its values, what it does, its audience and how it wants to be seen.",
+    "Find the words | I brainstorm words that capture the brand and pick the 5 to 7 strongest routes.",
+    "Sketch | Rough sketches of those routes, and the client shortlists 3 to 5.",
+    "Develop | Detailed logos with the thinking behind each, plus a real-life mockup.",
+    "Finalise | Minor tweaks, then clean files delivered."
   ],
   email: "neha@nehaondhia.com",
   location: "Mumbai, India",
@@ -32,7 +54,8 @@ export const profile = {
     "Accessible by default | Contrast, focus states and plain language aren’t a final checklist — they shape the very first sketch.",
     "Systems over screens | Whether it’s a product or a brand, I design the rules behind the pixels so teams keep shipping good work."
   ],
-  tools: ["Figma", "Illustrator", "Photoshop", "InDesign", "Procreate", "After Effects", "FigJam", "Framer"],
+  designTools: ["Photoshop", "Illustrator", "InDesign", "Figma (learning)", "Wix.com"],
+  aiTools: ["Claude", "ChatGPT", "Recraft", "Kling AI", "Leonardo.Ai", "Midjourney", "Adobe Firefly", "Gemini"],
   marquee: [
     "Logo Design",
     "Brand Identity",
@@ -56,11 +79,12 @@ export const profile = {
 };
 
 export const categories = [
-  { slug: "ux-ui", title: "UX / UI", icon: "▢", order: 1, description: "Research-led product design, told as case studies." },
-  { slug: "logo-design", title: "Logo design", icon: "◎", order: 2, description: "Marks, monograms and wordmarks." },
-  { slug: "branding", title: "Branding", icon: "✦", order: 3, description: "Identity systems, guidelines and brand worlds." },
-  { slug: "visual-design", title: "Visual & print", icon: "▤", order: 4, description: "Packaging, posters, editorial and social." },
-  { slug: "illustration", title: "Illustration", icon: "✎", order: 5, description: "Drawings, icons and spot illustrations." }
+  { slug: "logo", title: "Logo", icon: "◎", order: 1, description: "Marks, monograms and wordmarks." },
+  { slug: "brand-identity", title: "Brand identity", icon: "✦", order: 2, description: "Identity systems, guidelines and brand worlds." },
+  { slug: "illustration", title: "Illustration", icon: "✎", order: 3, description: "Drawings, icons and spot illustrations." },
+  { slug: "packaging", title: "Packaging", icon: "▤", order: 4, description: "Labels, boxes, packaging and things you can hold." },
+  { slug: "marketing", title: "Marketing", icon: "↗", order: 5, description: "Campaigns, collateral, social media and promotional design." },
+  { slug: "ai-videos", title: "AI Videos", icon: "▶", order: 6, description: "AI-generated video concepts, reels and motion stories." }
 ];
 
 export const services = [
@@ -81,262 +105,353 @@ export const experience = [
   { order: 4, period: "2018 — 20", role: "Interaction Designer", company: "Studio Craft", location: "Mumbai" }
 ];
 
+// Home "Kind words" marquee. Tile: gold / aqua / paprika / teal (leave empty to cycle).
+export const testimonials = [
+  {
+    order: 1,
+    quote:
+      "Neha has been a wonderful part of our design team at Webenza over the last four years. Her work for Sterling Holidays has always stood out. She understands the brief, brings fresh ideas and pays attention to every detail. It's been a pleasure working with someone so creative, dependable and consistent.",
+    author: "Pradeep Nair",
+    role: "Executive Vice President and Business Head, Webenza India Pvt. Ltd.",
+    tile: "gold"
+  },
+  {
+    order: 2,
+    quote:
+      "It was a pleasure to have Neha on my team, working on brands like Dabur and HDFC. Their eye for design, attention to detail, and willingness to explore ideas made them a valued team member. They brought creativity and a collaborative spirit to the work, and I’d happily recommend them.",
+    author: "Himanshu Bisht",
+    role: "HOD – Creative Director (Art), Jio Creative Labs.",
+    tile: "aqua"
+  },
+  {
+    order: 3,
+    quote:
+      "Neha did a wonderful job bringing our ideas and vision for BricX to life. From designing the company logo to developing the brand guidelines and helping with basics of the UI/UX, she made the entire process seamless. I loved how everything turned out and would highly recommend her work. Would definitely work with her again!",
+    author: "Eashani and Yaman",
+    role: "CCO and Founder, BricX",
+    tile: "paprika"
+  },
+  {
+    order: 4,
+    quote:
+      "Neha is a talented and creative designer with a knack for turning ideas into engaging visual stories. She understands client briefs well, brings fresh perspectives to every project and combines strong creative thinking with a collaborative, can-do attitude. A dependable team player who consistently brings value to the table.",
+    author: "Swastika Karmakar",
+    role: "Art Director, Webenza India Pvt. Ltd.",
+    tile: "teal"
+  },
+  {
+    order: 5,
+    quote:
+      "Neha consistently delivers top-notch social media and advertising creatives with a great eye for detail. She understands briefs quickly, brings fresh ideas to life and works with impressive turnaround times. Her creative thinking and quality of execution often mean one-shot approvals. A reliable, efficient and creatively sharp professional.",
+    author: "Sahil Mehta",
+    role: "Founder, Connection Design",
+    tile: "aqua"
+  }
+];
+
 // Placeholder gallery slots for showcase projects.
 const slots = (...items) => items.map(([title, aspect]) => ({ src: null, title, aspect }));
 
 export const projects = [
-  /* ---------- UX case studies ---------- */
+  /* ---------- Featured cards (Homepage 01 to 05) ---------- */
   {
-    slug: "financial-wellness",
-    kind: "case-study",
-    category: "ux-ui",
+    slug: "landmark-infratech",
+    cardName: "01.psd",
+    kind: "showcase",
+    category: "brand-identity",
     featured: true,
     order: 1,
-    title: "Financial Wellness Platform",
-    subtitle: "Overhauling personal finance for 150k+ millennial earners",
+    title: "Landmark Infratech",
+    subtitle: "A brand guidebook for a Bangalore real estate company",
     summary:
-      "Redesigned the core money-tracking experience for a fintech startup, reducing drop-off by 42% through a research-led overhaul of onboarding and goal-setting.",
-    role: "Lead UX Designer",
-    year: "2024",
-    timeline: "2023 – 2024",
-    client: "FinSpire Technologies",
-    platform: "Web & Mobile",
-    tags: ["Product Design", "Fintech"],
-    accent: "gold",
-    illustration: "finance",
+      "Building the Brand Guidelines, Office Stationery, Signage, Cutlery and designing the Hospitality Uniforms for the brand.",
+    client: "Landmark Infratech",
+    sector: "Real Estate",
+    projectType: "Via Freelance",
+    year: "2026–Current",
+    role: "Brand & Hospitality Design",
+    tags: ["Real Estate", "Brand Guidelines", "Stationery", "Signage"],
+    accent: "teal",
     cover: null,
     aspect: "landscape",
-    note: "money, but make it calm",
-    stats: ["42% | Drop-off reduction", "88% | Onboarding completion", "150k+ | Active users in 6 months"],
-    challenge:
-      "The existing platform buried people under financial jargon and dense tables. 63% of new users dropped off during bank-link setup because of low trust signals and complex authentication screens.",
-    solution:
-      "24 moderated interviews and 3 rounds of prototype testing later, we shipped a progressive-disclosure flow, visual budget ‘buckets’, and small celebration moments that guided people through verification in under 3 minutes.",
-    process: [
-      "Listen | 24 interviews, diary study, support-ticket mining",
-      "Frame | Trust map + jobs-to-be-done for the first 7 days",
-      "Make | 3 prototype rounds, 40+ onboarding variants",
-      "Measure | A/B framework + post-launch funnel analytics"
-    ],
-    deliverables: [
-      "User journey maps & empathy diagrams",
-      "High-fidelity interactive prototypes",
-      "Onboarding design specification",
-      "Post-launch analytics & A/B test framework"
-    ],
-    learnings:
-      "Trust in fintech isn’t built with security badges — it’s earned when every state is transparent, predictable and forgiving."
+    feeling: "Premium · Assured",
+    note: "Premium · Assured",
+    brief:
+      "A brand guidebook for a Bangalore real estate company, to guide every touchpoint, from social and web to stationery and signage.",
+    workedOn:
+      "Building the Brand Guidelines, Office Stationery, Signage, Cutlery and designing the Hospitality Uniforms for the brand.",
+    gallery: slots(["Brand Guidelines", "wide"], ["Office Stationery", "landscape"], ["Signage System", "portrait"], ["Cutlery & Uniforms", "square"])
   },
   {
-    slug: "healthcare-companion",
-    kind: "case-study",
-    category: "ux-ui",
+    slug: "sterling",
+    cardName: "02.psd",
+    kind: "showcase",
+    category: "ai-videos",
     featured: true,
     order: 2,
-    title: "Healthcare Companion App",
-    subtitle: "Accessible care coordination for people living with chronic illness",
-    summary:
-      "An end-to-end wellness app focused on accessibility and trust, plus a design system now used across 4 products and 2 platforms.",
-    role: "UX & Product Designer",
-    year: "2023",
-    timeline: "2022 – 2023",
-    client: "CarePulse Health",
-    platform: "iOS & Android",
-    tags: ["Mobile Design", "Healthtech"],
-    accent: "aqua",
-    illustration: "health",
+    title: "Sterling",
+    subtitle: "Online and offline brand assets that feel homely",
+    summary: "Logo, brochures, banners, email, social and AI videos for a holiday brand.",
+    client: "Sterling",
+    sector: "Hospitality",
+    projectType: "Via Webenza",
+    year: "2023–2026",
+    role: "Brand & Visual Designer",
+    tags: ["Hospitality", "AI Videos", "Brand Assets", "Brochures"],
+    accent: "gold",
     cover: null,
     aspect: "landscape",
-    note: "big buttons, kind words",
-    stats: ["76% | Daily adherence rate", "AAA | Accessibility", "−35% | Support calls"],
-    challenge:
-      "Patients aged 50+ managing multiple prescriptions struggled with tiny tap targets, low-contrast reminders and notification copy that made them anxious.",
-    solution:
-      "High-contrast, large-touch interfaces with haptic reinforcement. Medication schedules became simple morning / afternoon / night buckets, and empathetic microcopy took the dread out of clinical check-ins.",
-    process: [
-      "Listen | Home visits with 12 patients & 4 carers",
-      "Frame | Accessibility audit against WCAG 2.1 AAA",
-      "Make | Cross-platform tokens & component library",
-      "Measure | Adherence tracking over 90 days"
-    ],
-    deliverables: ["WCAG 2.1 AAA audit & redesign", "Cross-platform design system", "Medication adherence flow", "Voice & screen-reader specs"],
-    learnings:
-      "Accessibility never costs beauty. When an interface works for the most vulnerable person, it feels effortless for everyone."
+    feeling: "Warm · Welcoming",
+    note: "Warm · Welcoming",
+    brief:
+      "Online and offline assets that feel homely, with realistic visuals and clean, elegant type.",
+    workedOn:
+      "Logo, brochures, banners, email, social and AI videos for a holiday brand.",
+    gallery: slots(["Brand Visuals", "wide"], ["Brochure & Print", "portrait"], ["Email & Social", "square"], ["Campaign Banners", "landscape"])
   },
   {
-    slug: "saas-dashboard",
-    kind: "case-study",
-    category: "ux-ui",
+    slug: "seru",
+    cardName: "03.psd",
+    kind: "showcase",
+    category: "logo",
     featured: true,
     order: 3,
-    title: "Prism — Logistics Design System",
-    subtitle: "Enterprise logistics intelligence, made readable",
-    summary:
-      "Led a 0→1 design system for a logistics SaaS platform, cutting design-to-dev handoff time by 60% and giving three squads one shared visual language.",
-    role: "Design Lead",
-    year: "2022",
-    timeline: "2021 – 2022",
-    client: "LogiFlow Global",
-    platform: "Enterprise SaaS",
-    tags: ["Design System", "Enterprise"],
+    title: "Séru",
+    subtitle: "A warm, welcoming mark for a café in the heart of Bangalore",
+    summary: "Logo Design, Building the Brand Guidelines, and Packaging for Séru.",
+    client: "Séru",
+    sector: "F&B",
+    projectType: "Via Freelance",
+    year: "2026–Current",
+    role: "Logo & Brand Designer",
+    tags: ["F&B", "Logo Design", "Packaging", "Brand Guidelines"],
     accent: "paprika",
-    illustration: "system",
     cover: null,
     aspect: "landscape",
-    note: "18 buttons → 1",
-    stats: ["60% | Faster handoff", "94% | Component adoption", "−48% | UI bug reports"],
-    challenge:
-      "Three engineering squads were shipping disjointed UI — 18 different button styles, conflicting modal behaviour and zero documentation.",
-    solution:
-      "Built ‘Prism’ in Figma with synced React tokens. Standardised data-viz components, dense table layouts and keyboard-first patterns for high-speed freight dispatch.",
-    process: [
-      "Listen | UI inventory across 140 screens",
-      "Frame | Multi-brand token architecture",
-      "Make | 60+ accessible components + Storybook",
-      "Measure | Adoption dashboards & squad workshops"
-    ],
-    deliverables: ["Multi-brand design-token architecture", "60+ accessible components", "Storybook documentation & guidelines", "Designer + engineer training workshops"],
-    learnings:
-      "A design system is a communication tool before it’s a component library. It lives or dies on how easily engineers can adopt it."
+    feeling: "Warm · Welcoming",
+    note: "Warm · Welcoming",
+    brief:
+      "A warm, welcoming logo for a café in the heart of Bangalore. “Séru” means “together” in Kannada, so the mark needed a cultural connection.",
+    workedOn:
+      "Logo Design, Building the Brand Guidelines, and Packaging",
+    gallery: slots(["Logo Mark", "square"], ["Brand Guidelines Spread", "wide"], ["Packaging Design", "portrait"], ["In-Store Collateral", "landscape"])
   },
-
-  /* ---------- Branding (placeholders) ---------- */
   {
-    slug: "branding-project-01",
+    slug: "lighthouse-canton",
+    cardName: "04.psd",
     kind: "showcase",
-    category: "branding",
+    category: "marketing",
     featured: true,
     order: 4,
-    title: "Brand Identity 01",
-    subtitle: "Project name — a short one-line description",
-    summary: "Placeholder brand identity project. Add the cover, brief and gallery images in the Wix CMS.",
-    client: "Client name",
-    year: "2025",
-    role: "Brand designer",
-    tags: ["Identity", "Guidelines"],
-    accent: "paprika",
-    cover: null,
-    aspect: "wide",
-    note: "brand world goes here",
-    brief:
-      "Write the brief here: who the client is, what they needed, and the idea behind the identity. Two or three short paragraphs work best.",
-    gallery: slots(["Primary logo", "wide"], ["Colour palette", "square"], ["Typography", "square"], ["Stationery", "landscape"], ["Brand guidelines spread", "wide"], ["In the wild — mockup", "portrait"])
-  },
-  {
-    slug: "branding-project-02",
-    kind: "showcase",
-    category: "branding",
-    order: 6,
-    title: "Brand Identity 02",
-    subtitle: "Project name — a short one-line description",
-    summary: "Placeholder brand identity project.",
-    client: "Client name",
-    year: "2024",
-    role: "Brand designer",
-    tags: ["Identity", "Packaging"],
-    accent: "gold",
-    cover: null,
-    aspect: "portrait",
-    note: "add images in Wix",
-    brief: "Write the brief here.",
-    gallery: slots(["Logo suite", "landscape"], ["Packaging", "portrait"], ["Social templates", "square"], ["Signage", "landscape"])
-  },
-  {
-    slug: "branding-project-03",
-    kind: "showcase",
-    category: "branding",
-    order: 9,
-    title: "Brand Identity 03",
-    subtitle: "Project name — a short one-line description",
-    summary: "Placeholder brand identity project.",
-    client: "Client name",
-    year: "2023",
-    role: "Brand designer",
-    tags: ["Identity"],
+    title: "Lighthouse Canton",
+    subtitle: "Modern creatives for an NRI audience",
+    summary: "Social media collateral for a financial services firm.",
+    client: "Lighthouse Canton",
+    sector: "Financial Services",
+    projectType: "Via Webenza",
+    year: "2026",
+    role: "Visual & Social Media Designer",
+    tags: ["Financial Services", "Social Media", "Typography"],
     accent: "aqua",
     cover: null,
     aspect: "landscape",
-    brief: "Write the brief here.",
-    gallery: slots(["Logo", "wide"], ["Colour & type", "landscape"], ["Applications", "landscape"])
-  },
-
-  /* ---------- Logo design (placeholders) ---------- */
-  ...[1, 2, 3, 4].map((n, i) => ({
-    slug: `logo-project-0${n}`,
-    kind: "showcase",
-    category: "logo-design",
-    featured: n === 1,
-    order: 4 + n,
-    title: `Logo Design 0${n}`,
-    subtitle: "Brand name — industry",
-    summary: "Placeholder logo project. Add the final mark, sketches and variations in the Wix CMS.",
-    client: "Client name",
-    year: "2025",
-    role: "Logo designer",
-    tags: ["Logo", ["Monogram", "Wordmark", "Symbol", "Lettering"][i]],
-    accent: ["teal", "gold", "paprika", "aqua"][i],
-    cover: null,
-    aspect: "square",
-    note: n === 1 ? "sketch → mark" : "",
-    brief: "Write the story behind the mark: the idea, the sketches, and why it works.",
-    gallery: slots(["Final mark", "square"], ["Sketches", "square"], ["Construction grid", "square"], ["Variations", "landscape"])
-  })),
-
-  /* ---------- Visual & print (placeholders) ---------- */
-  {
-    slug: "packaging-project-01",
-    kind: "showcase",
-    category: "visual-design",
-    order: 10,
-    title: "Packaging Design 01",
-    subtitle: "Product name — a short one-line description",
-    summary: "Placeholder packaging project.",
-    client: "Client name",
-    year: "2024",
-    role: "Packaging designer",
-    tags: ["Packaging", "Print"],
-    accent: "gold",
-    cover: null,
-    aspect: "tall",
-    brief: "Write the brief here.",
-    gallery: slots(["Front of pack", "portrait"], ["Label details", "square"], ["Range", "wide"])
+    feeling: "Premium · Trustworthy",
+    note: "Premium · Trustworthy",
+    brief:
+      "Modern creatives for an NRI audience, indirect in their imagery, with typography doing much of the work.",
+    workedOn:
+      "Social media collateral for a financial services firm.",
+    gallery: slots(["Campaign Creatives", "wide"], ["Social Carousel", "portrait"], ["Typography System", "square"], ["Collateral Suite", "landscape"])
   },
   {
-    slug: "poster-series-01",
-    kind: "showcase",
-    category: "visual-design",
-    order: 11,
-    title: "Poster Series 01",
-    subtitle: "Event or campaign name",
-    summary: "Placeholder poster / campaign project.",
-    client: "Client name",
-    year: "2024",
-    role: "Visual designer",
-    tags: ["Poster", "Campaign"],
-    accent: "paprika",
-    cover: null,
-    aspect: "portrait",
-    brief: "Write the brief here.",
-    gallery: slots(["Poster 1", "portrait"], ["Poster 2", "portrait"], ["Poster 3", "portrait"], ["Social cut-downs", "square"])
-  },
-
-  /* ---------- Illustration (placeholder) ---------- */
-  {
-    slug: "illustration-project-01",
+    slug: "unhumble",
+    cardName: "05.psd",
     kind: "showcase",
     category: "illustration",
-    order: 12,
-    title: "Illustration Set 01",
-    subtitle: "Series name — medium",
-    summary: "Placeholder illustration project.",
-    client: "Personal",
-    year: "2025",
+    featured: true,
+    order: 5,
+    title: "UnHumble",
+    subtitle: "A deck of cards celebrating South Asian culture",
+    summary: "A deck of cards celebrating South Asian culture, for a US company.",
+    client: "UnHumble",
+    sector: "Gifting",
+    projectType: "Via Freelance",
+    year: "2020",
     role: "Illustrator",
-    tags: ["Illustration", "Icons"],
+    tags: ["Illustration", "Gifting", "Culture", "Card Deck"],
+    accent: "gold",
+    cover: null,
+    aspect: "landscape",
+    feeling: "Proud · Playful",
+    note: "Proud · Playful",
+    brief:
+      "A US company found my art page and asked me to illustrate a deck of cards inspired by South Asian culture. I drew on the culture I grew up around.",
+    workedOn:
+      "A deck of cards celebrating South Asian culture, for a US company.",
+    gallery: slots(["Card Deck Box", "portrait"], ["Face Cards Suite", "wide"], ["Pattern Details", "square"], ["Full Deck Layout", "landscape"])
+  },
+
+  /* ---------- Work page projects (06 to 11) ---------- */
+  {
+    slug: "hdfc-life-insurance",
+    cardName: "06.psd",
+    kind: "showcase",
+    category: "marketing",
+    featured: false,
+    order: 6,
+    title: "HDFC Life Insurance",
+    subtitle: "Social, email and video assets for a national insurer",
+    summary: "Social, email and video frames for a national insurer.",
+    client: "HDFC Life Insurance",
+    sector: "Insurance",
+    projectType: "Via Schbang",
+    year: "2021–2022",
+    role: "Social & Digital Designer",
+    tags: ["Insurance", "Social Media", "Email Design", "Video Frames"],
+    accent: "teal",
+    cover: null,
+    aspect: "landscape",
+    feeling: "Trustworthy · Caring",
+    note: "Trustworthy · Caring",
+    brief:
+      "Social, email and video assets that sit inside the brand guidelines but feel relatable.",
+    workedOn:
+      "Social, email and video frames for a national insurer.",
+    gallery: slots(["Social Creatives", "wide"], ["Email Design", "portrait"], ["Video Frames", "landscape"], ["Campaign Suite", "square"])
+  },
+  {
+    slug: "bricx",
+    cardName: "07.psd",
+    kind: "showcase",
+    category: "brand-identity",
+    featured: false,
+    order: 7,
+    title: "BricX",
+    subtitle: "A modern, memorable identity for real estate trading",
+    summary: "Logo Design, Building the Brand Guidebook, and Office Stationery.",
+    client: "BricX",
+    sector: "Real Estate",
+    projectType: "Via Freelance",
+    year: "2026–Current",
+    role: "Brand & Logo Designer",
+    tags: ["Real Estate", "Logo Design", "Brand Guidebook", "Office Stationery"],
+    accent: "paprika",
+    cover: null,
+    aspect: "landscape",
+    feeling: "Modern · Confident",
+    note: "Modern · Confident",
+    brief:
+      "A modern, memorable logo for a company pioneering real estate trading, plus a brand guidelines for its website and app, and later social and offline.",
+    workedOn:
+      "Logo Design, Building the Brand Guidebook, and Office Stationery",
+    gallery: slots(["Logo Mark", "square"], ["Brand Guidebook", "wide"], ["Stationery Suite", "landscape"], ["Digital Interface", "portrait"])
+  },
+  {
+    slug: "drink-prime",
+    cardName: "08.psd",
+    kind: "showcase",
+    category: "marketing",
+    featured: false,
+    order: 8,
+    title: "Drink Prime",
+    subtitle: "Fresh Google Ads creatives and website acquisition collateral",
+    summary: "Social media collateral and ads.",
+    client: "Drink Prime",
+    sector: "Water Purification",
+    projectType: "Via Freelance",
+    year: "2026",
+    role: "Digital & Ad Designer",
+    tags: ["Water Purification", "Google Ads", "Social Media", "Creatives"],
     accent: "aqua",
     cover: null,
+    aspect: "landscape",
+    feeling: "Fresh · Clean",
+    note: "Fresh · Clean",
+    brief:
+      "A fresh set of Google Ads creatives to bring more visitors to their website.",
+    workedOn:
+      "Social media collateral and ads.",
+    gallery: slots(["Google Ads Suite", "wide"], ["Social Assets", "square"], ["Ad Variations", "landscape"], ["Landing Creatives", "portrait"])
+  },
+  {
+    slug: "the-design-bar",
+    cardName: "09.psd",
+    kind: "showcase",
+    category: "illustration",
+    featured: false,
+    order: 9,
+    title: "The Design Bar",
+    subtitle: "Customised, premium illustrated gifts open to everyone",
+    summary: "Illustrated frames, Wallet Cards, Vintage Frames, Name plates and various other customised products including keychains and polaroids.",
+    client: "The Design Bar",
+    sector: "Gifting",
+    projectType: "Via My Own Studio",
+    year: "2020–2023",
+    role: "Founder & Creative Lead",
+    tags: ["Gifting", "Custom Products", "Illustrated Frames", "Merchandise"],
+    accent: "gold",
+    cover: null,
+    aspect: "portrait",
+    feeling: "Personal · Accessible",
+    note: "Personal · Accessible",
+    brief:
+      "There was no brief. I wanted premium-feeling gifts that were customised, budget-friendly and open to everyone.",
+    workedOn:
+      "Illustrated frames, Wallet Cards, Vintage Frames, Name plates and various other customised products including keychains and polaroids",
+    gallery: slots(["Illustrated Frames", "portrait"], ["Vintage Frames", "square"], ["Wallet Cards", "landscape"], ["Custom Product Range", "wide"])
+  },
+  {
+    slug: "twisted-tree-homestay",
+    cardName: "10.psd",
+    kind: "showcase",
+    category: "logo",
+    featured: false,
+    order: 10,
+    title: "Twisted Tree Homestay",
+    subtitle: "A heritage mark rooted in family history for an Ooty homestay",
+    summary: "Logo and Signage Design.",
+    client: "Twisted Tree Homestay",
+    sector: "Hospitality",
+    projectType: "Via Freelance",
+    year: "2026",
+    role: "Logo & Signage Designer",
+    tags: ["Hospitality", "Logo Design", "Signage", "Heritage"],
+    accent: "teal",
+    cover: null,
     aspect: "square",
-    brief: "Write the brief here.",
-    gallery: slots(["Illustration 1", "square"], ["Illustration 2", "square"], ["Process", "landscape"])
+    feeling: "Homely · Rooted",
+    note: "Homely · Rooted",
+    brief:
+      "A logo for a homestay in Ooty. The property has an old, twisted tree planted by the client’s great-grandfather, and he wanted it in the mark.",
+    workedOn:
+      "Logo and Signage Design",
+    gallery: slots(["Final Mark", "square"], ["Property Signage", "landscape"], ["Sketches & Grid", "square"], ["Homestay Collateral", "wide"])
+  },
+  {
+    slug: "creamland-and-annn",
+    cardName: "11.psd",
+    kind: "showcase",
+    category: "packaging",
+    featured: false,
+    order: 11,
+    title: "Creamland and Annn",
+    subtitle: "Everyday packaging and memorable marks for sister F&B brands",
+    summary: "Logo Design, Print Collateral, Packaging.",
+    client: "Creamland and Annn",
+    sector: "F&B",
+    projectType: "Via Freelance",
+    year: "2025–Current",
+    role: "Packaging & Brand Designer",
+    tags: ["F&B", "Packaging", "Logo Design", "Print Collateral"],
+    accent: "gold",
+    cover: null,
+    aspect: "landscape",
+    feeling: "Sweet · Playful",
+    note: "Sweet · Playful",
+    brief:
+      "Easy-to-remember logos for the sister brands, for everyday packaging.",
+    workedOn:
+      "Logo Design, Print Collateral, Packaging",
+    gallery: slots(["Packaging Range", "wide"], ["Logo Marks", "square"], ["Print Collateral", "landscape"], ["Pack Details", "portrait"])
   }
 ];

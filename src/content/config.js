@@ -8,7 +8,8 @@ export const collections = {
   projects: process.env.WIX_COLLECTION_PROJECTS || "Projects",
   categories: process.env.WIX_COLLECTION_CATEGORIES || "Categories",
   services: process.env.WIX_COLLECTION_SERVICES || "Services",
-  experience: process.env.WIX_COLLECTION_EXPERIENCE || "Experience"
+  experience: process.env.WIX_COLLECTION_EXPERIENCE || "Experience",
+  testimonials: process.env.WIX_COLLECTION_TESTIMONIALS || "Testimonials"
 };
 
 // Content comes from Wix when credentials exist, otherwise from the local seed in ./seed.js.

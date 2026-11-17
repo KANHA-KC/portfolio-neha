@@ -49,12 +49,14 @@ async function queryOne(collectionId) {
 }
 
 export async function fetchRaw() {
-  const [profile, projects, categories, services, experience] = await Promise.all([
+  const [profile, projects, categories, services, experience, testimonials] = await Promise.all([
     queryOne(collections.profile),
     queryAll(collections.projects),
     queryAll(collections.categories),
     queryAll(collections.services),
-    queryAll(collections.experience)
+    queryAll(collections.experience),
+    // Newer collection: if it doesn't exist in Wix yet, the site falls back to the seed (null) instead of failing.
+    queryAll(collections.testimonials).catch(() => null)
   ]);
-  return { profile, projects, categories, services, experience };
+  return { profile, projects, categories, services, experience, testimonials };
 }

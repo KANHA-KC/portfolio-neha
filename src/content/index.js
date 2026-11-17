@@ -3,10 +3,22 @@
 
 import { cacheLife, cacheTag } from "next/cache";
 import { CONTENT_TAG, contentSource } from "./config";
-import { normalizeCategory, normalizeExperience, normalizeProfile, normalizeProject, normalizeService } from "./normalize";
+import { normalizeCategory, normalizeExperience, normalizeProfile, normalizeProject, normalizeService, normalizeTestimonial } from "./normalize";
 import * as local from "./providers/local";
+import * as seed from "./seed";
 
 const byOrder = (a, b) => a.order - b.order;
+
+// Newer profile fields: until they are filled in the CMS, the seed copy is used.
+const SEEDED_PROFILE_KEYS = ["storyTitle", "story", "storyStats", "workWith", "workProcess", "designTools", "aiTools"];
+const withSeedProfile = (raw = {}) => {
+  const out = { ...raw };
+  for (const k of SEEDED_PROFILE_KEYS) {
+    const v = out[k];
+    if (v == null || v === "" || (Array.isArray(v) && !v.length)) out[k] = seed.profile[k];
+  }
+  return out;
+};
 
 async function fetchFromSource() {
   if (contentSource() === "wix") {
@@ -34,16 +46,16 @@ async function loadContent() {
     .map(normalizeCategory)
     .filter((c) => c.slug)
     .sort(byOrder)
-    .map((c) => ({ ...c, count: projects.filter((p) => p.category === c.slug).length }))
-    .filter((c) => c.count > 0);
+    .map((c) => ({ ...c, count: projects.filter((p) => p.category === c.slug).length }));
   const catOf = Object.fromEntries(categories.map((c) => [c.slug, c]));
 
   return {
-    profile: normalizeProfile(raw.profile || {}, image),
+    profile: normalizeProfile(withSeedProfile(raw.profile || {}), image),
     projects: projects.map((p) => ({ ...p, categoryTitle: catOf[p.category]?.title || p.category, categoryIcon: catOf[p.category]?.icon || "✦" })),
     categories,
     services: raw.services.map(normalizeService).sort(byOrder),
-    experience: raw.experience.map(normalizeExperience).sort(byOrder)
+    experience: raw.experience.map(normalizeExperience).sort(byOrder),
+    testimonials: (raw.testimonials ?? seed.testimonials).map(normalizeTestimonial).filter((t) => t.quote).sort(byOrder)
   };
 }
 
@@ -76,4 +88,8 @@ export async function getServices() {
 
 export async function getExperience() {
   return (await loadContent()).experience;
+}
+
+export async function getTestimonials() {
+  return (await loadContent()).testimonials;
 }
