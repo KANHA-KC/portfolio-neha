@@ -1,10 +1,9 @@
 import Hero from "@/components/home/Hero";
 import Manifesto from "@/components/home/Manifesto";
 import SelectedWork from "@/components/home/SelectedWork";
-import AboutSnapshot from "@/components/home/AboutSnapshot";
-import Pinboard from "@/components/home/Pinboard";
-import Marquee from "@/components/Marquee";
-import { getCategories, getProfile, getProjects, getServices } from "@/content";
+import LogoMarquee from "@/components/home/LogoMarquee";
+import Testimonials from "@/components/home/Testimonials";
+import { getCategories, getProfile, getProjects, getTestimonials } from "@/content";
 import { clip } from "@/lib/seo";
 
 export async function generateMetadata() {
@@ -19,39 +18,31 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [profile, featured, categories, services] = await Promise.all([
+  const [profile, featured, categories, testimonials] = await Promise.all([
     getProfile(),
     getProjects({ featured: true }),
     getCategories(),
-    getServices()
+    getTestimonials()
   ]);
 
   return (
     <>
       <Hero profile={profile} />
-      <div className="tilt-band">
-        <Marquee
-          items={
-            profile.marquee?.length
-              ? profile.marquee
-              : [
-                  "Logo Design",
-                  "Brand Identity",
-                  "Corporate Collateral",
-                  "Social Media Graphics",
-                  "Print & Digital Media",
-                  "Packaging & Labels",
-                  "Presentation Design",
-                  "Signage & Spatial Visuals"
-                ]
-          }
-          sep="·"
-        />
-      </div>
+      <section className="logo-band" aria-labelledby="brands-heading">
+        <div className="logo-band-head">
+          <p className="eyebrow">
+            <span className="eyebrow-num">✦</span> Brands I’ve worked on
+          </p>
+          <h2 id="brands-heading" className="logo-band-title">
+            <span className="sr-only">Brands I’ve worked on, </span>
+            through <em>Schbang</em>, <em>Webenza</em> &amp; freelance.
+          </h2>
+        </div>
+        <LogoMarquee />
+      </section>
       <Manifesto text={profile.manifesto} />
       <SelectedWork projects={featured} categories={categories} />
-      <AboutSnapshot profile={profile} services={services} />
-      <Pinboard services={services} />
+      <Testimonials items={testimonials} />
     </>
   );
 }

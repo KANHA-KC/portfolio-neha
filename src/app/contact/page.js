@@ -4,14 +4,14 @@ import ContactKeys from "@/components/ContactKeys";
 import LocalTime from "@/components/LocalTime";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
-import { getProfile } from "@/content";
+import { getCategories, getProfile } from "@/content";
 import { absolute, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateMetadata() {
   const p = await getProfile();
-  const description = clip(`Hire ${p.name} for UX, logo design, branding and graphic design projects. Based in ${p.location}, working worldwide.`);
+  const description = clip(`Hire ${p.name} for logo design, brand identity, packaging, illustration and marketing projects. Based in ${p.location}, working worldwide.`);
   return {
-    title: "Contact — Hire a UX & Brand Designer",
+    title: "Contact — Hire a Brand & Graphic Designer",
     description,
     alternates: { canonical: "/contact" },
     openGraph: { title: `Contact ${p.name}`, description, url: "/contact", images: SITE_OG_IMAGES }
@@ -19,7 +19,7 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const site = await getProfile();
+  const [site, categories] = await Promise.all([getProfile(), getCategories()]);
   return (
     <div className="page contact">
       <section className="contact-head">
@@ -31,7 +31,7 @@ export default async function ContactPage() {
           <span className="contact-wave" aria-hidden="true">👋</span>
         </h1>
         <p className="page-lede">
-          A new product, a tricky redesign, a logo or a whole brand that needs love — or just a coffee chat about
+          A new brand identity, a logo, packaging, illustration, or a coffee chat about
           design. My inbox is open.
         </p>
         </div>
@@ -39,7 +39,7 @@ export default async function ContactPage() {
       </section>
 
       <div className="contact-grid">
-        <ContactForm email={site.email} />
+        <ContactForm email={site.email} categories={categories} />
 
         <aside className="contact-side">
           <div className="contact-card contact-card--teal">

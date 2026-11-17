@@ -8,9 +8,9 @@ import { collectionSchema, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateMetadata() {
   const p = await getProfile();
-  const description = clip(`Portfolio of ${p.name}: UX case studies, logo design, brand identity, packaging and illustration work for Indian and global brands.`);
+  const description = clip(`Portfolio of ${p.name}: logo design, brand identity, illustration, packaging, marketing and AI video work for Indian and global brands.`);
   return {
-    title: "Work — UX, Logo & Brand Design Portfolio",
+    title: "Work — Logo, Brand Identity & Graphic Design Portfolio",
     description,
     alternates: { canonical: "/work" },
     openGraph: { title: `Work — ${p.name}`, description, url: "/work", images: SITE_OG_IMAGES }
@@ -30,7 +30,7 @@ export default async function WorkPage() {
           <sup>({String(projects.length).padStart(2, "0")})</sup>
         </h1>
         <p className="page-lede">
-          Research-led product case studies alongside logos, identities and things you can hold. Pick a lens below — or
+          Logos, brand identities, packaging, marketing collateral, illustrations, and AI videos. Pick a lens below — or
           just wander.
         </p>
         <span className="hand page-hand">tap a sticker to filter ↓</span>
