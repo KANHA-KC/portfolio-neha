@@ -3,6 +3,7 @@ import ProjectVisual from "@/components/ProjectVisual";
 import ProjectHero from "@/components/work/ProjectHero";
 import NextProject from "@/components/work/NextProject";
 import Gallery from "@/components/work/Gallery";
+import Reels from "@/components/work/Reels";
 
 // Visual project page for logos, branding, print and illustration: cover → brief → gallery mosaic.
 export default function Showcase({ project: p, next }) {
@@ -47,6 +48,7 @@ export default function Showcase({ project: p, next }) {
         </section>
       )}
 
+      {p.videos.length > 0 && <Reels videos={p.videos} title={p.title} />}
       {p.gallery.length > 0 && <Gallery project={p} />}
 
       <NextProject next={next} />

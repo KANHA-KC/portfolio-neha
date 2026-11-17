@@ -9,6 +9,20 @@ import * as seed from "./seed";
 
 const byOrder = (a, b) => a.order - b.order;
 
+// Project media: until a project's images/videos are uploaded in the CMS, the local files from the seed
+// (public/Projects/<slug>/) are used for that same slug.
+const hasMedia = (g) => Array.isArray(g) && g.some((x) => x && (x.src ?? x.image));
+const withSeedMedia = (raw = {}) => {
+  const local = seed.projects.find((p) => p.slug === raw.slug);
+  if (!local) return raw;
+  const out = { ...raw };
+  if (!out.cover) out.cover = local.cover;
+  if (!out.thumbnail) out.thumbnail = local.thumbnail;
+  if (!hasMedia(out.gallery) && hasMedia(local.gallery)) out.gallery = local.gallery;
+  if (!(Array.isArray(out.videos) && out.videos.length) && local.videos) out.videos = local.videos;
+  return out;
+};
+
 // Newer profile fields: until they are filled in the CMS, the seed copy is used.
 const SEEDED_PROFILE_KEYS = ["storyTitle", "story", "storyStats", "workWith", "workProcess", "designTools", "aiTools"];
 const withSeedProfile = (raw = {}) => {
@@ -41,7 +55,7 @@ async function loadContent() {
 
   const { raw, image } = await fetchFromSource();
 
-  const projects = raw.projects.map((p) => normalizeProject(p, image)).filter((p) => p.slug).sort(byOrder);
+  const projects = raw.projects.map((p) => normalizeProject(withSeedMedia(p), image)).filter((p) => p.slug).sort(byOrder);
   const categories = raw.categories
     .map(normalizeCategory)
     .filter((c) => c.slug)

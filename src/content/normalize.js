@@ -86,9 +86,16 @@ export function normalizeProject(raw, image) {
       return {
         image: img,
         caption: str(g.title ?? g.caption),
-        aspect: aspects[g.aspect] ? g.aspect : aspectFromSize(img) || "landscape"
+        aspect: aspects[g.aspect] ? g.aspect : aspectFromSize(img) || "landscape",
+        // optional layout override: "full" (whole row) or "half" (two per row)
+        size: ["full", "half"].includes(g.size) ? g.size : ""
       };
     }),
+    // Short portrait films (e.g. AI videos), shown as a reel strip under the gallery.
+    videos: list(raw.videos)
+      .map((v) => (typeof v === "string" ? { src: v } : v))
+      .map((v) => ({ src: str(v.src), poster: str(v.poster), title: str(v.title) }))
+      .filter((v) => v.src),
     // case study
     challenge: str(raw.challenge),
     solution: str(raw.solution),

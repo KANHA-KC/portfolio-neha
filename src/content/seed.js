@@ -152,6 +152,14 @@ export const testimonials = [
 // Placeholder gallery slots for showcase projects.
 const slots = (...items) => items.map(([title, aspect]) => ({ src: null, title, aspect }));
 
+// Real project images in /public/Projects/<slug>/ (all exported at 1600×1200).
+const shot = (slug, file) => ({ src: `/Projects/${slug}/${file}`, width: 1600, height: 1200 });
+const thumb = (slug) => ({ src: `/Projects/${slug}/thumbnail.png`, width: 521, height: 397 });
+// Gallery from [file, caption] pairs: with an odd count the first runs full width, the rest sit in pairs.
+const shots = (slug, ...items) =>
+  items.map(([file, title], i) => ({ src: shot(slug, file), title, size: items.length % 2 && i === 0 ? "full" : "half" }));
+const reel = (file, title) => ({ src: `/Projects/sterling/videos/${file}.mp4`, poster: `/Projects/sterling/videos/${file}.jpg`, title });
+
 export const projects = [
   /* ---------- Featured cards (Homepage 01 to 05) ---------- */
   {
@@ -172,7 +180,8 @@ export const projects = [
     role: "Brand & Hospitality Design",
     tags: ["Real Estate", "Brand Guidelines", "Stationery", "Signage"],
     accent: "teal",
-    cover: null,
+    cover: shot("landmark-infratech", "1.png"),
+    thumbnail: thumb("landmark-infratech"),
     aspect: "landscape",
     feeling: "Premium · Assured",
     note: "Premium · Assured",
@@ -180,7 +189,7 @@ export const projects = [
       "A brand guidebook for a Bangalore real estate company, to guide every touchpoint, from social and web to stationery and signage.",
     workedOn:
       "Building the Brand Guidelines, Office Stationery, Signage, Cutlery and designing the Hospitality Uniforms for the brand.",
-    gallery: slots(["Brand Guidelines", "wide"], ["Office Stationery", "landscape"], ["Signage System", "portrait"], ["Cutlery & Uniforms", "square"])
+    gallery: shots("landmark-infratech", ["2.png", "Brand guidelines"], ["3.png", "Billboard, social & sales deck"], ["4.png", "Hospitality & booking email"])
   },
   {
     slug: "sterling",
@@ -199,7 +208,8 @@ export const projects = [
     role: "Brand & Visual Designer",
     tags: ["Hospitality", "AI Videos", "Brand Assets", "Brochures"],
     accent: "gold",
-    cover: null,
+    cover: shot("sterling", "1.png"),
+    thumbnail: thumb("sterling"),
     aspect: "landscape",
     feeling: "Warm · Welcoming",
     note: "Warm · Welcoming",
@@ -207,7 +217,14 @@ export const projects = [
       "Online and offline assets that feel homely, with realistic visuals and clean, elegant type.",
     workedOn:
       "Logo, brochures, banners, email, social and AI videos for a holiday brand.",
-    gallery: slots(["Brand Visuals", "wide"], ["Brochure & Print", "portrait"], ["Email & Social", "square"], ["Campaign Banners", "landscape"])
+    videos: [
+      reel("alleppey-family", "Alleppey · Family"),
+      reel("gangtok-family", "Gangtok · Family"),
+      reel("mount-abu-couple", "Mount Abu · Couple"),
+      reel("nainital-working-prof-couples", "Nainital · Working couples"),
+      reel("ooty-fern-hill-family", "Ooty Fern Hill · Family")
+    ],
+    gallery: shots("sterling", ["2.png", "Instagram feed"], ["3.png", "Destination tent cards"], ["4.png", "Safari brochure"], ["5.png", "Seasonal newsletters"], ["6.png", "Offer & payment emails"], ["7.png", "Booking emails"])
   },
   {
     slug: "seru",
@@ -226,7 +243,8 @@ export const projects = [
     role: "Logo & Brand Designer",
     tags: ["F&B", "Logo Design", "Packaging", "Brand Guidelines"],
     accent: "paprika",
-    cover: null,
+    cover: shot("seru", "1.png"),
+    thumbnail: thumb("seru"),
     aspect: "landscape",
     feeling: "Warm · Welcoming",
     note: "Warm · Welcoming",
@@ -234,7 +252,7 @@ export const projects = [
       "A warm, welcoming logo for a café in the heart of Bangalore. “Séru” means “together” in Kannada, so the mark needed a cultural connection.",
     workedOn:
       "Logo Design, Building the Brand Guidelines, and Packaging",
-    gallery: slots(["Logo Mark", "square"], ["Brand Guidelines Spread", "wide"], ["Packaging Design", "portrait"], ["In-Store Collateral", "landscape"])
+    gallery: shots("seru", ["2.png", "Social & WhatsApp catalogue"], ["3.png", "Logo explorations"])
   },
   {
     slug: "lighthouse-canton",
@@ -253,7 +271,8 @@ export const projects = [
     role: "Visual & Social Media Designer",
     tags: ["Financial Services", "Social Media", "Typography"],
     accent: "aqua",
-    cover: null,
+    cover: shot("lighthouse-canton", "1.png"),
+    thumbnail: thumb("lighthouse-canton"),
     aspect: "landscape",
     feeling: "Premium · Trustworthy",
     note: "Premium · Trustworthy",
@@ -261,7 +280,7 @@ export const projects = [
       "Modern creatives for an NRI audience, indirect in their imagery, with typography doing much of the work.",
     workedOn:
       "Social media collateral for a financial services firm.",
-    gallery: slots(["Campaign Creatives", "wide"], ["Social Carousel", "portrait"], ["Typography System", "square"], ["Collateral Suite", "landscape"])
+    gallery: shots("lighthouse-canton", ["2.png", "Social carousel creatives"], ["3.png", "Website"], ["4.png", "Business cards"])
   },
   {
     slug: "unhumble",
@@ -280,7 +299,8 @@ export const projects = [
     role: "Illustrator",
     tags: ["Illustration", "Gifting", "Culture", "Card Deck"],
     accent: "gold",
-    cover: null,
+    cover: shot("unhumble", "1.png"),
+    thumbnail: thumb("unhumble"),
     aspect: "landscape",
     feeling: "Proud · Playful",
     note: "Proud · Playful",
@@ -288,7 +308,7 @@ export const projects = [
       "A US company found my art page and asked me to illustrate a deck of cards inspired by South Asian culture. I drew on the culture I grew up around.",
     workedOn:
       "A deck of cards celebrating South Asian culture, for a US company.",
-    gallery: slots(["Card Deck Box", "portrait"], ["Face Cards Suite", "wide"], ["Pattern Details", "square"], ["Full Deck Layout", "landscape"])
+    gallery: shots("unhumble", ["2.png", "Face cards"])
   },
 
   /* ---------- Work page projects (06 to 11) ---------- */
@@ -336,7 +356,8 @@ export const projects = [
     role: "Brand & Logo Designer",
     tags: ["Real Estate", "Logo Design", "Brand Guidebook", "Office Stationery"],
     accent: "paprika",
-    cover: null,
+    cover: shot("bricx", "1.png"),
+    thumbnail: thumb("bricx"),
     aspect: "landscape",
     feeling: "Modern · Confident",
     note: "Modern · Confident",
@@ -344,7 +365,7 @@ export const projects = [
       "A modern, memorable logo for a company pioneering real estate trading, plus a brand guidelines for its website and app, and later social and offline.",
     workedOn:
       "Logo Design, Building the Brand Guidebook, and Office Stationery",
-    gallery: slots(["Logo Mark", "square"], ["Brand Guidebook", "wide"], ["Stationery Suite", "landscape"], ["Digital Interface", "portrait"])
+    gallery: []
   },
   {
     slug: "drink-prime",
