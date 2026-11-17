@@ -2,6 +2,9 @@
 const nextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    agentUpgrade: "security"
+  },
   images: {
     // Images uploaded to the Wix Media Manager
     remotePatterns: [new URL("https://static.wixstatic.com/**")]
