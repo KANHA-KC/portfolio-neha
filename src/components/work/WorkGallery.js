@@ -12,9 +12,6 @@ const subscribe = (cb) => {
 };
 const readHash = () => new URLSearchParams(window.location.hash.slice(1)).get("type") || "all";
 
-// Card footprint on the wall, by format.
-const span = (p) => (p.kind === "case-study" ? "xl" : { wide: "lg", landscape: "md", portrait: "md", tall: "sm", square: "sm" }[p.aspect] || "md");
-
 export default function WorkGallery({ projects, categories, showFilters = true }) {
   const root = useRef(null);
   const flipState = useRef(null);
@@ -81,10 +78,10 @@ export default function WorkGallery({ projects, categories, showFilters = true }
       )}
 
       <ul className="wall">
-        {visible.map((p, i) => (
-          <li key={p.slug} className={`gcard gcard--${span(p)}`} data-flip-id={p.slug} style={{ "--i": i % 6 }}>
+        {visible.map((p) => (
+          <li key={p.slug} className="gcard" data-flip-id={p.slug}>
             <Link href={`/work/${p.slug}`} className="gcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
-              <ProjectVisual project={p} card sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+              <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw" />
               <div className="gcard-cap">
                 <div>
                   <p className="gcard-cat">

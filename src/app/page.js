@@ -1,7 +1,7 @@
 import Hero from "@/components/home/Hero";
 import Manifesto from "@/components/home/Manifesto";
 import SelectedWork from "@/components/home/SelectedWork";
-import LogoMarquee from "@/components/home/LogoMarquee";
+import BrandLogos from "@/components/home/BrandLogos";
 import Testimonials from "@/components/home/Testimonials";
 import { getCategories, getProfile, getProjects, getTestimonials } from "@/content";
 import { clip } from "@/lib/seo";
@@ -38,7 +38,7 @@ export default async function HomePage() {
             through <em>Schbang</em>, <em>Webenza</em> &amp; freelance.
           </h2>
         </div>
-        <LogoMarquee />
+        <BrandLogos />
       </section>
       <Manifesto text={profile.manifesto} />
       <SelectedWork projects={featured} categories={categories} />

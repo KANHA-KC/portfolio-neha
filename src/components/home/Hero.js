@@ -101,8 +101,9 @@ export default function Hero({ profile }) {
       <div className="hero-copy">
         <div className="hero-lede hero-fade">
           <div className="hero-heading-block">
-            <h1 id="hero-title" className="hero-greeting">Hi, I’m {profile.firstName || "Neha"}</h1>
-            <p className="hero-role">Illustrator, Brand and Graphic Designer.</p>
+            <h1 id="hero-title" className="hero-role">
+              <span className="sr-only">{profile.name || "Neha Ondhia"}: </span>I’m Illustrator, Brand and Graphic Designer.
+            </h1>
           </div>
 
           <div className="hero-hook-block">

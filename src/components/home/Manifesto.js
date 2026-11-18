@@ -81,9 +81,6 @@ export default function Manifesto({ text }) {
 
   return (
     <section ref={root} className="manifesto" aria-label="Approach">
-      <p className="eyebrow">
-        <span className="eyebrow-num">(01)</span> The short version
-      </p>
       <div className="manifesto-text">
         {paragraphs.length > 0 ? (
           paragraphs.map((para, i) => (

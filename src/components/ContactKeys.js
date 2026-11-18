@@ -278,6 +278,7 @@ function Key({ href, label, icon, tone, note, notePos, download, external, short
         aria-keyshortcuts={`Alt+${shortcut}`}
         title={`${label} — Shortcut: ${shortcutLabel}`}
         data-cursor={label.toLowerCase()}
+        suppressHydrationWarning
         {...(download ? { download: "" } : {})}
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         onPointerDown={press}
@@ -292,7 +293,7 @@ function Key({ href, label, icon, tone, note, notePos, download, external, short
           <span className="ckey-top">
             {shortcut && (
               <span className="ckey-engraved" aria-hidden="true">
-                <span className="ckey-mod">{modSymbol}</span>
+                <span className="ckey-mod" suppressHydrationWarning>{modSymbol}</span>
                 <span>{shortcut}</span>
               </span>
             )}
@@ -309,13 +310,14 @@ function Key({ href, label, icon, tone, note, notePos, download, external, short
 }
 
 export default function ContactKeys({ email, socials = [], resume }) {
-  const [modSymbol] = useState(() => {
+  const [modSymbol, setModSymbol] = useState("⌥");
+
+  useEffect(() => {
     if (typeof navigator !== "undefined") {
       const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.userAgent || navigator.platform || "");
-      return isMac ? "⌥" : "Alt + ";
+      if (!isMac) setModSymbol("Alt + ");
     }
-    return "⌥";
-  });
+  }, []);
 
   const keys = [
     { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "pap", shortcut: "M", note: `projects / collabs /\ncoffee chats ✿\n${email}` },

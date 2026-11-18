@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import MarqueeAlongSvgPath from "@/components/ui/marquee-along-svg-path";
 import { prefersReducedMotion } from "@/lib/gsap";
 
-// Same tile language as the brand-logo band: flat palette swatches riding a curve.
+// Flat palette swatches gliding along a straight line.
 // Copy comes from the Wix "Testimonials" collection (see src/content/seed.js for the fallback).
 const TILE = { gold: "var(--gold-wash)", aqua: "var(--light-aqua)", paprika: "var(--pap-wash)", teal: "var(--mist)" };
 const CYCLE = ["gold", "aqua", "paprika", "teal"];
 
-// A long, gentle wave (design space 1600 × 560); both ends run far off-screen so the cards space out
-// and glide in and out.
-const PATH = "M-1000 330C-560 330 140 205 480 215C840 225 960 360 1280 345C1600 330 2140 225 2600 220";
+// A straight, level line (design space 1600 × 440); both ends run far off-screen so the cards space
+// out and glide in and out without tilting.
+const PATH = "M-1000 220H2600";
 
 function Card({ quote, author, role, bg }) {
   return (
@@ -36,9 +36,6 @@ export default function Testimonials({ items = [] }) {
   return (
     <section className="testimonials-section" aria-labelledby="testimonials-title">
       <div className="testimonials-head">
-        <p className="eyebrow">
-          <span className="eyebrow-num">(03)</span> Kind words
-        </p>
         <h2 id="testimonials-title" className="section-title">
           (They said it, <em>not me.</em>)
         </h2>
@@ -47,7 +44,7 @@ export default function Testimonials({ items = [] }) {
       <div className="testi-marquee">
         <MarqueeAlongSvgPath
           path={PATH}
-          viewBox="0 0 1600 560"
+          viewBox="0 0 1600 440"
           responsive
           fit="cover"
           baseVelocity={1.1}

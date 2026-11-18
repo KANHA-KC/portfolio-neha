@@ -6,49 +6,31 @@ import ProjectVisual from "@/components/ProjectVisual";
 import { categoryPath } from "@/lib/seo";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
-// Loose "desk" layout. Slots repeat, so any number of featured projects can be placed.
-// Every card spans 5 columns to match the standard size of cards 2 and 3.
-// col = grid columns on the 12-col desktop grid, mt = nudge down, rot = tilt, speed = scroll parallax.
-const slots = [
-  { col: "1 / 6", mt: "0", rot: -2.5, speed: -50 },
-  { col: "8 / 13", mt: "20vh", rot: 2, speed: 70 },
-  { col: "2 / 7", mt: "-6vh", rot: 1.5, speed: -15 },
-  { col: "8 / 13", mt: "14vh", rot: -1.5, speed: 50 },
-  { col: "1 / 6", mt: "-2vh", rot: -1.5, speed: -30 },
-  { col: "8 / 13", mt: "18vh", rot: 2, speed: 60 }
-];
-
 export default function SelectedWork({ projects, categories }) {
   const root = useRef(null);
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 900px)", () => {
-        root.current.querySelectorAll(".wcard").forEach((card) => {
-          gsap.fromTo(
-            card,
-            { y: 0 },
-            { y: Number(card.dataset.speed), ease: "none", scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true } }
-          );
+      root.current.querySelectorAll(".wcard-inner").forEach((el, i) => {
+        gsap.from(el, {
+          y: 48,
+          opacity: 0,
+          duration: 1,
+          delay: (i % 3) * 0.08,
+          ease: "expo.out",
+          clearProps: "transform,opacity", // hand the hover lift back to CSS once it's in
+          scrollTrigger: { trigger: el, start: "top 90%" }
         });
       });
-      root.current.querySelectorAll(".wcard-inner").forEach((el) => {
-        gsap.from(el, { y: 80, opacity: 0, rotate: 4, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
-      });
-      return () => mm.revert();
     },
     { scope: root }
   );
 
   return (
-    <section ref={root} className="work-scatter" aria-labelledby="work-title">
+    <section ref={root} className="work-scatter work-scatter--grid" aria-labelledby="work-title">
       <header className="section-head section-head--split">
         <div>
-          <p className="eyebrow">
-            <span className="eyebrow-num">(02)</span> Selected work
-          </p>
           <h2 id="work-title" className="section-title">
             Brands I’ve given a <em>voice</em>
             <span className="hand section-hand">A few of the 50 ↓</span>
@@ -69,14 +51,8 @@ export default function SelectedWork({ projects, categories }) {
 
       <div className="work-field">
         {projects.map((p, i) => {
-          const s = slots[i % slots.length];
           return (
-            <article
-              key={p.slug}
-              className={`wcard wcard--${p.kind}`}
-              data-speed={s.speed}
-              style={{ "--rot": `${s.rot}deg`, gridColumn: s.col, marginTop: s.mt }}
-            >
+            <article key={p.slug} className={`wcard wcard--${p.kind}`}>
               <Link href={`/work/${p.slug}`} className="wcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
                 <div className="wcard-media">
                   <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
