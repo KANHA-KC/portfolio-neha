@@ -4997,12 +4997,10 @@ a:hover .media-icon {
 }
 .testi-quote {
   margin: 0 0 18px;
-  font-family: var(--f-display);
-  font-variation-settings: "SOFT" 80, "WONK" 0;
-  font-size: 0.95rem;
-  line-height: 1.42;
-  letter-spacing: -0.005em;
-  color: var(--teal);
+  font-family: var(--f-sans);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ink);
 }
 .testi-author {
   margin-top: auto;
@@ -5017,9 +5015,13 @@ a:hover .media-icon {
   border-top: 1px solid rgba(6, 54, 65, 0.14);
 }
 .testi-name {
-  font-family: var(--f-sans);
-  font-weight: 700;
-  font-size: 0.82rem;
+  font-family: var(--f-display);
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   color: var(--teal);
 }
 .testi-role {
