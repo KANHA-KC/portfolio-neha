@@ -43,12 +43,12 @@ export const profile = {
     "Develop | Detailed logos with the thinking behind each, plus a real-life mockup.",
     "Finalise | Minor tweaks, then clean files delivered."
   ],
-  email: "neha@nehaondhia.com",
+  email: "nehaondhia6@gmail.com",
   location: "Mumbai, India",
   timezone: "Asia/Kolkata",
   // availability: "Available for select projects",
   portrait: "/brand/neha-cutout.webp",
-  socials: ["LinkedIn | https://linkedin.com/in/nehaondhia", "Dribbble | https://dribbble.com/nehaondhia"],
+  socials: ["LinkedIn | https://www.linkedin.com/in/neha-ondhia/", "Instagram | https://www.instagram.com/nehaondhiadesign/"],
   principles: [
     "Listen before drawing | The first week of any project is mostly questions. The best design decisions are hiding in what people already told you.",
     "Accessible by default | Contrast, focus states and plain language aren’t a final checklist — they shape the very first sketch.",
