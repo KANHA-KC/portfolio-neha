@@ -43,12 +43,68 @@ const parseTool = (t) => {
 };
 
 
+// An illustrated flower in the brand palette: hand-inked, irregular petals (neon → cyan), a golden-spiral seed
+// head (like the intro loader), a curling stem and a few sparkles. Sways, breathes and blooms on hover (CSS only).
+const PHI_ANGLE = 2.39996; // golden angle, radians
+const jitter = (i, k) => Math.sin(i * 12.9898 + k * 78.233) * 0.5 + 0.5; // stable pseudo-random 0..1
+function Bloom({ className }) {
+  const cx = 60, cy = 52;
+  const petal = (len, w) => `M0 0 C ${-w} ${-len * 0.28}, ${-w * 0.9} ${-len * 0.82}, 0 ${-len} C ${w * 0.9} ${-len * 0.82}, ${w} ${-len * 0.28}, 0 0 Z`;
+  const ring = (n, base, w, cls, offset) =>
+    Array.from({ length: n }, (_, i) => {
+      const len = base * (0.86 + jitter(i, offset) * 0.28);
+      const tilt = (360 / n) * i + offset + (jitter(i, offset + 3) - 0.5) * 9;
+      return (
+        <g key={`${cls}${i}`} transform={`translate(${cx} ${cy}) rotate(${tilt.toFixed(1)})`}>
+          <g className={`bloom-petal ${cls}`} style={{ "--i": i }}>
+            <path d={petal(len, w)} />
+            <path className="bloom-sketch" d={petal(len * 0.96, w * 0.8)} transform="rotate(4)" />
+          </g>
+        </g>
+      );
+    });
+  const seeds = Array.from({ length: 55 }, (_, i) => {
+    const a = i * PHI_ANGLE, d = 1.9 * Math.sqrt(i + 0.6);
+    return <circle key={i} cx={(cx + d * Math.cos(a)).toFixed(2)} cy={(cy + d * Math.sin(a)).toFixed(2)} r={(0.55 + i / 70).toFixed(2)} className={i % 3 ? "bloom-seed" : "bloom-seed bloom-seed--alt"} />;
+  });
+  const spark = (x, y, s, k) => (
+    <g key={k} transform={`translate(${x} ${y}) scale(${s})`}>
+      <path className="bloom-spark" style={{ "--k": k }} d="M0 -6 C0.6 -1.2 1.2 -0.6 6 0 C1.2 0.6 0.6 1.2 0 6 C-0.6 1.2 -1.2 0.6 -6 0 C-1.2 -0.6 -0.6 -1.2 0 -6 Z" />
+    </g>
+  );
+  return (
+    <svg className={`bloom ${className || ""}`} viewBox="0 0 120 140" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="bloom-front" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#c7db0a" />
+          <stop offset="1" stopColor="#b8f9ff" />
+        </linearGradient>
+      </defs>
+      <g className="bloom-plant">
+        <path className="bloom-stem" d="M60 66 C 58 86, 66 100, 60 112 C 55 122, 58 130, 62 137" />
+        <path className="bloom-leaf" d="M61 104 C 70 92, 86 92, 94 98 C 84 108, 70 110, 61 104 Z" />
+        <path className="bloom-leaf-vein" d="M63 103 C 72 99, 82 98, 91 98" />
+        <g className="bloom-head">
+          {ring(13, 40, 9.5, "bloom-petal--back", 7)}
+          {ring(11, 33, 8.5, "bloom-petal--front", 0)}
+          <circle className="bloom-disc" cx={cx} cy={cy} r="15" />
+          <g className="bloom-seeds">{seeds}</g>
+          <circle className="bloom-disc-ring" cx={cx} cy={cy} r="16.5" />
+        </g>
+      </g>
+      {spark(104, 18, 1, 0)}
+      {spark(14, 30, 0.7, 1)}
+      {spark(100, 80, 0.55, 2)}
+    </svg>
+  );
+}
+
 export default async function AboutPage() {
   const [profile, experience, categories] = await Promise.all([getProfile(), getExperience(), getCategories()]);
   const story = profile.story;
   const kits = [
-    { key: "design", title: "Design", tag: "the craft", items: profile.designTools },
-    { key: "ai", title: "AI", tag: "the new sidekicks", items: profile.aiTools }
+    { key: "design", title: "Design", items: profile.designTools },
+    { key: "ai", title: "AI", items: profile.aiTools }
   ];
 
   return (
@@ -57,12 +113,11 @@ export default async function AboutPage() {
       <section className="about-hero">
         <div className="about-hero-copy">
           <Breadcrumbs items={[{ name: "About", href: "/about" }]} />
-          <p className="eyebrow">About — {profile.role}</p>
           <h1 className="page-title about-title">
             <span className="about-title-line">Hello,</span>
             <span className="about-title-line">
               I’m <em>{profile.firstName}</em>
-              <span className="about-wave" aria-hidden="true">✿</span>
+              <Bloom className="about-wave" />
             </span>
           </h1>
           <p className="page-lede about-lede">{profile.intro}</p>
@@ -134,39 +189,43 @@ export default async function AboutPage() {
               <span className="hand section-hand">(and how it gets made)</span>
             </h2>
           </header>
-          <div className="together-grid">
-            {profile.workWith.length > 0 && (
-              <Reveal className="together-card together-card--vibe">
-                <span className="hand together-tag">the vibe</span>
-                <h3>What it’s like to work with me</h3>
-                <ul className="vibe-list">
-                  {profile.workWith.map((w) => (
-                    <li key={w.title}>
-                      <span className="vibe-tick" aria-hidden="true">✓</span>
-                      <p><b>{w.title}.</b> {w.description}</p>
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            )}
-            {profile.workProcess.length > 0 && (
-              <Reveal className="together-card together-card--process" delay={140}>
-                <span className="hand together-tag">the method</span>
-                <h3>How I work</h3>
-                <ol className="process-steps">
-                  {profile.workProcess.map((step, i) => (
-                    <li key={step.title}>
-                      <span className="process-n">{String(i + 1).padStart(2, "0")}</span>
-                      <div>
-                        <b>{step.title}</b>
-                        <p>{step.description}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </Reveal>
-            )}
-          </div>
+          <Reveal className="notepad">
+            <div className="notepad-rings" aria-hidden="true">
+              {Array.from({ length: 22 }, (_, i) => <span key={i} />)}
+            </div>
+            <div className="notepad-page">
+              {profile.workProcess.length > 0 && (
+                <div className="notepad-steps">
+                  <span className="hand notepad-tag">the method</span>
+                  <h3>How I work</h3>
+                  <ol className="process-steps">
+                    {profile.workProcess.map((step, i) => (
+                      <li key={step.title}>
+                        <span className="process-n">{String(i + 1).padStart(2, "0")}</span>
+                        <div>
+                          <b>{step.title}</b>
+                          <p>{step.description}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {profile.workWith.length > 0 && (
+                <aside className="notepad-stickies" aria-label="What it’s like to work with me">
+                  <p className="hand notepad-stickies-label">what it’s like to work with me ↓</p>
+                  <ul>
+                    {profile.workWith.map((w, i) => (
+                      <li key={w.title} className={`sticky sticky--${(i % 3) + 1}`}>
+                        <b>{w.title}</b>
+                        <p>{w.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              )}
+            </div>
+          </Reveal>
         </section>
       )}
 
@@ -195,7 +254,7 @@ export default async function AboutPage() {
             {kits.filter((k) => k.items.length).map((kit) => (
               <div key={kit.key} className={`toolkit toolkit--${kit.key}`}>
                 <h3 className="toolkit-title">
-                  {kit.title} <span className="hand">{kit.tag}</span>
+                  {kit.title}
                 </h3>
                 <ul className="tool-list">
                   {kit.items.map((t, i) => {
@@ -220,7 +279,7 @@ export default async function AboutPage() {
         )}
       </section>
 
-      <Experience items={experience} id="about-exp-title" num="(03)" />
+      <Experience items={experience} id="about-exp-title" />
 
       <section className="about-cta">
         <p className="hand">Still reading? Let’s just talk.</p>

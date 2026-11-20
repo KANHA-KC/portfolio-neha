@@ -14,7 +14,7 @@ const spots = [
   { x: 76, y: 4, r: 6 },
   { x: 24, y: 70, r: -2 }
 ];
-const tints = ["#FFF3DC", "#EDF7F4", "#FBECE6", "#E7EFF0", "#C8E8E2", "#F8CC78", "#EDA18A", "#9ED4CB"];
+const tints = ["#F6FAD6", "#EAFDFF", "#F3F8D2", "#E1EEF0", "#B8F9FF", "#DCE86A", "#E6EF9A", "#8EEAF3"];
 
 export default function Pinboard({ services }) {
   const root = useRef(null);

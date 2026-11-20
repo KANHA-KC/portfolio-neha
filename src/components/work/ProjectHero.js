@@ -12,19 +12,18 @@ export default function ProjectHero({ project: p, num, meta }) {
           { name: p.title, href: projectPath(p.slug) }
         ]}
       />
-      <div className="case-hero-top">
-        <span className="case-num">{num}</span>
+      <div className={`case-hero-top${num ? "" : " case-hero-top--plain"}`}>
+        {num && <span className="case-num">{num}</span>}
         <div>
           <p className="eyebrow eyebrow--ink">
-            {p.categoryIcon} {[p.categoryTitle, ...p.tags].join(" · ")}
+            {p.workedOn || Array.from(new Set([p.categoryTitle, ...p.tags])).filter(Boolean).join(" · ")}
           </p>
           <h1 className="case-title">{p.title}</h1>
-          {p.subtitle && <p className="case-sub">{p.subtitle}</p>}
+          {(p.brief || p.subtitle || p.summary) && (
+            <p className="case-sub">{p.brief || p.subtitle || p.summary}</p>
+          )}
         </div>
       </div>
-      {p.note && (
-        <span className="sticker case-sticker" style={{ background: p.palette.frame }}>{p.note}</span>
-      )}
       <dl className="case-meta">
         {meta
           .filter(([, v]) => v)

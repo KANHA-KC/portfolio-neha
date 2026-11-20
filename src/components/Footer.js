@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import LocalTime from "@/components/LocalTime";
 import CopyEmail from "@/components/CopyEmail";
 import { getCategories, getProfile } from "@/content";
 import { categoryPath } from "@/lib/seo";
@@ -8,36 +7,33 @@ import { categoryPath } from "@/lib/seo";
 export default async function Footer() {
   const [site, categories] = await Promise.all([getProfile(), getCategories()]);
   return (
-    <footer className="footer">
+    <footer id="footer" className="footer">
       <div className="footer-top">
-        <h2 className="footer-title">
-          That’s the end of
-          <br />
-          the <em>portfolio.</em> <span className="footer-smile" aria-hidden="true">🙂</span>
-        </h2>
-        <span className="hand footer-hand" aria-hidden="true">
-          (Sad, I know.)
-        </span>
+        <div className="footer-title-row">
+          <h2 className="footer-title">
+            That&apos;s the end of the <em>portfolio.</em> <span className="footer-smile" aria-hidden="true">🙂</span>
+          </h2>
+          <span className="hand footer-hand" aria-hidden="true">
+            (Sad, I know.)
+          </span>
+        </div>
         <div className="footer-reach">
           <div className="footer-reach-text">
             <p className="footer-lede">
               But the conversation doesn’t have to be. If something here caught your eye, let’s talk it over a cup of chai.
             </p>
-            <div className="footer-cta">
-              {site.calendly ? (
-                <div className="footer-book">
-                  <a href={site.calendly} target="_blank" rel="noopener noreferrer" className="btn btn--aqua" data-cursor="book">
-                    Book a chai chat <span aria-hidden="true">↗</span>
-                  </a>
-                  <span className="hand footer-book-note">(20 minutes, no pressure)</span>
-                </div>
-              ) : null}
-            </div>
-            <div className="footer-write">
-              <CopyEmail email={site.email} quiet />
+            <div className="footer-actions">
+              <div className="footer-book">
+                <a href={site.calendly || "https://calendly.com/nehaondhia/chai-chat"} target="_blank" rel="noopener noreferrer" className="btn btn--aqua" data-cursor="book">
+                  Book a chai chat <span aria-hidden="true">↗</span>
+                </a>
+                <span className="hand footer-book-note">(20 minutes, no pressure)</span>
+              </div>
+              <div className="footer-write">
+                <CopyEmail quiet email={site.email || "nehaondhia6@gmail.com"} />
+              </div>
             </div>
           </div>
-          <span className="footer-watermark" aria-hidden="true" />
         </div>
       </div>
 
@@ -66,7 +62,6 @@ export default async function Footer() {
         <div>
           <p className="footer-label">Based in</p>
           <span>{site.location}</span>
-          <LocalTime prefix="Local time" timezone={site.timezone} />
         </div>
       </div>
 

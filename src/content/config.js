@@ -18,10 +18,10 @@ export const contentSource = () =>
 
 // Editors pick an accent name in the CMS; the site turns it into a palette.
 export const palettes = {
-  gold: { wash: "#FFF3DC", frame: "#F8CC78", ink: "#925B00", spark: "#F5A000" },
-  aqua: { wash: "#EDF7F4", frame: "#C8E8E2", ink: "#36786D", spark: "#36786D" },
-  paprika: { wash: "#FBECE6", frame: "#EDA18A", ink: "#A6381B", spark: "#DF5227" },
-  teal: { wash: "#E7EFF0", frame: "#9ED4CB", ink: "#0B4F5E", spark: "#0B4F5E" }
+  gold: { wash: "#F6FAD6", frame: "#DCE86A", ink: "#5F6B00", spark: "#C7DB0A" },
+  aqua: { wash: "#EAFDFF", frame: "#B8F9FF", ink: "#045A68", spark: "#045A68" },
+  paprika: { wash: "#F3F8D2", frame: "#E6EF9A", ink: "#5F6B00", spark: "#C7DB0A" },
+  teal: { wash: "#E1EEF0", frame: "#8EEAF3", ink: "#056E7F", spark: "#056E7F" }
 };
 
 export const aspects = {

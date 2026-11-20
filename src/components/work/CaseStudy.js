@@ -86,7 +86,7 @@ export default function CaseStudy({ project: p, next }) {
           <ul className="deliverables">
             {p.deliverables.map((d, i) => (
               <Reveal as="li" key={d} delay={i * 70}>
-                <span aria-hidden="true">✦</span> {d}
+                {d}
               </Reveal>
             ))}
           </ul>

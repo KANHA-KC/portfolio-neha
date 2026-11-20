@@ -2,24 +2,9 @@
 
 import { useState } from "react";
 
-const DEFAULT_TOPICS = [
-  "Logo",
-  "Brand identity",
-  "Illustration",
-  "Packaging",
-  "Marketing",
-  "AI Videos",
-  "Something else"
-];
-
 // No backend: the form validates, then hands a pre-written message to the visitor's email app.
-export default function ContactForm({ email, categories = [] }) {
-  const topics = categories.length > 0
-    ? [...categories.map((c) => c.title), "Something else"]
-    : DEFAULT_TOPICS;
-
+export default function ContactForm({ email }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [picked, setPicked] = useState([topics[0]]);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
 
@@ -27,8 +12,6 @@ export default function ContactForm({ email, categories = [] }) {
     setForm((f) => ({ ...f, [k]: e.target.value }));
     if (errors[k]) setErrors((x) => ({ ...x, [k]: undefined }));
   };
-
-  const toggle = (t) => setPicked((p) => (p.includes(t) ? p.filter((x) => x !== t) : [...p, t]));
 
   const submit = (e) => {
     e.preventDefault();
@@ -39,7 +22,7 @@ export default function ContactForm({ email, categories = [] }) {
     setErrors(next);
     if (Object.keys(next).length) return;
 
-    const subject = `Hello from ${form.name} — ${picked.join(", ") || "a project"}`;
+    const subject = `Hello from ${form.name}`;
     const body = `${form.message}\n\n— ${form.name} (${form.email})`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
@@ -61,16 +44,6 @@ export default function ContactForm({ email, categories = [] }) {
 
   return (
     <form className="form" onSubmit={submit} noValidate>
-      <fieldset className="chips">
-        <legend>I’m interested in…</legend>
-        {topics.map((t) => (
-          <label key={t} className={`chip ${picked.includes(t) ? "is-on" : ""}`}>
-            <input type="checkbox" checked={picked.includes(t)} onChange={() => toggle(t)} />
-            {t}
-          </label>
-        ))}
-      </fieldset>
-
       <div className="form-row">
         <Field id="name" label="Your name" error={errors.name}>
           <input id="name" name="name" autoComplete="name" value={form.name} onChange={update("name")} placeholder="Alex Rivera" aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-err" : undefined} />

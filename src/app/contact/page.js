@@ -1,10 +1,9 @@
 import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
 import ContactKeys from "@/components/ContactKeys";
-import LocalTime from "@/components/LocalTime";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
-import { getCategories, getProfile } from "@/content";
+import { getProfile } from "@/content";
 import { absolute, clip, SITE_OG_IMAGES } from "@/lib/seo";
 
 export async function generateMetadata() {
@@ -19,13 +18,12 @@ export async function generateMetadata() {
 }
 
 export default async function ContactPage() {
-  const [site, categories] = await Promise.all([getProfile(), getCategories()]);
+  const site = await getProfile();
   return (
     <div className="page contact">
       <section className="contact-head">
         <div className="contact-head-text">
         <Breadcrumbs items={[{ name: "Contact", href: "/contact" }]} />
-        <p className="eyebrow">Contact</p>
         <h1 className="page-title contact-title">
           Say <em>hi</em>
           <span className="contact-wave" aria-hidden="true">👋</span>
@@ -34,24 +32,13 @@ export default async function ContactPage() {
           A new brand identity, a logo, packaging, illustration, or a coffee chat about
           design. My inbox is open.
         </p>
+        <CopyEmail email={site.email} className="contact-email" />
         </div>
-        <ContactKeys email={site.email} socials={site.socials} resume={site.resume} />
+        <ContactForm email={site.email} />
       </section>
 
-      <div className="contact-grid">
-        <ContactForm email={site.email} categories={categories} />
-
-        <aside className="contact-side">
-          <div className="contact-card contact-card--teal">
-            <p className="footer-label">Prefer email?</p>
-            <CopyEmail email={site.email} />
-          </div>
-          <div className="contact-card contact-card--aqua">
-            <p className="footer-label">Right now in {site.location.split(",")[0]}</p>
-            <LocalTime prefix="It’s" timezone={site.timezone} />
-            <span className="hand">usually replying with chai in hand</span>
-          </div>
-        </aside>
+      <div className="contact-keys">
+        <ContactKeys email={site.email} socials={site.socials} resume={site.resume} />
       </div>
       <JsonLd data={{ "@type": "ContactPage", url: absolute("/contact"), name: `Contact ${site.name}`, mainEntity: { "@id": absolute("/#person") } }} />
     </div>

@@ -1,11 +1,15 @@
 // The logo files are transparent PNGs used as CSS masks, so the mark can take any brand colour.
+// `gradient` paints the mark in the brand's neon → cyan gradient (for dark/teal backgrounds).
+// The vector original is /brand/mark.svg; the favicon/app icons are /brand/icon-*.png.
+const V = "?v=2026-11"; // bump when the files change so browsers drop the old mark
 const marks = {
-  monogram: { src: "/brand/monogram.png", ratio: 227 / 127 },
+  monogram: { src: `/brand/monogram.png${V}`, ratio: 414 / 256 },
   wordmark: { src: "/brand/wordmark.png", ratio: 249 / 127 },
-  full: { src: "/brand/logo-full.png", ratio: 511 / 127 }
+  full: { src: `/brand/logo-full.png${V}`, ratio: 1009 / 256 }
 };
+export const LOGO_GRADIENT = "linear-gradient(90deg, #cada49, #c5f6fc)";
 
-export default function Logo({ variant = "monogram", height = 32, color, className = "", label }) {
+export default function Logo({ variant = "monogram", height = 32, color, gradient = false, className = "", label }) {
   const m = marks[variant];
   return (
     <span
@@ -17,7 +21,8 @@ export default function Logo({ variant = "monogram", height = 32, color, classNa
         "--logo-src": `url(${m.src})`,
         width: typeof height === "number" ? height * m.ratio : `calc(${height} * ${m.ratio})`,
         height,
-        color
+        color,
+        ...(gradient && { background: LOGO_GRADIENT })
       }}
     />
   );

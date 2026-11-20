@@ -42,7 +42,7 @@ export default function SelectedWork({ projects, categories }) {
           </Link>
           {categories.map((c) => (
             <Link key={c.slug} href={categoryPath(c.slug)} className="disc-chip" data-cursor="browse">
-              <span aria-hidden="true">{c.icon}</span> {c.title}
+              {c.title}
               {c.count > 0 && <sup>{c.count}</sup>}
             </Link>
           ))}
@@ -56,11 +56,6 @@ export default function SelectedWork({ projects, categories }) {
               <Link href={`/work/${p.slug}`} className="wcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
                 <div className="wcard-media">
                   <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
-                  {p.note && (
-                    <span className="wcard-note hand" style={{ "--tape": p.palette.frame }}>
-                      {p.note}
-                    </span>
-                  )}
                 </div>
                 <div className="wcard-body">
                   <span className="wcard-num" style={{ color: p.palette.spark }}>
@@ -68,7 +63,7 @@ export default function SelectedWork({ projects, categories }) {
                   </span>
                   <div>
                     <p className="wcard-cat">
-                      <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
+                      {p.categoryTitle}
                       {p.sector && <span className="wcard-sector"> · {p.sector}</span>}
                     </p>
                     <h3 className="wcard-title">{p.title}</h3>

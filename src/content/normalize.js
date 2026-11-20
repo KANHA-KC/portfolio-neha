@@ -121,6 +121,7 @@ export function normalizeExperience(raw) {
     role: str(raw.role),
     company: str(raw.company),
     location: str(raw.location),
+    highlight: str(raw.highlight),
     order: num(raw.order, 99)
   };
 }

@@ -13,7 +13,6 @@ export default function Gallery({ project }) {
                 image={g.image}
                 aspect={g.aspect}
                 label={g.caption}
-                icon={project.categoryIcon}
                 palette={project.palette}
                 sizes="(max-width: 760px) 100vw, 60vw"
               />

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
-import LocalTime from "@/components/LocalTime";
+import TopBanner from "@/components/TopBanner";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 const baseLinks = [
@@ -20,12 +20,25 @@ export default function Nav({ profile, workCount = 0 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const overlayRef = useRef(null);
+  // Easter egg: 4+ quick clicks on the logo replay the intro loader.
+  const markClicks = useRef({ n: 0, t: 0 });
+  const onMarkClick = (e) => {
+    const now = performance.now();
+    const c = markClicks.current;
+    c.n = now - c.t < 700 ? c.n + 1 : 1;
+    c.t = now;
+    if (c.n >= 4) {
+      e.preventDefault();
+      c.n = 0;
+      window.dispatchEvent(new Event("intro:replay"));
+    }
+  };
 
   useEffect(() => {
     let last = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 24);
+      setScrolled(y > 20);
       setHidden(y > 240 && y > last);
       last = y;
     };
@@ -63,18 +76,15 @@ export default function Nav({ profile, workCount = 0 }) {
 
   return (
     <header className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""} ${onDark ? "nav--on-dark" : ""}`}>
+      {pathname === "/" && <TopBanner />}
       <div className="nav-inner">
-        <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home">
+        <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home" onClick={onMarkClick}>
           <Logo variant="monogram" height={30} />
           <span className="nav-name">
             {profile.name}
             <em>{profile.role}</em>
           </span>
         </Link>
-
-        <div className="nav-time">
-          <LocalTime prefix={profile.location.split(",")[0]} timezone={profile.timezone} />
-        </div>
 
         <nav aria-label="Main" className="nav-links">
           {links.map((l) => (
@@ -116,7 +126,6 @@ export default function Nav({ profile, workCount = 0 }) {
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">{s.label} ↗</a>
             ))}
           </div>
-          <LocalTime prefix={profile.location.split(",")[0]} timezone={profile.timezone} />
         </div>
         <Logo variant="monogram" height="40vw" className="menu-bg-mark" />
       </div>

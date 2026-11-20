@@ -11,66 +11,64 @@ export default function Manifesto({ text }) {
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
-      const textContainer = root.current?.querySelector(".manifesto-text");
+      const el = root.current;
+      const textContainer = el?.querySelector(".manifesto-text");
       if (!textContainer) return;
 
-      const split = SplitText.create(textContainer, {
-        type: "words",
-        wordsClass: "mw",
-        tag: "span"
+      const split = SplitText.create(textContainer, { type: "words", wordsClass: "mw", tag: "span" });
+      const words = split.words || [];
+      const accents = el.querySelectorAll(".manifesto-text em");
+      const ring = el.querySelector(".mf-badge-ring");
+      const circle = el.querySelector(".mf-badge-circle");
+      const track = el.querySelector(".mf-line-track");
+      const sticker = el.querySelector(".mf-pop--b");
+
+      gsap.set(words, { opacity: 0.1, yPercent: 55, rotate: 4, filter: "blur(8px)", transformOrigin: "0% 100%" });
+      accents.forEach((a) => a.style.setProperty("--hl", "0%"));
+      gsap.set(circle, { scale: 0.4, rotate: -60 });
+      gsap.set(track, { height: 0 });
+      gsap.set(sticker, { scale: 0, rotate: -30 });
+
+      // One scrubbed sequence: words rise out of a blur, accent words get a neon sweep,
+      // the badge spins in, the dashed line draws down and the sticker lands.
+      // Each accent word's neon underline grows as the words around it arrive (driven by the timeline's progress).
+      const sweep = (p) =>
+        accents.forEach((a, i) => {
+          const from = 0.45 + i * 0.2;
+          const t = Math.min(1, Math.max(0, (p - from) / 0.25));
+          a.style.setProperty("--hl", `${Math.round(t * 100)}%`);
+        });
+
+      const build = (scrollTrigger) =>
+        gsap
+          .timeline({ defaults: { ease: "power2.out" }, scrollTrigger, onUpdate() { sweep(this.progress()); } })
+          .to(words, { opacity: 1, yPercent: 0, rotate: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.09 }, 0)
+          .to(circle, { scale: 1, rotate: -10, duration: 0.8, ease: "back.out(2)" }, 0)
+          .to(ring, { rotate: "+=220", duration: words.length * 0.09 + 0.6, ease: "none" }, 0)
+          .to(track, { height: 490, duration: words.length * 0.09, ease: "none" }, 0.2)
+          .to(sticker, { scale: 1, rotate: 6, duration: 0.5, ease: "back.out(3)" }, ">-0.2");
+
+      const mm = gsap.matchMedia();
+      // Desktop: pin the section while the words play through.
+      mm.add("(min-width: 761px)", () => {
+        build({ trigger: el, start: "center center", end: "+=120%", pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true });
+      });
+      // Phones: same sequence over the normal scroll, no pinning.
+      mm.add("(max-width: 760px)", () => {
+        build({ trigger: el, start: "top 80%", end: "bottom 55%", scrub: 0.6, invalidateOnRefresh: true });
       });
 
-      if (split.words && split.words.length) {
-        gsap.fromTo(
-          split.words,
-          { opacity: 0.14 },
-          {
-            opacity: 1,
-            stagger: 0.05,
-            ease: "none",
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top 75%",
-              end: "bottom 60%",
-              scrub: true
-            }
-          }
-        );
-      }
-
-      gsap.from(root.current.querySelectorAll(".mf-pop"), {
-        scale: 0,
-        rotate: -30,
-        stagger: 0.2,
-        ease: "back.out(2)",
-        duration: 0.8,
-        scrollTrigger: { trigger: root.current, start: "top 60%" }
-      });
-
-      const track = root.current.querySelector(".mf-line-track");
-      if (track) {
-        gsap.fromTo(
-          track,
-          { height: 0 },
-          {
-            height: 490,
-            ease: "none",
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top 70%",
-              end: "bottom 60%",
-              scrub: true
-            }
-          }
-        );
-      }
-
-      const off = afterIntro(() => {
-        ScrollTrigger.refresh();
-      });
+      // Positions depend on everything above (hero, fonts), so measure again once those settle.
+      const refresh = () => ScrollTrigger.refresh();
+      const off = afterIntro(refresh);
+      document.fonts?.ready.then(refresh);
+      window.addEventListener("load", refresh);
 
       return () => {
         off();
+        window.removeEventListener("load", refresh);
+        mm.revert();
+        accents.forEach((a) => a.style.removeProperty("--hl"));
         split.revert();
       };
     },
@@ -112,7 +110,7 @@ export default function Manifesto({ text }) {
               </text>
             </svg>
             <div className="mf-badge-circle">
-              <Logo variant="monogram" height={28} color="#ffffff" />
+              <Logo variant="monogram" height={30} gradient />
             </div>
           </div>
         </div>
@@ -126,20 +124,11 @@ export default function Manifesto({ text }) {
               strokeDasharray="5 5"
               strokeLinecap="round"
             />
-            <path
-              d="M 112 482 L 127 492 L 114 500"
-              stroke="rgba(24, 47, 52, 0.25)"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
           </svg>
         </div>
 
         <span className="mf-pop mf-pop--b hand">since 2018</span>
       </div>
-
-      <span className="mf-pop mf-pop--c" aria-hidden="true">✿</span>
     </section>
   );
 }

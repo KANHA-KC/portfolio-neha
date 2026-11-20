@@ -8,8 +8,12 @@ export default async function manifest() {
     description: p.intro,
     start_url: "/",
     display: "standalone",
-    background_color: "#FCFAF6",
-    theme_color: "#0B4F5E",
-    icons: [{ src: "/brand/monogram.png", sizes: "227x127", type: "image/png" }]
+    background_color: "#F4F4F4",
+    theme_color: "#056E7F",
+    icons: [
+      { src: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png" },
+      { src: "/brand/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
+    ]
   };
 }

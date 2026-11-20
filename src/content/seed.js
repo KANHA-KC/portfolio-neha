@@ -13,7 +13,7 @@ export const profile = {
   heroIntro:
     "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
-    "Design is never just what meets the eye.\n\nBehind every identity you *recognize* or package you *hold* lies a deeper question: how did it make you feel?\n\nBecause while good design looks good, great design *tells a story*. That is why I always start with the humans before working my way down to the pixels.",
+    "Good design looks good. Great design *tells a story*.\n\nPeople remember how it made them *feel*.",
   intro:
     "a self-taught illustrator and brand designer based in Mumbai. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
   bio: [
@@ -98,11 +98,13 @@ export const services = [
   { group: "brand", order: 8, title: "Illustration", description: "Spot drawings & icon sets with a warm hand." }
 ];
 
+// From the résumé (Work Experience). `highlight` shows in the right-hand column.
 export const experience = [
-  { order: 1, period: "2024 — now", role: "Senior UX & Brand Consultant", company: "Independent", location: "Mumbai & remote" },
-  { order: 2, period: "2022 — 24", role: "Product Designer", company: "CarePulse Health", location: "Bangalore" },
-  { order: 3, period: "2020 — 22", role: "UX Designer", company: "FinSpire Technologies", location: "Mumbai" },
-  { order: 4, period: "2018 — 20", role: "Interaction Designer", company: "Studio Craft", location: "Mumbai" }
+  { order: 1, period: "2024 — 26", role: "Senior Graphic Designer", company: "Webenza India", highlight: "Led 3 designers · 120+ creatives a month" },
+  { order: 2, period: "2022 — 24", role: "Graphic Designer", company: "Webenza India", highlight: "60+ assets a month across 8 accounts" },
+  { order: 3, period: "2021 — 22", role: "Graphic Visualiser", company: "Schbang Digital Solutions", highlight: "20+ creatives a week, 5 sectors" },
+  { order: 4, period: "2021", role: "Executive Graphic Designer", company: "The Social Lions", highlight: "Turnaround cut from 5 days to 3" },
+  { order: 5, period: "2019 — 21", role: "Fashion Designer", company: "Bellani S", highlight: "Bespoke formal wear for 40–70 clients a season" }
 ];
 
 // Home "Kind words" marquee. Tile: gold / aqua / paprika / teal (leave empty to cycle).
@@ -172,7 +174,7 @@ export const projects = [
     title: "Landmark Infratech",
     subtitle: "A brand guidebook for a Bangalore real estate company",
     summary:
-      "Building the Brand Guidelines, Office Stationery, Signage, Cutlery and designing the Hospitality Uniforms for the brand.",
+      "Building the brand guidelines, office stationery, signage, cutlery and designing the hospitality uniforms for the brand.",
     client: "Landmark Infratech",
     sector: "Real Estate",
     projectType: "Via Freelance",
@@ -188,7 +190,7 @@ export const projects = [
     brief:
       "A brand guidebook for a Bangalore real estate company, to guide every touchpoint, from social and web to stationery and signage.",
     workedOn:
-      "Building the Brand Guidelines, Office Stationery, Signage, Cutlery and designing the Hospitality Uniforms for the brand.",
+      "Building the brand guidelines, office stationery, signage, cutlery and designing the hospitality uniforms for the brand.",
     gallery: shots("landmark-infratech", ["2.png", "Brand guidelines"], ["3.png", "Billboard, social & sales deck"], ["4.png", "Hospitality & booking email"])
   },
   {

@@ -57,8 +57,8 @@ const Icons = {
 // Brand-palette tone + handwritten note per known network.
 const SOCIAL_META = {
   linkedin: { icon: "linkedin", tone: "teal", shortcut: "L", note: "where I keep things\nprofessional-ish" },
-  dribbble: { icon: "dribbble", tone: "pink", shortcut: "D", note: "shots, sketches &\nwork in progress" },
-  instagram: { icon: "instagram", tone: "pink", shortcut: "I", note: "I’m most real here" },
+  dribbble: { icon: "dribbble", tone: "dribbble", shortcut: "D", note: "shots, sketches &\nwork in progress" },
+  instagram: { icon: "instagram", tone: "instagram", shortcut: "I", note: "I’m most real here" },
   behance: { icon: "behance", tone: "teal", shortcut: "B", note: "full case studies\nlive here" },
   x: { icon: "x", tone: "ink", shortcut: "X", note: "trying to be\nactive here" },
   twitter: { icon: "x", tone: "ink", shortcut: "X", note: "trying to be\nactive here" }
@@ -279,8 +279,8 @@ function Key({ href, label, icon, tone, note, notePos, download, external, short
         title={`${label} — Shortcut: ${shortcutLabel}`}
         data-cursor={label.toLowerCase()}
         suppressHydrationWarning
-        {...(download ? { download: "" } : {})}
-        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...(download ? { download: "Neha-Ondhia-Resume.pdf" } : {})}
+        {...(external || (download && href?.startsWith("http")) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         onPointerDown={press}
         onPointerUp={release}
         onPointerLeave={release}
@@ -320,7 +320,7 @@ export default function ContactKeys({ email, socials = [], resume }) {
   }, []);
 
   const keys = [
-    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "pap", shortcut: "M", note: `projects / collabs /\ncoffee chats ✿\n${email}` },
+    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "projects / collabs /\ncoffee chats ✿" },
     ...socials.map((s) => {
       const meta = SOCIAL_META[s.label.toLowerCase()] ?? { icon: "link", tone: "aqua", shortcut: s.label.charAt(0).toUpperCase(), note: `find me on ${s.label}` };
       return { href: s.href, label: s.label, external: true, ...meta };

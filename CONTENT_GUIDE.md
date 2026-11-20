@@ -70,7 +70,7 @@ CMS → **Profile** → the single item. Don't add a second item — the site on
 
 ## Add or rename a category
 
-CMS → **Categories** → **+ Add Item**: **Title** (shown on filters), **Slug** (lowercase-with-dashes, used in the web address), **Description**, **Icon** (a single symbol like ◎ ✦ ▢ ▤ ✎), **Order**.
+CMS → **Categories** → **+ Add Item**: **Title** (shown on filters), **Slug** (lowercase-with-dashes, used in the web address), **Description**, **Order**. (The **Icon** field is no longer shown on the site — leave it empty.).
 
 - A category only appears on the site once at least one project uses its slug.
 - Renaming a **slug** changes its web address — update the **Category slug** of its projects to match.

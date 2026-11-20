@@ -11,15 +11,11 @@ export default function Showcase({ project: p, next }) {
     <article className="case showcase" style={{ "--wash": p.palette.wash, "--frame": p.palette.frame, "--ink": p.palette.ink, "--spark": p.palette.spark }}>
       <ProjectHero
         project={p}
-        num={p.categoryIcon}
         meta={[
-          ["Client", p.client],
           ["Sector", p.sector],
           ["Project Type", p.projectType],
           ["Year", p.year],
-          ["Feeling", p.feeling || p.note],
-          ["Role", p.role],
-          ["Discipline", p.categoryTitle]
+          ["Role", p.role]
         ]}
       />
 
@@ -27,26 +23,6 @@ export default function Showcase({ project: p, next }) {
       <div className="case-cover showcase-cover">
         <ProjectVisual project={p} sizes="(max-width: 1200px) 100vw, 1200px" preload />
       </div>
-
-      {p.workedOn && (
-        <section className="case-block">
-          <Reveal className="case-label"><span>✦</span> What I worked on</Reveal>
-          <div className="brief">
-            <Reveal as="p" className="case-lead" delay={80}>{p.workedOn}</Reveal>
-          </div>
-        </section>
-      )}
-
-      {(p.brief || p.summary) && (
-        <section className="case-block">
-          <Reveal className="case-label"><span>✎</span> The brief</Reveal>
-          <div className="brief">
-            {(p.brief || p.summary).split("\n").filter(Boolean).map((para, i) => (
-              <Reveal as="p" key={i} className={i === 0 ? "case-lead" : "brief-p"} delay={80}>{para}</Reveal>
-            ))}
-          </div>
-        </section>
-      )}
 
       {p.videos.length > 0 && <Reels videos={p.videos} title={p.title} />}
       {p.gallery.length > 0 && <Gallery project={p} />}

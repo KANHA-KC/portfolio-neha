@@ -3,64 +3,347 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
-// A soft dot that trails the pointer. Elements with `data-cursor="label"` grow it into a labelled bubble.
+/*
+  Design-tool cursor (desktop + mouse only).
+  The tool changes with what's under the pointer:
+    pen        empty space (hold & drag to draw; strokes fade away)
+    type       text and fields
+    move       links and buttons (their data-cursor label shows as a tooltip)
+    zoom       work cards and "view"-type links
+    hand       draggable things (grabs on press)
+    eyedropper images (live colour swatch; click picks the colour for the brush and copies the hex)
+  Hidden shortcuts (ignored while typing in a field):
+    P pen (or B) · E eraser · [ ] brush size · X swap colours · ⌘/Ctrl+Z undo stroke · ? shortcuts card
+*/
+
+const ICONS = {
+  // pen tool with bezier anchor points: the nib's tip is the hotspot
+  brush:
+    '<svg viewBox="0 0 24 24"><path class="tc-arc" d="M3.6 10.4C3.8 6 7.6 3.2 11 3.2M13 3.2c3.4 0 7.2 2.8 7.4 7.2"/><rect x="10.2" y="1.6" width="3.6" height="3.2" rx=".5"/><rect x="1.8" y="10.4" width="3.6" height="3.2" rx=".5"/><rect x="18.6" y="10.4" width="3.6" height="3.2" rx=".5"/><path class="tc-nib" d="M12 5.6 17.6 12.3 15.4 17.2H8.6L6.4 12.3Z"/><path d="M12 5.6v5"/><circle cx="12" cy="11.8" r="1.25"/><rect x="8.6" y="17.2" width="6.8" height="4.6" rx=".6"/><path d="M10.2 19.5h3.6"/></svg>',
+  eraser:
+    '<svg viewBox="0 0 24 24"><path d="m14.8 3.6 5.6 5.6a1.5 1.5 0 0 1 0 2.1l-8.2 8.2H6.9l-3.3-3.3a1.5 1.5 0 0 1 0-2.1l9.1-9.1a1.5 1.5 0 0 1 2.1 0Z"/><path d="M9 9.9 14.6 15.5M7 19.5h13"/></svg>',
+  move:
+    '<svg viewBox="0 0 24 24"><path d="M3 2.5v15.2l4-3.8 2.6 6 2.8-1.2-2.6-5.9 5.6-.3Z"/><path d="M17.5 13v8M13.5 17h8M17.5 13l-1.4 1.4M17.5 13l1.4 1.4M17.5 21l-1.4-1.4M17.5 21l1.4-1.4"/></svg>',
+  type:
+    '<svg viewBox="0 0 24 24"><path d="M9 3h-2.5M15 3h2.5M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/></svg>',
+  zoom:
+    '<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M10 7v6M7 10h6"/></svg>',
+  hand:
+    '<svg viewBox="0 0 24 24"><path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11M11 10.5V4a1.5 1.5 0 0 1 3 0v6.5M14 10.5V5.5a1.5 1.5 0 0 1 3 0V12M17 11.5V8a1.5 1.5 0 0 1 3 0v6.5c0 3.9-3 7-6.8 7h-1.1c-2.3 0-4.1-1-5.4-2.8L3.6 14.5a1.5 1.5 0 0 1 2.3-1.9L8 15"/></svg>',
+  grab:
+    '<svg viewBox="0 0 24 24"><path d="M7 11.5V9a1.5 1.5 0 0 1 3 0v2M10 10.5V8.5a1.5 1.5 0 0 1 3 0v2M13 10.5V9a1.5 1.5 0 0 1 3 0v2M16 11V10a1.5 1.5 0 0 1 3 0v4.5c0 3.9-3 7-6.8 7h-1.1c-3.4 0-6.1-2.8-6.1-6.2V12.5a1.5 1.5 0 0 1 2-1.4"/></svg>',
+  eyedropper:
+    '<svg viewBox="0 0 24 24"><path d="m14.5 6.2 3.3 3.3M19.6 4.4a2.2 2.2 0 0 0-3.1 0l-2.4 2.4-1-1-1.4 1.4 1 1-7.9 7.9-.6 3.4 3.4-.6 7.9-7.9 1 1 1.4-1.4-1-1 2.4-2.4a2.2 2.2 0 0 0 .3-2.8Z"/></svg>'
+};
+
+// Where the pointer's hotspot sits inside each 28px icon (so clicks land exactly where the tool points).
+const HOTSPOT = { brush: [14, 6.5], eraser: [6, 22], move: [3, 3], type: [14, 14], zoom: [11, 11], hand: [12, 12], grab: [12, 12], eyedropper: [3, 25] };
+const INTERACTIVE = "a, button, [role='button'], summary, select, label[for]";
+const FIELD = "input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio']), textarea, [contenteditable='true']";
+const TEXT = "p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, dd, dt, td, th";
+const ZOOMY = /^(view|read case|peek|browse|all work)$/i;
+const SWATCHES = ["#c7db0a", "#b8f9ff"];
+
 export default function Cursor() {
-  const ref = useRef(null);
-  const labelRef = useRef(null);
+  const rootRef = useRef(null);
+  const canvasRef = useRef(null);
 
   useEffect(() => {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const el = ref.current;
+    const root = rootRef.current;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const $ = (s) => root.querySelector(s);
+    const toolEl = $(".tc-tool"), ring = $(".tc-ring"), tip = $(".tc-tip"), swatch = $(".tc-swatch"), hud = $(".tc-hud"), ants = $(".tc-ants");
     document.documentElement.classList.add("has-cursor");
 
-    const xTo = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3" });
-    const yTo = gsap.quickTo(el, "y", { duration: 0.45, ease: "power3" });
+    const state = {
+      x: -100, y: -100, tool: "brush", canvasTool: "brush", size: 14, colors: [...SWATCHES], down: false,
+      painting: null, strokes: [], redo: [], lastMove: 0, lastX: 0, vx: 0, sampled: null, idleTimer: 0, hinted: false
+    };
 
-    let hasMoved = false;
-    const move = (e) => {
-      if (!hasMoved) {
-        gsap.set(el, { x: e.clientX, y: e.clientY });
-        hasMoved = true;
-      } else {
-        xTo(e.clientX);
-        yTo(e.clientY);
-      }
-      const target = e.target.closest?.("[data-cursor], a, button, input, textarea, label");
-      const label = target?.getAttribute("data-cursor");
-      if (label && label !== "home") {
-        labelRef.current.textContent = label;
-        el.dataset.state = "label";
-      } else if (target) {
-        el.dataset.state = "link";
-      } else {
-        el.dataset.state = "";
+    // ---- positioning: the tool is exact, the ring and tooltip trail slightly for feel ----
+    const ringX = gsap.quickTo(ring, "x", { duration: 0.35, ease: "power3" });
+    const ringY = gsap.quickTo(ring, "y", { duration: 0.35, ease: "power3" });
+    const tipX = gsap.quickTo(tip, "x", { duration: 0.5, ease: "power3" });
+    const tipY = gsap.quickTo(tip, "y", { duration: 0.5, ease: "power3" });
+    const tilt = gsap.quickTo(toolEl, "rotate", { duration: 0.5, ease: "power3" });
+
+    const setTool = (t) => {
+      if (state.tool === t) return;
+      state.tool = t;
+      root.dataset.tool = t;
+      toolEl.innerHTML = ICONS[t];
+      const [hx, hy] = HOTSPOT[t];
+      toolEl.style.setProperty("--hx", `${-hx}px`);
+      toolEl.style.setProperty("--hy", `${-hy}px`);
+      if (!reduce) gsap.fromTo(toolEl, { scale: 0.6 }, { scale: 1, duration: 0.35, ease: "back.out(3)" });
+    };
+    const setSize = (s) => {
+      state.size = Math.max(4, Math.min(60, s));
+      root.style.setProperty("--brush", `${state.size}px`);
+    };
+    const flash = (msg) => {
+      hud.textContent = msg;
+      gsap.killTweensOf(hud);
+      gsap.set(hud, { x: state.x, y: state.y });
+      gsap.fromTo(hud, { autoAlpha: 0, yPercent: 40 }, { autoAlpha: 1, yPercent: 0, duration: 0.2 }); // yPercent, so the pointer position (x/y) is kept
+      gsap.to(hud, { autoAlpha: 0, duration: 0.3, delay: 1.3 });
+    };
+    const setColors = () => {
+      root.style.setProperty("--fg", state.colors[0]);
+      root.style.setProperty("--bg2", state.colors[1]);
+    };
+    setTool("move"); setTool("brush"); setSize(14); setColors();
+
+    // ---- eyedropper: sample a pixel from the image under the pointer ----
+    const samplers = new WeakMap();
+    const sample = (img, cx, cy) => {
+      try {
+        let s = samplers.get(img);
+        if (!s) {
+          if (!img.complete || !img.naturalWidth) return null;
+          const c = document.createElement("canvas");
+          c.width = 96; c.height = Math.max(1, Math.round((96 * img.naturalHeight) / img.naturalWidth));
+          const g = c.getContext("2d", { willReadFrequently: true });
+          g.drawImage(img, 0, 0, c.width, c.height);
+          s = { c, g };
+          samplers.set(img, s);
+        }
+        const r = img.getBoundingClientRect();
+        const px = Math.floor(((cx - r.left) / r.width) * s.c.width);
+        const py = Math.floor(((cy - r.top) / r.height) * s.c.height);
+        const d = s.g.getImageData(Math.max(0, Math.min(s.c.width - 1, px)), Math.max(0, Math.min(s.c.height - 1, py)), 1, 1).data;
+        if (d[3] < 20) return null;
+        return "#" + [d[0], d[1], d[2]].map((v) => v.toString(16).padStart(2, "0")).join("");
+      } catch {
+        return null;
       }
     };
-    const leave = () => {
-      el.dataset.state = "gone";
-      hasMoved = false;
-    };
-    const down = () => el.classList.add("is-down");
-    const up = () => el.classList.remove("is-down");
 
-    window.addEventListener("pointermove", move, { passive: true });
-    document.addEventListener("pointerleave", leave);
-    window.addEventListener("pointerdown", down);
-    window.addEventListener("pointerup", up);
+    // ---- which tool fits what's under the pointer ----
+    const pick = (target) => {
+      const el = target?.closest ? target : null;
+      if (!el) return { tool: state.canvasTool };
+      const labelled = el.closest("[data-cursor]");
+      const label = labelled?.getAttribute("data-cursor");
+      if (el.closest(FIELD)) return { tool: "type" };
+      if (label === "drag" || el.closest("[data-drag], .is-draggable")) return { tool: state.down ? "grab" : "hand", label: label === "drag" ? "drag" : "" };
+      if (el.tagName === "IMG" && !el.closest(INTERACTIVE)) return { tool: "eyedropper", img: el };
+      if (el.closest(".peek")) return { tool: "zoom" };
+      if (label && label !== "home" && ZOOMY.test(label)) return { tool: "zoom", label };
+      if (el.closest(INTERACTIVE) || labelled) return { tool: "move", label: label && label !== "home" ? label : "" };
+      if (el.closest(TEXT) || el.closest(".hw")) return { tool: "type" };
+      return { tool: state.canvasTool };
+    };
+
+    // ---- painting (page coordinates, so strokes scroll with the page; they fade after a while) ----
+    let raf = 0;
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    };
+    const LIFE = 9000, FADE = 2500;
+    function draw() {
+      raf = 0;
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      const now = performance.now();
+      state.strokes = state.strokes.filter((s) => s === state.painting || now - s.born < LIFE);
+      for (const s of state.strokes) {
+        const age = s === state.painting ? 0 : now - s.born;
+        ctx.globalAlpha = age > LIFE - FADE ? Math.max(0, (LIFE - age) / FADE) : 1;
+        ctx.strokeStyle = s.color; ctx.lineWidth = s.size; ctx.lineCap = "round"; ctx.lineJoin = "round";
+        ctx.beginPath();
+        const p = s.pts;
+        ctx.moveTo(p[0].x - scrollX, p[0].y - scrollY);
+        for (let i = 1; i < p.length - 1; i++) {
+          const mx = (p[i].x + p[i + 1].x) / 2, my = (p[i].y + p[i + 1].y) / 2;
+          ctx.quadraticCurveTo(p[i].x - scrollX, p[i].y - scrollY, mx - scrollX, my - scrollY);
+        }
+        const last = p[p.length - 1];
+        ctx.lineTo(last.x - scrollX, last.y - scrollY);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      if (state.strokes.length) raf = requestAnimationFrame(draw);
+    }
+    const kick = () => { if (!raf) raf = requestAnimationFrame(draw); };
+    const eraseAt = (x, y) => {
+      const r = state.size;
+      const before = state.strokes.length;
+      state.strokes = state.strokes.filter((s) => !s.pts.some((p) => Math.hypot(p.x - x, p.y - y) < r + s.size / 2));
+      if (state.strokes.length !== before) kick();
+    };
+
+    // ---- idle marching ants + one-time hint ----
+    const resetIdle = () => {
+      root.classList.remove("is-idle");
+      clearTimeout(state.idleTimer);
+      state.idleTimer = setTimeout(() => {
+        if (state.tool === "brush" && !reduce) root.classList.add("is-idle");
+        if (!state.hinted && state.tool === "brush") { state.hinted = true; flash("Hold & drag to draw · press ? for tools"); }
+      }, 4500);
+    };
+
+    let current = { tool: "brush" };
+    const onMove = (e) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      state.x = e.clientX; state.y = e.clientY;
+      root.classList.remove("is-gone");
+      gsap.set(toolEl, { x: e.clientX, y: e.clientY });
+      ringX(e.clientX); ringY(e.clientY); tipX(e.clientX); tipY(e.clientY);
+      gsap.set([swatch, hud, ants], { x: e.clientX, y: e.clientY });
+      // flick tilt
+      const now = performance.now();
+      const v = (e.clientX - state.lastX) / Math.max(now - state.lastMove, 1);
+      state.lastX = e.clientX; state.lastMove = now;
+      if (!reduce) tilt(Math.max(-18, Math.min(18, v * 9)));
+
+      if (state.painting) {
+        state.painting.pts.push({ x: e.clientX + scrollX, y: e.clientY + scrollY });
+        kick();
+        return;
+      }
+      if (state.down && state.tool === "eraser") eraseAt(e.clientX + scrollX, e.clientY + scrollY);
+
+      current = pick(e.target);
+      setTool(current.tool);
+      if (current.label) { tip.textContent = current.label; root.classList.add("has-tip"); } else root.classList.remove("has-tip");
+      if (current.tool === "eyedropper") {
+        const hex = sample(current.img, e.clientX, e.clientY);
+        state.sampled = hex;
+        if (hex) { swatch.style.setProperty("--sample", hex); swatch.dataset.hex = hex.toUpperCase(); root.classList.add("has-swatch"); }
+        else root.classList.remove("has-swatch");
+      } else root.classList.remove("has-swatch");
+      resetIdle();
+    };
+
+    const burst = (x, y) => {
+      if (reduce) return;
+      for (let i = 0; i < 6; i++) {
+        const dot = document.createElement("i");
+        dot.className = "tc-spark";
+        root.appendChild(dot);
+        const a = (Math.PI * 2 * i) / 6 + Math.random() * 0.5;
+        gsap.fromTo(dot, { x, y, scale: 1, opacity: 1 }, {
+          x: x + Math.cos(a) * gsap.utils.random(14, 26), y: y + Math.sin(a) * gsap.utils.random(14, 26), scale: 0, opacity: 0,
+          duration: 0.55, ease: "power2.out", onComplete: () => dot.remove()
+        });
+      }
+    };
+
+    const onDown = (e) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      state.down = true;
+      root.classList.add("is-down");
+      burst(e.clientX, e.clientY);
+      if (state.tool === "hand") setTool("grab");
+      if (state.tool === "brush") {
+        e.preventDefault(); // painting, not text selection
+        state.redo = [];
+        state.painting = { pts: [{ x: e.clientX + scrollX, y: e.clientY + scrollY }], color: state.colors[0], size: state.size, born: performance.now() };
+        state.strokes.push(state.painting);
+        kick();
+      } else if (state.tool === "eraser") {
+        e.preventDefault();
+        eraseAt(e.clientX + scrollX, e.clientY + scrollY);
+      } else if (state.tool === "eyedropper" && state.sampled) {
+        state.colors[0] = state.sampled;
+        setColors();
+        navigator.clipboard?.writeText(state.sampled.toUpperCase()).catch(() => {});
+        flash(`Picked ${state.sampled.toUpperCase()} · copied`);
+        if (!reduce) gsap.fromTo(swatch, { scale: 1.4 }, { scale: 1, duration: 0.5, ease: "back.out(3)" });
+      }
+    };
+    const onUp = () => {
+      state.down = false;
+      root.classList.remove("is-down");
+      if (state.painting) {
+        state.painting.born = performance.now();
+        if (state.painting.pts.length < 2) state.painting.pts.push({ ...state.painting.pts[0], x: state.painting.pts[0].x + 0.1 });
+        state.painting = null;
+        kick();
+      }
+      if (state.tool === "grab") setTool("hand");
+    };
+
+    const typing = (t) => t && (t.closest?.(FIELD) || t.isContentEditable);
+    const onKey = (e) => {
+      if (typing(e.target)) return;
+      const k = e.key;
+      if ((e.metaKey || e.ctrlKey) && k.toLowerCase() === "z") {
+        e.preventDefault();
+        if (e.shiftKey) {
+          const s = state.redo.pop();
+          if (s) { s.born = performance.now(); state.strokes.push(s); kick(); flash("Redo brush stroke"); } else flash("Nothing to redo");
+        } else {
+          const s = state.strokes.pop();
+          if (s) { state.redo.push(s); kick(); flash("Undo brush stroke"); } else flash("Nothing to undo. You’re doing great.");
+        }
+        return;
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (k === "b" || k === "B" || k === "p" || k === "P") { state.canvasTool = "brush"; if (current.tool === "brush" || current.tool === "eraser") setTool("brush"); flash("Pen tool (P)"); }
+      else if (k === "e" || k === "E") { state.canvasTool = "eraser"; if (current.tool === "brush" || current.tool === "eraser") setTool("eraser"); flash("Eraser tool (E)"); }
+      else if (k === "[") { setSize(state.size - 4); flash(`Brush size ${state.size}px`); }
+      else if (k === "]") { setSize(state.size + 4); flash(`Brush size ${state.size}px`); }
+      else if (k === "x" || k === "X") {
+        state.colors.reverse(); setColors();
+        if (!reduce) gsap.fromTo(root.querySelector(".tc-colors"), { rotate: -90 }, { rotate: 0, duration: 0.45, ease: "back.out(2)" });
+        flash("Swapped colours (X)");
+      } else if (k === "?") root.classList.toggle("show-help");
+      else if (k === "Escape") root.classList.remove("show-help");
+    };
+
+    const onLeave = () => root.classList.add("is-gone");
+    const onScroll = () => { if (state.strokes.length) kick(); };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", resize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("pointerleave", onLeave);
+    resize();
+
     return () => {
       document.documentElement.classList.remove("has-cursor");
-      window.removeEventListener("pointermove", move);
-      document.removeEventListener("pointerleave", leave);
-      window.removeEventListener("pointerdown", down);
-      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("pointerleave", onLeave);
+      clearTimeout(state.idleTimer);
+      cancelAnimationFrame(raf);
     };
   }, []);
 
   return (
-    <div ref={ref} className="cursor" data-state="gone" aria-hidden="true">
-      <span className="cursor-blob">
-        <span ref={labelRef} className="cursor-label" />
-      </span>
-    </div>
+    <>
+      <canvas ref={canvasRef} className="tc-paint" aria-hidden="true" />
+      <div ref={rootRef} className="tc is-gone" data-tool="brush" aria-hidden="true">
+        <span className="tc-ring" />
+        <span className="tc-ants" />
+        <span className="tc-tool" />
+        <span className="tc-tip" />
+        <span className="tc-swatch" />
+        <span className="tc-hud" />
+        <span className="tc-help">
+          <b>Hidden tools</b>
+          <span><kbd>P</kbd> Pen · hold &amp; drag to draw</span>
+          <span><kbd>E</kbd> Eraser</span>
+          <span><kbd>[</kbd> <kbd>]</kbd> Brush size</span>
+          <span><kbd>X</kbd> Swap colours <i className="tc-colors"><i /><i /></i></span>
+          <span><kbd>⌘/Ctrl</kbd> <kbd>Z</kbd> Undo</span>
+          <span>Click an image to pick its colour</span>
+        </span>
+      </div>
+    </>
   );
 }

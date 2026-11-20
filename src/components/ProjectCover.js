@@ -10,9 +10,9 @@ function Finance() {
         <p className="pc-big">₹48,250</p>
         <p className="pc-sub">safe to spend this month</p>
         <div className="pc-buckets">
-          <span style={{ "--c": "#F5A000", "--p": "72%" }}><b>Rent</b></span>
-          <span style={{ "--c": "#0B4F5E", "--p": "40%" }}><b>Future</b></span>
-          <span style={{ "--c": "#DF5227", "--p": "88%" }}><b>Fun</b></span>
+          <span style={{ "--c": "#C7DB0A", "--p": "72%" }}><b>Rent</b></span>
+          <span style={{ "--c": "#056E7F", "--p": "40%" }}><b>Future</b></span>
+          <span style={{ "--c": "#C7DB0A", "--p": "88%" }}><b>Fun</b></span>
         </div>
         <div className="pc-row"><i style={{ width: "62%" }} /></div>
         <div className="pc-row"><i style={{ width: "38%" }} /></div>
@@ -26,7 +26,7 @@ function Finance() {
         </div>
       </div>
       <div className="pc-float pc-float--b">
-        <svg viewBox="0 0 120 44" aria-hidden="true"><path d="M2 40 C 20 36, 26 18, 44 22 S 70 8, 84 14 S 108 4, 118 2" fill="none" stroke="#0B4F5E" strokeWidth="4" strokeLinecap="round" /></svg>
+        <svg viewBox="0 0 120 44" aria-hidden="true"><path d="M2 40 C 20 36, 26 18, 44 22 S 70 8, 84 14 S 108 4, 118 2" fill="none" stroke="#056E7F" strokeWidth="4" strokeLinecap="round" /></svg>
         <small>+12% saved</small>
       </div>
     </>
@@ -35,9 +35,9 @@ function Finance() {
 
 function Health() {
   const slots = [
-    { t: "Morning", s: "8:00", pills: ["#F5A000", "#9ED4CB"], done: true },
-    { t: "Afternoon", s: "13:30", pills: ["#DF5227"], done: true },
-    { t: "Night", s: "21:00", pills: ["#0B4F5E", "#F8CC78", "#9ED4CB"], done: false }
+    { t: "Morning", s: "8:00", pills: ["#C7DB0A", "#8EEAF3"], done: true },
+    { t: "Afternoon", s: "13:30", pills: ["#C7DB0A"], done: true },
+    { t: "Night", s: "21:00", pills: ["#056E7F", "#DCE86A", "#8EEAF3"], done: false }
   ];
   return (
     <>
@@ -78,7 +78,7 @@ function System() {
   return (
     <div className="pc-board">
       <div className="pc-tile pc-tile--swatches">
-        {["#063641", "#0B4F5E", "#477B85", "#9ED4CB", "#F5A000", "#DF5227"].map((c) => (
+        {["#03414B", "#056E7F", "#4A8F9A", "#8EEAF3", "#C7DB0A", "#C7DB0A"].map((c) => (
           <i key={c} style={{ background: c }} />
         ))}
       </div>

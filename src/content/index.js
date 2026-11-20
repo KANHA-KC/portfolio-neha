@@ -8,6 +8,7 @@ import * as local from "./providers/local";
 import * as seed from "./seed";
 
 const byOrder = (a, b) => a.order - b.order;
+const EXPERIENCE_FROM_CMS = false;
 
 // Project media: until a project's images/videos are uploaded in the CMS, the local files from the seed
 // (public/Projects/<slug>/) are used for that same slug.
@@ -23,13 +24,14 @@ const withSeedMedia = (raw = {}) => {
   return out;
 };
 
-// Newer profile fields: until they are filled in the CMS, the seed copy is used.
-const SEEDED_PROFILE_KEYS = ["storyTitle", "story", "storyStats", "workWith", "workProcess", "designTools", "aiTools"];
+// Merge CMS profile with seed fallbacks so any empty field in Wix CMS defaults to the seed content.
 const withSeedProfile = (raw = {}) => {
   const out = { ...raw };
-  for (const k of SEEDED_PROFILE_KEYS) {
+  for (const [k, fallback] of Object.entries(seed.profile)) {
     const v = out[k];
-    if (v == null || v === "" || (Array.isArray(v) && !v.length)) out[k] = seed.profile[k];
+    if (v == null || v === "" || (Array.isArray(v) && !v.length)) {
+      out[k] = fallback;
+    }
   }
   return out;
 };
@@ -68,7 +70,9 @@ async function loadContent() {
     projects: projects.map((p) => ({ ...p, categoryTitle: catOf[p.category]?.title || p.category, categoryIcon: catOf[p.category]?.icon || "✦" })),
     categories,
     services: raw.services.map(normalizeService).sort(byOrder),
-    experience: raw.experience.map(normalizeExperience).sort(byOrder),
+    // Experience is kept in seed.js (from the résumé) — the Wix "Experience" collection still holds placeholder roles.
+    // Set EXPERIENCE_FROM_CMS to true once that collection is updated in Wix.
+    experience: (EXPERIENCE_FROM_CMS ? raw.experience : seed.experience).map(normalizeExperience).sort(byOrder),
     testimonials: (raw.testimonials ?? seed.testimonials).map(normalizeTestimonial).filter((t) => t.quote).sort(byOrder)
   };
 }

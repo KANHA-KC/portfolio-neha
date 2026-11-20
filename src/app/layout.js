@@ -1,4 +1,5 @@
-import { Plus_Jakarta_Sans, Caveat } from "next/font/google";
+import { Patrick_Hand } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -8,15 +9,38 @@ import JsonLd from "@/components/JsonLd";
 import { getProfile, getProjects } from "@/content";
 import { SITE_URL, clip, personSchema, websiteSchema } from "@/lib/seo";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
+// Type system — PP Neue Montreal everywhere; Aubrey only for the big hero words.
+const montreal = localFont({
+  src: [
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-thin.otf", weight: "100", style: "normal" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-thin.otf", weight: "300", style: "normal" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-book.otf", weight: "400", style: "normal" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-italic.otf", weight: "400", style: "italic" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-medium.otf", weight: "500", style: "normal" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-semibolditalic.otf", weight: "600", style: "italic" },
+    { path: "../fonts/pp-neue-montreal/ppneuemontreal-bold.otf", weight: "700", style: "normal" }
+  ],
+  variable: "--font-montreal",
+  display: "swap",
+  fallback: ["Helvetica Neue", "Arial", "sans-serif"]
+});
+
+// Aubrey (the designer's own display face) only covers basic A–Z, digits and ASCII punctuation,
+// so anything else falls back to Montreal (see --f-aubrey in globals.css).
+const aubrey = localFont({
+  src: "../fonts/aubrey/Aubrey-Display.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-aubrey",
   display: "swap"
 });
 
-const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
+// Handwritten notes: Marydale is the brand's highlight font (licensed files go in public/fonts/marydale/);
+// Patrick Hand is the free lookalike used until then.
+const patrick = Patrick_Hand({
+  weight: "400",
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-patrick",
   display: "swap"
 });
 
@@ -42,7 +66,14 @@ export async function generateMetadata() {
       "design systems"
     ],
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
-    icons: { icon: "/brand/monogram.png", apple: "/brand/monogram.png" },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+        { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" }
+      ],
+      apple: { url: "/brand/apple-icon.png", sizes: "180x180" }
+    },
     openGraph: {
       title,
       description: clip(p.headline || p.intro),
@@ -56,13 +87,13 @@ export async function generateMetadata() {
 }
 
 export const viewport = {
-  themeColor: "#FCFAF6"
+  themeColor: "#F4F4F4"
 };
 
 export default async function RootLayout({ children }) {
   const [profile, projects] = await Promise.all([getProfile(), getProjects()]);
   return (
-    <html lang="en" className={`${jakarta.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${montreal.variable} ${aubrey.variable} ${patrick.variable}`}>
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <Preloader />

@@ -66,7 +66,7 @@ export default function WorkGallery({ projects, categories, showFilters = true }
                 aria-pressed={filter === c.slug}
                 onClick={() => choose(c.slug)}
               >
-                <span aria-hidden="true">{c.icon}</span> {c.title} <sup>{c.count}</sup>
+                {c.title} <sup>{c.count}</sup>
               </button>
             ))}
           </div>
@@ -85,7 +85,7 @@ export default function WorkGallery({ projects, categories, showFilters = true }
               <div className="gcard-cap">
                 <div>
                   <p className="gcard-cat">
-                    <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
+                    {p.categoryTitle}
                     {p.sector && <span> · {p.sector}</span>}
                     {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
                   </p>
@@ -96,7 +96,6 @@ export default function WorkGallery({ projects, categories, showFilters = true }
                   {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
                 </p>
               </div>
-              {p.note && <span className="gcard-note hand">{p.note}</span>}
             </Link>
           </li>
         ))}

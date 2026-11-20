@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import HeroIntro from "@/components/home/HeroIntro";
 import Manifesto from "@/components/home/Manifesto";
 import SelectedWork from "@/components/home/SelectedWork";
 import BrandLogos from "@/components/home/BrandLogos";
@@ -28,10 +29,11 @@ export default async function HomePage() {
   return (
     <>
       <Hero profile={profile} />
+      <HeroIntro profile={profile} />
       <section className="logo-band" aria-labelledby="brands-heading">
         <div className="logo-band-head">
           <p className="eyebrow">
-            <span className="eyebrow-num">✦</span> Brands I’ve worked on
+            Brands I’ve worked on
           </p>
           <h2 id="brands-heading" className="logo-band-title">
             <span className="sr-only">Brands I’ve worked on, </span>

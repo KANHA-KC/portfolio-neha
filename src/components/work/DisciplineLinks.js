@@ -11,11 +11,11 @@ export default function DisciplineLinks({ categories, current, label = "Browse b
           <li key={c.slug}>
             {c.slug === current ? (
               <span className="disc-chip is-on" aria-current="page">
-                <span aria-hidden="true">{c.icon}</span> {c.title}
+                {c.title}
               </span>
             ) : (
               <Link href={categoryPath(c.slug)} className="disc-chip">
-                <span aria-hidden="true">{c.icon}</span> {c.title} <sup>{c.count}</sup>
+                {c.title} <sup>{c.count}</sup>
               </Link>
             )}
           </li>

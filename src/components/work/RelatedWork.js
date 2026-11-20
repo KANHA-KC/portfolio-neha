@@ -20,7 +20,7 @@ export default function RelatedWork({ projects, category }) {
             <Link href={projectPath(p.slug)} className="related-card" data-cursor="view">
               <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 760px) 100vw, 33vw" />
               <span className="gcard-cat">
-                <span aria-hidden="true">{p.categoryIcon}</span> {p.categoryTitle}
+                {p.categoryTitle}
               </span>
               <h3 className="gcard-title">{p.title}</h3>
             </Link>

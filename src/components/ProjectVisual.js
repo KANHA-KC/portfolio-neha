@@ -11,7 +11,6 @@ export default function ProjectVisual({ project, card = false, aspect, sizes, pr
       image={img}
       aspect={aspect || project.aspect}
       label={project.title}
-      icon={project.categoryIcon}
       palette={project.palette}
       sizes={sizes}
       preload={preload}

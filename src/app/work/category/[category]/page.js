@@ -54,7 +54,7 @@ async function Category({ params }) {
       <header className="page-head work-head">
         <Breadcrumbs items={[{ name: "Work", href: "/work" }, { name: category.title, href: categoryPath(slug) }]} />
         <p className="eyebrow">
-          {category.icon} {projects.length} {projects.length === 1 ? "project" : "projects"}
+          {projects.length} {projects.length === 1 ? "project" : "projects"}
         </p>
         <h1 className="page-title">
           {category.title}

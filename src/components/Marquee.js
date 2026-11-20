@@ -1,5 +1,5 @@
 // Infinite CSS marquee. `items` repeat twice so the loop is seamless.
-export default function Marquee({ items, className = "", reverse = false, sep = "✦" }) {
+export default function Marquee({ items, className = "", reverse = false, sep = "·" }) {
   const row = (
     <div className="marquee-row">
       {items.map((t, i) => (

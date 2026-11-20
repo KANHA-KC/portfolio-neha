@@ -33,6 +33,22 @@ export const image = (v, alt) => {
   return null;
 };
 
+// Wix document fields hold "wix:document://v1/…" or { url, src } or direct Wix/hosted URLs
+export const documentUrl = (v) => {
+  if (!v) return null;
+  if (typeof v === "object") v = v.url || v.src;
+  if (typeof v !== "string") return null;
+  if (v.startsWith("wix:document://")) {
+    try {
+      const doc = media.getDocumentUrl(v);
+      return doc?.url || v;
+    } catch {
+      return v;
+    }
+  }
+  return v;
+};
+
 async function queryAll(collectionId) {
   let res = await getClient().items.query(collectionId).ascending("order").limit(100).find();
   const all = [...res.items];
@@ -58,5 +74,8 @@ export async function fetchRaw() {
     // Newer collection: if it doesn't exist in Wix yet, the site falls back to the seed (null) instead of failing.
     queryAll(collections.testimonials).catch(() => null)
   ]);
+  if (profile?.resume) {
+    profile.resume = documentUrl(profile.resume) || profile.resume;
+  }
   return { profile, projects, categories, services, experience, testimonials };
 }
