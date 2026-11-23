@@ -11,6 +11,11 @@
 //
 // Safe to re-run: existing collections only get missing fields added / wrong types fixed (your own extra
 // fields are left alone), and items are only imported into empty collections.
+//
+// Opt-in maintenance flags (combine with --dry-run to preview):
+//   --replace-experience   delete every Experience item and import the résumé roles from seed.js
+//   --fill-profile         copy seed.js values into Profile fields that are EMPTY in Wix (never overwrites;
+//                          image fields are skipped — upload those in the CMS)
 
 import { createClient, ApiKeyStrategy } from "@wix/sdk";
 import { collections as collectionsApi, items } from "@wix/data";
@@ -18,6 +23,8 @@ import * as seed from "../src/content/seed.js";
 import { collections as ids } from "../src/content/config.js";
 
 const DRY = process.argv.includes("--dry-run");
+const REPLACE_EXPERIENCE = process.argv.includes("--replace-experience");
+const FILL_PROFILE = process.argv.includes("--fill-profile");
 
 /* ---------- schema (keys must match src/content/normalize.js) ---------- */
 const T = (key, displayName = key, type = "TEXT") => ({ key, displayName, type });
@@ -116,7 +123,7 @@ const SCHEMA = {
     id: ids.experience,
     displayName: "Experience",
     displayField: "role",
-    fields: [T("role", "Role"), T("company", "Company"), T("period", "Period"), T("location", "Location"), N("order", "Order")]
+    fields: [T("role", "Role"), T("company", "Company"), T("period", "Period"), T("location", "Location"), T("highlight", "Highlight (right-hand column)"), N("order", "Order")]
   },
   testimonials: {
     id: ids.testimonials,
@@ -242,8 +249,42 @@ async function insertAll(wix, id, docs) {
   }
 }
 
+const isEmpty = (v) => v == null || v === "" || (Array.isArray(v) && !v.length);
+
+async function replaceExperience(wix) {
+  const id = SCHEMA.experience.id;
+  const { items: current } = await wix.items.query(id).limit(1000).find();
+  const docs = SEED.experience.map((r) => toItem("experience", r));
+  console.log(`\n${id}: replacing ${current.length} item(s) with ${docs.length} from seed.js`);
+  for (const it of current) console.log(`  - ${it.role} · ${it.company}`);
+  for (const d of docs) console.log(`  + ${d.role} · ${d.company}`);
+  if (DRY) return;
+  for (const it of current) await wix.items.remove(id, it._id);
+  await wix.items.bulkInsert(id, docs);
+  console.log(`  now ${await wix.items.query(id).count()} item(s)`);
+}
+
+async function fillProfile(wix) {
+  const id = SCHEMA.profile.id;
+  const images = new Set(SCHEMA.profile.fields.filter((f) => f.type === "IMAGE").map((f) => f.key));
+  const { items: found } = await wix.items.query(id).limit(1).find();
+  const current = found[0];
+  const seedDoc = toItem("profile", seed.profile);
+  const fills = Object.fromEntries(Object.entries(seedDoc).filter(([k]) => !images.has(k) && isEmpty(current?.[k])));
+  console.log(`\n${id}: filling ${Object.keys(fills).length} empty field(s): ${Object.keys(fills).join(", ") || "none"}`);
+  if (DRY || !Object.keys(fills).length) return;
+  if (current) await wix.items.update(id, { ...current, ...fills });
+  else await wix.items.insert(id, fills);
+}
+
 async function main() {
   console.log(DRY ? "DRY RUN — nothing will be changed.\n" : "");
+  if (DRY && (REPLACE_EXPERIENCE || FILL_PROFILE)) {
+    const wix = client();
+    if (REPLACE_EXPERIENCE) await replaceExperience(wix);
+    if (FILL_PROFILE) await fillProfile(wix);
+    return;
+  }
   if (DRY) {
     for (const [name, s] of Object.entries(SCHEMA)) {
       const docs = SEED[name].map((r) => toItem(name, r));
@@ -281,6 +322,9 @@ async function main() {
     console.log(`  imported ${ok} item(s)`);
     notes.push(...skipped.map((x) => `${s.id} → ${x}`));
   }
+
+  if (REPLACE_EXPERIENCE) await replaceExperience(wix);
+  if (FILL_PROFILE) await fillProfile(wix);
 
   if (notes.length) console.log(`\nNeeds attention:\n  ${notes.join("\n  ")}`);
   console.log("\nDone. Images (portrait, covers, galleries) are best uploaded through the Wix CMS.");

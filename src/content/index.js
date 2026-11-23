@@ -8,7 +8,6 @@ import * as local from "./providers/local";
 import * as seed from "./seed";
 
 const byOrder = (a, b) => a.order - b.order;
-const EXPERIENCE_FROM_CMS = false;
 
 // Project media: until a project's images/videos are uploaded in the CMS, the local files from the seed
 // (public/Projects/<slug>/) are used for that same slug.
@@ -70,9 +69,7 @@ async function loadContent() {
     projects: projects.map((p) => ({ ...p, categoryTitle: catOf[p.category]?.title || p.category, categoryIcon: catOf[p.category]?.icon || "✦" })),
     categories,
     services: raw.services.map(normalizeService).sort(byOrder),
-    // Experience is kept in seed.js (from the résumé) — the Wix "Experience" collection still holds placeholder roles.
-    // Set EXPERIENCE_FROM_CMS to true once that collection is updated in Wix.
-    experience: (EXPERIENCE_FROM_CMS ? raw.experience : seed.experience).map(normalizeExperience).sort(byOrder),
+    experience: raw.experience.map(normalizeExperience).sort(byOrder),
     testimonials: (raw.testimonials ?? seed.testimonials).map(normalizeTestimonial).filter((t) => t.quote).sort(byOrder)
   };
 }

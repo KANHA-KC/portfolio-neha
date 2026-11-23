@@ -16,6 +16,12 @@ const Letters = ({ word }) =>
     </span>
   ));
 
+const toSentenceCase = (text) => {
+  if (!text) return "";
+  const s = String(text).trim().replace(/\.+$/, "");
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() + ".";
+};
+
 // Four words around the portrait: "Hi" · [visitor types their name] · "I'm" · "Neha".
 export default function Hero({ profile }) {
   const root = useRef(null);
@@ -68,14 +74,12 @@ export default function Hero({ profile }) {
 
       gsap.set(q(".hw"), { yPercent: 40, opacity: 0 });
       gsap.set(q(".hero-cutout"), { y: 120, rotate: 6, opacity: 0 });
-      gsap.set(q(".hero-fade"), { opacity: 0, y: 24 });
 
       const intro = () =>
         gsap
           .timeline({ defaults: { ease: "expo.out" } })
           .to(q(".hero-cutout"), { y: 0, rotate: 0, opacity: 1, duration: 1.4 }, 0)
-          .to(q(".hw"), { yPercent: 0, opacity: 1, duration: 1.3, stagger: 0.12 }, 0.2)
-          .to(q(".hero-fade"), { opacity: 1, y: 0, duration: 1, stagger: 0.08 }, 0.8);
+          .to(q(".hw"), { yPercent: 0, opacity: 1, duration: 1.3, stagger: 0.12 }, 0.2);
 
       const off = afterIntro(intro);
 
@@ -158,13 +162,13 @@ export default function Hero({ profile }) {
         <Letters word="Hi" />
       </p>
 
-      <div className="hw hw--right hw--name" data-depth="-16">
-        <span className="hw-cue" aria-hidden="true">{name ? "nice to meet you" : "type your name"} <i>✎</i></span>
+      <div className={`hw hw--right hw--name ${name.trim() ? "has-name" : ""}`} data-depth="-16">
+        <span className="hw-cue" aria-hidden="true">{name ? "Nice to meet you" : "Type your name"}</span>
         <label htmlFor="hero-name" className="sr-only">Your name</label>
         <input
           ref={field}
           id="hero-name"
-          className="hw-input"
+          className={`hw-input ${name.trim() ? "has-name" : ""}`}
           type="text"
           value={name}
           onChange={onName}
@@ -176,7 +180,7 @@ export default function Hero({ profile }) {
           onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
           onBlur={() => name.trim() && wave(".hw--hi .hl")}
         />
-        <span ref={mirror} className="hw-mirror" aria-hidden="true">{name || "{your name}"}</span>
+        <span ref={mirror} className={`hw-mirror ${name.trim() ? "has-name" : ""}`} aria-hidden="true">{name || "{your name}"}</span>
       </div>
 
       <p className="hw hw--left hw--im" aria-hidden="true" data-depth="-8">
@@ -186,15 +190,11 @@ export default function Hero({ profile }) {
       <div className="hw hw--right hw--me" data-depth="-12">
         <h1 id="hero-title" className="hero4-role">
           <span className="sr-only">{profile.name || "Neha Ondhia"}, </span>
-          {profile.role || "Illustrator, Brand and Graphic Designer"}.
+          {toSentenceCase(profile.role || "Illustrator, brand and graphic designer")}
         </h1>
         <p className="hw-word" aria-hidden="true">
           <Letters word={first} />
         </p>
-      </div>
-
-      <div className="hero4-foot hero-fade">
-        <span className="hero-scroll" aria-hidden="true">scroll <i /></span>
       </div>
     </section>
   );

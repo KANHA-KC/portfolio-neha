@@ -8,13 +8,13 @@ import TopBanner from "@/components/TopBanner";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 const baseLinks = [
-  { href: "/work", label: "Work" },
+  { href: "/work", label: "Works" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
 ];
 
-export default function Nav({ profile, workCount = 0 }) {
-  const links = baseLinks.map((l) => (l.href === "/work" ? { ...l, n: String(workCount).padStart(2, "0") } : l));
+export default function Nav({ profile }) {
+  const links = baseLinks;
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -79,11 +79,7 @@ export default function Nav({ profile, workCount = 0 }) {
       {pathname === "/" && <TopBanner />}
       <div className="nav-inner">
         <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home" onClick={onMarkClick}>
-          <Logo variant="monogram" height={30} />
-          <span className="nav-name">
-            {profile.name}
-            <em>{profile.role}</em>
-          </span>
+          <Logo variant="monogram" height={32} gradient={onDark} />
         </Link>
 
         <nav aria-label="Main" className="nav-links">
@@ -93,6 +89,16 @@ export default function Nav({ profile, workCount = 0 }) {
               {l.n && <sup>{l.n}</sup>}
             </Link>
           ))}
+          <a
+            href={profile.resume || "/resume.pdf"}
+            download="Neha-Ondhia-Resume.pdf"
+            className="nav-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="resume"
+          >
+            <span className="roll-wrap"><span className="roll">Resume</span></span>
+          </a>
         </nav>
 
         <button
@@ -118,6 +124,19 @@ export default function Nav({ profile, workCount = 0 }) {
               </span>
             </Link>
           ))}
+          <a
+            href={profile.resume || "/resume.pdf"}
+            download="Neha-Ondhia-Resume.pdf"
+            onClick={() => setOpen(false)}
+            className="menu-item"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="menu-link">
+              <small>0{links.length + 2}</small>
+              Resume
+            </span>
+          </a>
         </nav>
         <div className="menu-foot">
           <a href={`mailto:${profile.email}`}>{profile.email}</a>

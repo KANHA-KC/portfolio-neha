@@ -82,6 +82,7 @@ CMS → **Testimonials** → **+ Add Item**: **Quote** (no need to type the quot
 ## Services & Experience
 
 Plain lists — edit text and **Order**. Services need **Group**: `ux` or `brand` (which "hat" column it sits in).
+Experience items also have **Highlight** — the short line in the right-hand column (e.g. `Led 3 designers · 120+ creatives a month`).
 
 ---
 
