@@ -1,6 +1,9 @@
 // Shared SEO helpers: absolute URLs and schema.org (JSON-LD) builders.
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+// Production falls back to the real domain so share cards (LinkedIn, WhatsApp, X) never point at localhost.
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === "production" ? "https://www.nehaondhia.com" : "http://localhost:3000")
+).replace(/\/$/, "");
 
 export const absolute = (path = "/") => (/^https?:\/\//.test(path) ? path : `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`);
 
