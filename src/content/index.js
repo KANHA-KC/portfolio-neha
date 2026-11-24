@@ -12,7 +12,15 @@ const byOrder = (a, b) => a.order - b.order;
 // Project media: until a project's images/videos are uploaded in the CMS, the local files from the seed
 // (public/Projects/<slug>/) are used for that same slug.
 const hasMedia = (g) => Array.isArray(g) && g.some((x) => x && (x.src ?? x.image));
-const withSeedMedia = (raw = {}) => {
+// The local project PNGs were re-saved as JPEGs, so old "/Projects/….png" paths still stored in the CMS keep working.
+const localPng = /^(\/Projects\/.+)\.png$/i;
+const fixLocalPaths = (v) =>
+  typeof v === "string" ? v.replace(localPng, "$1.jpg")
+  : Array.isArray(v) ? v.map(fixLocalPaths)
+  : v && Object.getPrototypeOf(v) === Object.prototype ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fixLocalPaths(x)]))
+  : v;
+const withSeedMedia = (input = {}) => {
+  const raw = fixLocalPaths(input);
   const local = seed.projects.find((p) => p.slug === raw.slug);
   if (!local) return raw;
   const out = { ...raw };

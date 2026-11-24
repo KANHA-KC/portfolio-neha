@@ -35,8 +35,7 @@ const aubrey = localFont({
   display: "swap"
 });
 
-// Handwritten notes: Marydale is the brand's highlight font (licensed files go in public/fonts/marydale/);
-// Patrick Hand is the free lookalike used until then.
+// Handwritten notes font (Patrick Hand)
 const patrick = Patrick_Hand({
   weight: "400",
   subsets: ["latin", "latin-ext"],

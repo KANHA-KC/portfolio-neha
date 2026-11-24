@@ -138,6 +138,14 @@ export function normalizeTestimonial(raw) {
   };
 }
 
+function tidyTypography(text) {
+  return String(text)
+    .replace(/\b(in|from|to|at|by|of|for|on)\s+(\d{4}[–-]?\d{0,4}\.?)/gi, "$1\u00A0$2")
+    .replace(/\b(to|from)\s+(\d{4}\.?)/gi, "$1\u00A0$2")
+    .replace(/\s+([^\s]{1,10}\s+[^\s]{1,10}[.!?])$/, (m, g) => "\u00A0" + g.replace(/\s+/, "\u00A0"))
+    .replace(/\s+([^\s]+[.!?])$/, "\u00A0$1");
+}
+
 export function normalizeProfile(raw, image) {
   const name = str(raw.name, "Neha Ondhia");
   return {
@@ -151,9 +159,18 @@ export function normalizeProfile(raw, image) {
     intro: str(raw.intro).replace(/^a self-taught/i, "A self-taught"),
     bio: list(raw.bio),
     storyTitle: str(raw.storyTitle),
-    story: list(raw.story).map(String).map((para) =>
-      para.replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]")
-    ),
+    story: list(raw.story).map(String).map((para) => {
+      let p = para.replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]");
+      // Map older CMS paragraphs to improved widow-free phrasing if present
+      if (p.includes("left everything hanging") && p.includes("2021")) {
+        p = "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.";
+      } else if (p.includes("The Social Lions, Schbang") && p.includes("2020–2023")) {
+        p = "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over four years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.";
+      } else if (p.includes("designing since before AI") && p.includes("is still mine")) {
+        p = "I’ve been designing since before the wave of AI. Today I use it daily to accelerate research and mockups, while the visual thinking, taste, and craft remain entirely mine.";
+      }
+      return tidyTypography(p);
+    }),
     storyStats: pairs(raw.storyStats, "value", "label"),
     workWith: pairs(raw.workWith, "title", "description"),
     workProcess: pairs(raw.workProcess, "title", "description").map((step) =>

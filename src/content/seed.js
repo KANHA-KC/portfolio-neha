@@ -25,9 +25,9 @@ export const profile = {
   storyTitle: "I came to design through *clothes*.",
   story: [
     "I studied fashion design in [[Mumbai]] (2015 to 2019). Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
-    "Then Covid hit and left everything hanging. I moved back to my hometown and, since I can’t sit still, taught myself design software. Three graphic design internships later, I landed my first agency job in 2021.",
-    "Five years on, I’ve worked at The Social Lions, Schbang and Webenza, on brands like HDFC Life, Amazon, Airtel Business and Salesforce. At Webenza I grew from Graphic Designer to Senior Graphic Designer over four years, produced around 120 creatives a month, trained three junior designers and stepped in as art director when needed. Alongside agency work, I also ran my own small design studio, The Design Bar, for three years, from 2020–2023.",
-    "I’ve been designing since before AI. Today I use it daily for research and mockups, and the thinking is still mine.",
+    "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.",
+    "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over four years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.",
+    "I’ve been designing since before the wave of AI. Today I use it daily to accelerate research and mockups, while the visual thinking, taste, and craft remain entirely mine.",
     "*Off the screen:* 10K and [[half marathons]] in Bangalore and Kolkata, travel, chai, and anything that gets my hands dirty."
   ],
   storyStats: ["5+ | years in agencies", "~120 | creatives a month", "3 | junior designers trained", "1 | dog in a sherwani"],
@@ -156,7 +156,7 @@ const slots = (...items) => items.map(([title, aspect]) => ({ src: null, title, 
 
 // Real project images in /public/Projects/<slug>/ (all exported at 1600×1200).
 const shot = (slug, file) => ({ src: `/Projects/${slug}/${file}`, width: 1600, height: 1200 });
-const thumb = (slug) => ({ src: `/Projects/${slug}/thumbnail.png`, width: 521, height: 397 });
+const thumb = (slug) => ({ src: `/Projects/${slug}/thumbnail.jpg`, width: 521, height: 397 });
 // Gallery from [file, caption] pairs: with an odd count the first runs full width, the rest sit in pairs.
 const shots = (slug, ...items) =>
   items.map(([file, title], i) => ({ src: shot(slug, file), title, size: items.length % 2 && i === 0 ? "full" : "half" }));
@@ -182,7 +182,7 @@ export const projects = [
     role: "Brand & Hospitality Design",
     tags: ["Real Estate", "Brand Guidelines", "Stationery", "Signage"],
     accent: "teal",
-    cover: shot("landmark-infratech", "1.png"),
+    cover: shot("landmark-infratech", "1.jpg"),
     thumbnail: thumb("landmark-infratech"),
     aspect: "landscape",
     feeling: "Premium · Assured",
@@ -191,7 +191,7 @@ export const projects = [
       "A brand guidebook for a Bangalore real estate company, to guide every touchpoint, from social and web to stationery and signage.",
     workedOn:
       "Building the brand guidelines, office stationery, signage, cutlery and designing the hospitality uniforms for the brand.",
-    gallery: shots("landmark-infratech", ["2.png", "Brand guidelines"], ["3.png", "Billboard, social & sales deck"], ["4.png", "Hospitality & booking email"])
+    gallery: shots("landmark-infratech", ["2.jpg", "Brand guidelines"], ["3.jpg", "Billboard, social & sales deck"], ["4.jpg", "Hospitality & booking email"])
   },
   {
     slug: "sterling",
@@ -210,7 +210,7 @@ export const projects = [
     role: "Brand & Visual Designer",
     tags: ["Hospitality", "AI Videos", "Brand Assets", "Brochures"],
     accent: "gold",
-    cover: shot("sterling", "1.png"),
+    cover: shot("sterling", "1.jpg"),
     thumbnail: thumb("sterling"),
     aspect: "landscape",
     feeling: "Warm · Welcoming",
@@ -226,7 +226,7 @@ export const projects = [
       reel("nainital-working-prof-couples", "Nainital · Working couples"),
       reel("ooty-fern-hill-family", "Ooty Fern Hill · Family")
     ],
-    gallery: shots("sterling", ["2.png", "Instagram feed"], ["3.png", "Destination tent cards"], ["4.png", "Safari brochure"], ["5.png", "Seasonal newsletters"], ["6.png", "Offer & payment emails"], ["7.png", "Booking emails"])
+    gallery: shots("sterling", ["2.jpg", "Instagram feed"], ["3.jpg", "Destination tent cards"], ["4.jpg", "Safari brochure"], ["5.jpg", "Seasonal newsletters"], ["6.jpg", "Offer & payment emails"], ["7.jpg", "Booking emails"])
   },
   {
     slug: "seru",
@@ -245,7 +245,7 @@ export const projects = [
     role: "Logo & Brand Designer",
     tags: ["F&B", "Logo Design", "Packaging", "Brand Guidelines"],
     accent: "paprika",
-    cover: shot("seru", "1.png"),
+    cover: shot("seru", "1.jpg"),
     thumbnail: thumb("seru"),
     aspect: "landscape",
     feeling: "Warm · Welcoming",
@@ -254,7 +254,7 @@ export const projects = [
       "A warm, welcoming logo for a café in the heart of Bangalore. “Séru” means “together” in Kannada, so the mark needed a cultural connection.",
     workedOn:
       "Logo Design, Building the Brand Guidelines, and Packaging",
-    gallery: shots("seru", ["2.png", "Social & WhatsApp catalogue"], ["3.png", "Logo explorations"])
+    gallery: shots("seru", ["2.jpg", "Social & WhatsApp catalogue"], ["3.jpg", "Logo explorations"])
   },
   {
     slug: "lighthouse-canton",
@@ -273,7 +273,7 @@ export const projects = [
     role: "Visual & Social Media Designer",
     tags: ["Financial Services", "Social Media", "Typography"],
     accent: "aqua",
-    cover: shot("lighthouse-canton", "1.png"),
+    cover: shot("lighthouse-canton", "1.jpg"),
     thumbnail: thumb("lighthouse-canton"),
     aspect: "landscape",
     feeling: "Premium · Trustworthy",
@@ -282,7 +282,7 @@ export const projects = [
       "Modern creatives for an NRI audience, indirect in their imagery, with typography doing much of the work.",
     workedOn:
       "Social media collateral for a financial services firm.",
-    gallery: shots("lighthouse-canton", ["2.png", "Social carousel creatives"], ["3.png", "Website"], ["4.png", "Business cards"])
+    gallery: shots("lighthouse-canton", ["2.jpg", "Social carousel creatives"], ["3.jpg", "Website"], ["4.jpg", "Business cards"])
   },
   {
     slug: "unhumble",
@@ -301,7 +301,7 @@ export const projects = [
     role: "Illustrator",
     tags: ["Illustration", "Gifting", "Culture", "Card Deck"],
     accent: "gold",
-    cover: shot("unhumble", "1.png"),
+    cover: shot("unhumble", "1.jpg"),
     thumbnail: thumb("unhumble"),
     aspect: "landscape",
     feeling: "Proud · Playful",
@@ -310,7 +310,7 @@ export const projects = [
       "A US company found my art page and asked me to illustrate a deck of cards inspired by South Asian culture. I drew on the culture I grew up around.",
     workedOn:
       "A deck of cards celebrating South Asian culture, for a US company.",
-    gallery: shots("unhumble", ["2.png", "Face cards"])
+    gallery: shots("unhumble", ["2.jpg", "Face cards"])
   },
 
   /* ---------- Work page projects (06 to 11) ---------- */
@@ -358,7 +358,7 @@ export const projects = [
     role: "Brand & Logo Designer",
     tags: ["Real Estate", "Logo Design", "Brand Guidebook", "Office Stationery"],
     accent: "paprika",
-    cover: shot("bricx", "1.png"),
+    cover: shot("bricx", "1.jpg"),
     thumbnail: thumb("bricx"),
     aspect: "landscape",
     feeling: "Modern · Confident",

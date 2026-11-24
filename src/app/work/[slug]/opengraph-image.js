@@ -1,12 +1,14 @@
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { getProfile, getProject } from "@/content";
 import { OG_COLORS as C, OG_SIZE, ogFonts, ogImageSrc } from "@/lib/og";
 
 export const alt = "Project preview";
 export const size = OG_SIZE;
-export const contentType = "image/png";
+export const contentType = "image/jpeg";
 
 // Per-project share card: the uploaded cover (or thumbnail) when there is one, otherwise a branded title card.
+// Rendered as PNG, then re-encoded as JPEG: a photo card drops from ~1 MB to ~150 KB.
 export default async function Image({ params }) {
   const { slug } = await params;
   const [profile, found] = await Promise.all([getProfile(), getProject(slug)]);
@@ -14,7 +16,7 @@ export default async function Image({ params }) {
   const photo = await ogImageSrc((p?.cover || p?.thumbnail)?.src);
   const pal = p?.palette || { wash: C.canvas, ink: C.teal, spark: C.gold };
 
-  return new ImageResponse(
+  const png = new ImageResponse(
     photo ? (
       <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: C.teal }}>
         <img src={photo} alt="" width={1200} height={630} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -35,4 +37,6 @@ export default async function Image({ params }) {
     ),
     { ...size, fonts: await ogFonts() }
   );
+  const jpg = await sharp(Buffer.from(await png.arrayBuffer())).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+  return new Response(jpg, { headers: { "Content-Type": contentType, "Cache-Control": png.headers.get("Cache-Control") || "public, max-age=0, must-revalidate" } });
 }

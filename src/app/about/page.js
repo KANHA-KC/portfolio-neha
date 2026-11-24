@@ -20,10 +20,20 @@ export async function generateMetadata() {
   };
 }
 
+function tidyTypography(text) {
+  return String(text)
+    .replace(/\b(in|from|to|at|by|of|for|on)\s+(\d{4}[–-]?\d{0,4}\.?)/gi, "$1\u00A0$2")
+    .replace(/\b(to|from)\s+(\d{4}\.?)/gi, "$1\u00A0$2")
+    .replace(/\s+([^\s]{1,10}\s+[^\s]{1,10}[.!?])$/, (m, g) => "\u00A0" + g.replace(/\s+/, "\u00A0"))
+    .replace(/\s+([^\s]+[.!?])$/, "\u00A0$1");
+}
+
 // "*word*" in CMS copy → handwritten accent. "[[Name]]" or "[[Name|slug]]" → hover photo from /public/story/<slug>.*
 const rich = (text) =>
-  String(text)
-    .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]")
+  tidyTypography(
+    String(text)
+      .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]")
+  )
     .split(/(\*[^*]+\*|\[\[[^\]]+\]\])/)
     .map((part, i) => {
       if (part.startsWith("[[") && part.endsWith("]]")) {
@@ -271,7 +281,6 @@ export default async function AboutPage() {
       <section className="desk" aria-label="Tools">
         {kits.some((k) => k.items.length) && (
           <div className="desk-tools">
-            <h2 className="section-title">My <em>toolbox</em></h2>
             {kits.filter((k) => k.items.length).map((kit) => (
               <div key={kit.key} className={`toolkit toolkit--${kit.key}`}>
                 <h3 className="toolkit-title">

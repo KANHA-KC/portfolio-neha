@@ -28,7 +28,8 @@ const ICONS = {
   move:
     '<svg viewBox="0 0 24 24"><path d="M3 2.5v15.2l4-3.8 2.6 6 2.8-1.2-2.6-5.9 5.6-.3Z"/><path d="M17.5 13v8M13.5 17h8M17.5 13l-1.4 1.4M17.5 13l1.4 1.4M17.5 21l-1.4-1.4M17.5 21l1.4-1.4"/></svg>',
   type:
-    '<svg viewBox="0 0 24 24"><path d="M9 3h-2.5M15 3h2.5M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/></svg>',
+    // I-beam drawn twice: a thick contrasting halo underneath, the crisp beam on top, so it reads on any colour.
+    '<svg viewBox="0 0 24 24"><path class="tc-halo" d="M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/><path d="M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/></svg>',
   zoom:
     '<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M10 7v6M7 10h6"/></svg>',
   hand:
@@ -70,7 +71,8 @@ export default function Cursor() {
 
     const state = {
       x: -100, y: -100, tool: "select", canvasTool: "select", size: 14, colors: [BRAND_SWATCHES[0], BRAND_SWATCHES[2]], down: false,
-      painting: null, strokes: [], redo: [], lastMove: 0, lastX: 0, vx: 0, sampled: null, idleTimer: 0, hinted: false
+      painting: null, strokes: [], redo: [], lastMove: 0, lastX: 0, vx: 0, sampled: null, idleTimer: 0,
+      marq: null, selection: null
     };
 
     // ---- positioning: the tool is exact, the ring and tooltip trail slightly for feel ----
@@ -188,15 +190,62 @@ export default function Cursor() {
       if (state.strokes.length !== before) kick();
     };
 
-    // ---- idle marching ants + one-time hint ----
+    // ---- idle marching ants ----
     const resetIdle = () => {
       root.classList.remove("is-idle");
       clearTimeout(state.idleTimer);
       state.idleTimer = setTimeout(() => {
         if (state.tool === "brush" && !reduce) root.classList.add("is-idle");
-        if (!state.hinted && state.tool === "select") { state.hinted = true; flash("Psst… press ? for hidden tools"); }
       }, 4500);
     };
+
+    // ---- marquee: click-and-drag in any direction draws a selection that shows the page as a negative ----
+    // It lives in page coordinates (so it scrolls with the content) and fades away once the mouse is released.
+    const DRAG_MIN = 6;
+    const clearSelection = () => {
+      const el = state.selection;
+      if (!el) return;
+      state.selection = null;
+      el.remove();
+    };
+    const drawMarquee = (cx, cy) => {
+      const m = state.marq;
+      const x = cx + scrollX, y = cy + scrollY;
+      if (!m.el) {
+        if (Math.hypot(x - m.x0, y - m.y0) < DRAG_MIN) return;
+        m.el = document.createElement("div");
+        m.el.className = "tc-marquee";
+        m.el.setAttribute("aria-hidden", "true");
+        document.body.appendChild(m.el);
+        document.documentElement.classList.add("is-marqueeing"); // no native text selection while dragging
+        window.getSelection()?.removeAllRanges();
+      }
+      const l = Math.min(x, m.x0), t = Math.min(y, m.y0);
+      const w = Math.abs(x - m.x0), h = Math.abs(y - m.y0);
+      Object.assign(m.el.style, { left: `${l}px`, top: `${t}px`, width: `${w}px`, height: `${h}px` });
+      m.el.dataset.size = `${Math.round(w)} × ${Math.round(h)}`;
+    };
+    const endMarquee = () => {
+      const m = state.marq;
+      state.marq = null;
+      document.documentElement.classList.remove("is-marqueeing");
+      if (!m?.el) return false;
+      if (m.el.offsetWidth < 12 || m.el.offsetHeight < 12) { m.el.remove(); return true; }
+      // Let go and the negative melts away on its own.
+      const el = m.el;
+      el.classList.add("is-set");
+      state.selection = el;
+      // Shrink back into the corner where the drag began (see .tc-marquee.is-leaving).
+      el.style.transformOrigin = `${m.x0 - parseFloat(el.style.left)}px ${m.y0 - parseFloat(el.style.top)}px`;
+      el.classList.add("is-leaving");
+      setTimeout(() => { el.remove(); if (state.selection === el) state.selection = null; }, 900);
+      return true;
+    };
+    // Dragging across an image or link would otherwise start the browser's own drag-and-drop and cut the marquee short.
+    const onDragStart = (e) => { if (state.marq) e.preventDefault(); };
+    const onCancel = () => { if (state.marq) endMarquee(); state.down = false; root.classList.remove("is-down"); };
+    // A drag that ends over a link shouldn't also follow it.
+    const swallowClick = (e) => { e.preventDefault(); e.stopPropagation(); };
 
     let current = { tool: "select" };
     const onMove = (e) => {
@@ -212,6 +261,11 @@ export default function Cursor() {
       state.lastX = e.clientX; state.lastMove = now;
       if (!reduce) tilt(Math.max(-18, Math.min(18, v * 9)));
 
+      if (state.marq) {
+        drawMarquee(e.clientX, e.clientY);
+        resetIdle();
+        return;
+      }
       if (state.painting) {
         state.painting.pts.push({ x: e.clientX + scrollX, y: e.clientY + scrollY });
         kick();
@@ -255,6 +309,12 @@ export default function Cursor() {
       state.down = true;
       root.classList.add("is-down");
       burst(e.clientX, e.clientY);
+      clearSelection();
+      const t = e.target;
+      // On text (the I-beam) a drag selects text natively, as in any editor; elsewhere it draws the marquee.
+      const canMarquee = !current.isLink && ["select", "eyedropper", "zoom"].includes(state.tool) &&
+        !(t?.closest?.(`${FIELD}, ${INTERACTIVE}, [data-drag], .is-draggable, .tc-help`) || t?.isContentEditable);
+      if (canMarquee) state.marq = { x0: e.clientX + scrollX, y0: e.clientY + scrollY, el: null };
       if (state.tool === "hand") setTool("grab");
       if (state.tool === "brush") {
         e.preventDefault(); // painting, not text selection
@@ -276,6 +336,10 @@ export default function Cursor() {
     const onUp = () => {
       state.down = false;
       root.classList.remove("is-down");
+      if (state.marq && endMarquee()) {
+        window.addEventListener("click", swallowClick, { capture: true, once: true });
+        setTimeout(() => window.removeEventListener("click", swallowClick, { capture: true }), 0);
+      }
       if (state.painting) {
         state.painting.born = performance.now();
         if (state.painting.pts.length < 2) state.painting.pts.push({ ...state.painting.pts[0], x: state.painting.pts[0].x + 0.1 });
@@ -316,7 +380,7 @@ export default function Cursor() {
         if (!reduce) gsap.fromTo(root.querySelector(".tc-colors"), { rotation: -90 }, { rotation: 0, duration: 0.45, ease: "back.out(2)" });
         flash(`Colour: ${state.colors[0].toUpperCase()} (X to cycle)`);
       } else if (k === "?") root.classList.toggle("show-help");
-      else if (k === "Escape") root.classList.remove("show-help");
+      else if (k === "Escape") { root.classList.remove("show-help"); clearSelection(); }
     };
 
     const onLeave = () => root.classList.add("is-gone");
@@ -325,6 +389,8 @@ export default function Cursor() {
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onCancel);
+    window.addEventListener("dragstart", onDragStart);
     window.addEventListener("keydown", onKey);
     window.addEventListener("resize", resize);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -336,12 +402,17 @@ export default function Cursor() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onCancel);
+      window.removeEventListener("dragstart", onDragStart);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("pointerleave", onLeave);
       clearTimeout(state.idleTimer);
       cancelAnimationFrame(raf);
+      state.marq?.el?.remove();
+      state.selection?.remove();
+      document.documentElement.classList.remove("is-marqueeing");
     };
   }, []);
 
@@ -357,7 +428,7 @@ export default function Cursor() {
         <span className="tc-hud" />
         <span className="tc-help">
           <b>Hidden tools</b>
-          <span><kbd>V</kbd> Selection</span>
+          <span><kbd>V</kbd> Selection · drag to invert</span>
           <span><kbd>P</kbd> Pen · hold &amp; drag to draw</span>
           <span><kbd>E</kbd> Eraser</span>
           <span><kbd>[</kbd> <kbd>]</kbd> Brush size</span>

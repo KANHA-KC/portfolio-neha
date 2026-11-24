@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useEffectEvent, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
@@ -71,6 +71,10 @@ export default function HoverPeek({ children, src, alt, position = "center top" 
     activeHide = hide;
     isVisible.current = true;
 
+    // The photo is only fetched the first time its card opens, so the page itself stays light.
+    const img = imgRef.current?.querySelector("img");
+    if (img && !img.getAttribute("src")) img.setAttribute("src", img.dataset.src);
+
     place(cx, cy, true);
     last.current = { x: cx, t: performance.now() };
     gsap.killTweensOf([card, imgRef.current]);
@@ -98,6 +102,14 @@ export default function HoverPeek({ children, src, alt, position = "center top" 
     }
   };
 
+  // Always see the latest `hide`, without re-running the setup effect on every render.
+  const onGlobalScroll = useEffectEvent(() => {
+    if (isVisible.current) hide();
+  });
+  const release = useEffectEvent(() => {
+    if (activeHide === hide) activeHide = null;
+  });
+
   useEffect(() => {
     const card = cardRef.current;
     if (!card) return;
@@ -109,14 +121,12 @@ export default function HoverPeek({ children, src, alt, position = "center top" 
     };
 
     // Auto-hide when window scrolls
-    const onGlobalScroll = () => {
-      if (isVisible.current) hide();
-    };
-    window.addEventListener("scroll", onGlobalScroll, { passive: true });
+    const onScroll = () => onGlobalScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", onGlobalScroll);
-      if (activeHide === hide) activeHide = null;
+      window.removeEventListener("scroll", onScroll);
+      release();
       if (card) gsap.killTweensOf(card);
     };
   }, [mounted]);
@@ -181,7 +191,7 @@ export default function HoverPeek({ children, src, alt, position = "center top" 
             <div ref={imgRef} className="peek-media">
               {src ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={src} alt={alt || ""} loading="lazy" decoding="async" style={{ objectPosition: position }} />
+                <img data-src={src} alt={alt || ""} decoding="async" style={{ objectPosition: position }} />
               ) : (
                 <span className="peek-placeholder">{children}</span>
               )}

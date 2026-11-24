@@ -13,7 +13,7 @@ export async function generateMetadata() {
     description,
     alternates: { canonical: "/" },
     openGraph: { description, url: "/" },
-    twitter: { description }
+    twitter: { card: "summary_large_image", description }
   };
 }
 

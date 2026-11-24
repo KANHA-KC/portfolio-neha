@@ -163,7 +163,7 @@ export default function Hero({ profile }) {
       </p>
 
       <div className={`hw hw--right hw--name ${name.trim() ? "has-name" : ""}`} data-depth="-16">
-        <span className="hw-cue" aria-hidden="true">{name ? "Nice to meet you" : "Type your name"}</span>
+        <span className="hw-cue hand" aria-hidden="true">{name ? "Nice to meet you" : "Type your name"}</span>
         <label htmlFor="hero-name" className="sr-only">Your name</label>
         <input
           ref={field}
@@ -188,7 +188,7 @@ export default function Hero({ profile }) {
       </p>
 
       <div className="hw hw--right hw--me" data-depth="-12">
-        <h1 id="hero-title" className="hero4-role">
+        <h1 id="hero-title" className="hero4-role hand">
           <span className="sr-only">{profile.name || "Neha Ondhia"}, </span>
           {toSentenceCase(profile.role || "Illustrator, brand and graphic designer")}
         </h1>

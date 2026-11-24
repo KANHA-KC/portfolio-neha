@@ -1,4 +1,3 @@
-import CopyEmail from "@/components/CopyEmail";
 import ContactKeys from "@/components/ContactKeys";
 import JsonLd from "@/components/JsonLd";
 import { getProfile } from "@/content";
@@ -29,7 +28,6 @@ export default async function ContactPage() {
             A new brand identity, a logo, packaging, illustration,<br className="contact-lede-br" />{" "}
             or a chai chat about design. My inbox is open.
           </p>
-          <CopyEmail email={site.email} className="contact-email" />
         </div>
       </section>
 

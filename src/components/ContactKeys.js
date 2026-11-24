@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 /* ---------- icons ---------- */
 const Icons = {
@@ -309,15 +309,15 @@ function Key({ href, label, icon, tone, note, notePos, download, external, short
   );
 }
 
-export default function ContactKeys({ email, socials = [], resume }) {
-  const [modSymbol, setModSymbol] = useState("⌥");
+const subscribe = () => () => {};
+const getSnapshot = () =>
+  typeof navigator !== "undefined" && !/Mac|iPhone|iPod|iPad/i.test(navigator.userAgent || navigator.platform || "")
+    ? "Alt + "
+    : "⌥";
+const getServerSnapshot = () => "⌥";
 
-  useEffect(() => {
-    if (typeof navigator !== "undefined") {
-      const isMac = /Mac|iPhone|iPod|iPad/i.test(navigator.userAgent || navigator.platform || "");
-      if (!isMac) setModSymbol("Alt + ");
-    }
-  }, []);
+export default function ContactKeys({ email, socials = [], resume }) {
+  const modSymbol = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const keys = [
     { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "projects / collabs /\nchai chats ✿" },
