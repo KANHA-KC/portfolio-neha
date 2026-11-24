@@ -1261,14 +1261,7 @@ em {
   font-size: clamp(3.4rem, 16vw, 7rem);
   line-height: 1;
   letter-spacing: -0.04em;
-  padding: 4px 0;
-}
-.menu-link small {
-  font-family: var(--f-sans);
-  font-size: 0.8rem;
-  letter-spacing: 0;
-  color: var(--pearl);
-  margin-top: 0.8em;
+  padding: clamp(8px, 1.6vh, 16px) 0;
 }
 .menu-foot {
   display: grid;
@@ -6615,3 +6608,26 @@ a:hover .media-icon {
   .page.contact .contact-keys { margin-top: clamp(72px, 8vw, 128px); }
   .page.contact .ckeys-row { gap: clamp(40px, 5vw, 88px); }
 }
+
+/* ==========================================================================
+   Phone calm-down: smaller display type, fewer floating extras
+   ========================================================================== */
+@media (max-width: 760px) {
+  .hero4 { --hw: 17vw; }
+  .hw-cue { font-size: 0.8rem; }
+  .hero-intro { padding-top: 28px; padding-bottom: 40px; gap: 10px; }
+  .hero-intro-lead { font-size: 1.3rem; line-height: 1.2; }
+  .hero-intro-stats { font-size: 0.85rem; }
+
+  .logo-band-title { font-size: 1.15rem; }
+
+  /* manifesto: drop the floating badge/line/sticker so the text breathes */
+  .mf-side-wrap { display: none; }
+  .manifesto-text { font-size: 1.45rem; line-height: 1.2; max-width: none; }
+  .home-brand-manifesto .manifesto-text { margin-top: 8px; }
+
+  .section-title { font-size: clamp(2rem, 9vw, 2.4rem); line-height: 1.05; }
+  .wcard-num { font-size: 2rem; }
+  .wcard-title { font-size: 1.3rem; }
+}
+@media (max-width: 760px) { .home-brand-manifesto .manifesto { padding-bottom: 24px; } }

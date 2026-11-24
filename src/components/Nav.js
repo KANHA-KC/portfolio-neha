@@ -119,10 +119,9 @@ export default function Nav({ profile }) {
 
       <div id="menu-overlay" ref={overlayRef} className={`menu-overlay ${open ? "is-open" : ""}`} inert={!open}>
         <nav aria-label="Mobile" className="menu-list">
-          {[{ href: "/", label: "Home" }, ...links].map((l, i) => (
+          {[{ href: "/", label: "Home" }, ...links].map((l) => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="menu-item">
               <span className="menu-link">
-                <small>0{i + 1}</small>
                 {l.label}
               </span>
             </Link>
@@ -136,7 +135,6 @@ export default function Nav({ profile }) {
             rel="noopener noreferrer"
           >
             <span className="menu-link">
-              <small>0{links.length + 2}</small>
               Resume
             </span>
           </a>
