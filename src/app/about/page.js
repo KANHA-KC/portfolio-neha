@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
 import Marquee from "@/components/Marquee";
 import Experience from "@/components/home/Experience";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import HoverPeek from "@/components/HoverPeek";
 import { peekImage, peekSlug } from "@/lib/peek";
 import JsonLd from "@/components/JsonLd";
@@ -23,6 +23,7 @@ export async function generateMetadata() {
 // "*word*" in CMS copy → handwritten accent. "[[Name]]" or "[[Name|slug]]" → hover photo from /public/story/<slug>.*
 const rich = (text) =>
   String(text)
+    .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]")
     .split(/(\*[^*]+\*|\[\[[^\]]+\]\])/)
     .map((part, i) => {
       if (part.startsWith("[[") && part.endsWith("]]")) {
@@ -103,8 +104,8 @@ export default async function AboutPage() {
   const [profile, experience, categories] = await Promise.all([getProfile(), getExperience(), getCategories()]);
   const story = profile.story;
   const kits = [
-    { key: "design", title: "Design", items: profile.designTools },
-    { key: "ai", title: "AI", items: profile.aiTools }
+    { key: "design", title: "Design Toolkit", items: profile.designTools },
+    { key: "ai", title: "Ai Toolkit", items: profile.aiTools }
   ];
 
   return (
@@ -112,7 +113,6 @@ export default async function AboutPage() {
       {/* ---- hello ---- */}
       <section className="about-hero">
         <div className="about-hero-copy">
-          <Breadcrumbs items={[{ name: "About", href: "/about" }]} />
           <h1 className="page-title about-title">
             <span className="about-title-line">Hello,</span>
             <span className="about-title-line">
@@ -126,29 +126,44 @@ export default async function AboutPage() {
 
         <div className="about-photo">
           <div className="about-sun" aria-hidden="true" />
-          <div className="about-arch" aria-hidden="true" />
+          <div className="about-card" aria-hidden="true" />
           <Image
-            src={profile.portrait?.src || "/brand/neha-cutout.webp"}
-            alt={`${profile.name}, smiling`}
-            width={653}
-            height={870}
+            className="about-print"
+            src="/brand/neha-mountains.webp"
+            alt={`${profile.name} sitting on a boulder by a river, snowy mountains behind`}
+            width={798}
+            height={1033}
             preload
             sizes="(max-width: 900px) 80vw, 36vw"
           />
-          <svg className="about-badge" viewBox="0 0 120 120" aria-hidden="true">
-            <defs>
-              <path id="about-badge-ring" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
-            </defs>
-            <circle cx="60" cy="60" r="58" />
-            <text>
-              <textPath href="#about-badge-ring" textLength="272" lengthAdjust="spacing">
-                {`${profile.role.replace(/,\s*|\s+and\s+/g, " · ")} · `}
-              </textPath>
-            </text>
-            <text className="about-badge-mark" x="60" y="60" textAnchor="middle" dominantBaseline="central">✿</text>
-          </svg>
-          <span className="sticker sticker--gold about-sticker-a">hi there!</span>
-          <span className="sticker sticker--aqua about-sticker-b">the teal is on brand</span>
+          <div className="about-badge" aria-hidden="true">
+            <svg className="about-badge-ring" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="58" />
+              <defs>
+                <path id="about-badge-ring" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+              </defs>
+              <text>
+                <textPath href="#about-badge-ring" textLength="272" lengthAdjust="spacing">
+                  {`${profile.role.replace(/,\s*|\s+and\s+/g, " · ")} · `}
+                </textPath>
+              </text>
+            </svg>
+            <div className="about-badge-mark">
+              <Logo variant="monogram" height="clamp(20px, 2.2vw, 28px)" color="var(--teal)" />
+            </div>
+          </div>
+          <div className="about-hair-note hand" aria-hidden="true">
+            <span className="about-hair-text">
+              teal hair color is a<br /><mark className="about-hair-mark">design decision</mark>
+            </span>
+            <svg className="about-hair-arrow" viewBox="0 0 160 140" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              {/* curve down from the note to the teal hair ends: white, with a soft shadow */}
+              <g stroke="#fff" strokeWidth="2.6" strokeOpacity="0.9">
+                <path d="M 12 6 C 6 70, 60 118, 146 120" />
+                <path d="M 126 106 L 148 120 L 126 134" />
+              </g>
+            </svg>
+          </div>
         </div>
       </section>
 
@@ -156,7 +171,6 @@ export default async function AboutPage() {
       {story.length > 0 && (
         <section className="story" aria-labelledby="story-title">
           <div className="story-side">
-            <p className="eyebrow"><span className="eyebrow-num">(01)</span> The longer story</p>
             {profile.storyTitle && (
               <h2 id="story-title" className="story-title">{rich(profile.storyTitle)}</h2>
             )}
@@ -183,10 +197,8 @@ export default async function AboutPage() {
       {(profile.workWith.length > 0 || profile.workProcess.length > 0) && (
         <section className="together" aria-labelledby="together-title">
           <header className="section-head">
-            <p className="eyebrow"><span className="eyebrow-num">(02)</span> Working together</p>
             <h2 id="together-title" className="section-title">
               How it <em>feels</em>
-              <span className="hand section-hand">(and how it gets made)</span>
             </h2>
           </header>
           <Reveal className="notepad">
@@ -229,21 +241,30 @@ export default async function AboutPage() {
         </section>
       )}
 
-      <div className="tilt-band tilt-band--paprika">
-        <Marquee
-          reverse
-          sep="·"
-          items={profile.marquee?.length ? profile.marquee : [
-            "Logo Design",
-            "Brand Identity",
-            "Corporate Collateral",
-            "Social Media Graphics",
-            "Print & Digital Media",
-            "Packaging & Labels",
-            "Presentation Design",
-            "Signage & Spatial Visuals"
-          ]}
-        />
+      <div className="about-banner-marquee tilt-band" aria-hidden="true">
+        <div className="top-banner-marquee">
+          <div className="top-banner-track">
+            {[0, 1, 2, 3].map((setIndex) => (
+              <div key={setIndex} className="top-banner-row">
+                {(profile.marquee?.length ? profile.marquee : [
+                  "Logo Design",
+                  "Brand Identity",
+                  "Corporate Collateral",
+                  "Social Media Graphics",
+                  "Print & Digital Media",
+                  "Packaging & Labels",
+                  "Presentation Design",
+                  "Signage & Spatial Visuals"
+                ]).map((item, idx) => (
+                  <span key={idx} className="top-banner-item">
+                    <span className="top-banner-text">{item}</span>
+                    <span className="top-banner-dot" aria-hidden="true">·</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ---- toolbox ---- */}

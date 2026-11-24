@@ -53,10 +53,11 @@ export default function WorkGallery({ projects, categories, showFilters = true }
   return (
     <div ref={root} className="gallery">
       {showFilters && (
-        <>
+        <div className="filter-wrap">
+          <p className="filter-note hand">tap a sticker to filter ↓</p>
           <div className="filters" role="toolbar" aria-label="Filter work by discipline">
             <button type="button" className={`filter ${filter === "all" ? "is-on" : ""}`} aria-pressed={filter === "all"} onClick={() => choose("all")}>
-              All <sup>{projects.length}</sup>
+              All
             </button>
             {categories.map((c) => (
               <button
@@ -66,15 +67,11 @@ export default function WorkGallery({ projects, categories, showFilters = true }
                 aria-pressed={filter === c.slug}
                 onClick={() => choose(c.slug)}
               >
-                {c.title} <sup>{c.count}</sup>
+                {c.title}
               </button>
             ))}
           </div>
-
-          <p className="filter-desc hand" aria-live="polite">
-            {current ? current.description : "everything, in no particular order (okay, a little order)"}
-          </p>
-        </>
+        </div>
       )}
 
       <ul className="wall">
@@ -85,8 +82,7 @@ export default function WorkGallery({ projects, categories, showFilters = true }
               <div className="gcard-cap">
                 <div>
                   <p className="gcard-cat">
-                    {p.categoryTitle}
-                    {p.sector && <span> · {p.sector}</span>}
+                    {p.sector || p.categoryTitle}
                     {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
                   </p>
                   <h2 className="gcard-title">{p.title}</h2>

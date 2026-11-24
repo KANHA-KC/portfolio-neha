@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Cursor from "@/components/Cursor";
 import Preloader from "@/components/Preloader";
 import JsonLd from "@/components/JsonLd";
-import { getProfile, getProjects } from "@/content";
+import { getCategories, getProfile, getProjects } from "@/content";
 import { SITE_URL, clip, personSchema, websiteSchema } from "@/lib/seo";
 
 // Type system — PP Neue Montreal everywhere; Aubrey only for the big hero words.
@@ -91,7 +91,7 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children }) {
-  const [profile, projects] = await Promise.all([getProfile(), getProjects()]);
+  const [profile, projects, categories] = await Promise.all([getProfile(), getProjects(), getCategories()]);
   return (
     <html lang="en" className={`${montreal.variable} ${aubrey.variable} ${patrick.variable}`}>
       <body>
@@ -100,7 +100,7 @@ export default async function RootLayout({ children }) {
         <Cursor />
         <Nav profile={profile} workCount={projects.length} />
         <main id="main">{children}</main>
-        <Footer />
+        <Footer site={profile} categories={categories} />
         <div className="grain" aria-hidden="true" />
         <JsonLd data={[personSchema(profile), websiteSchema(profile)]} />
       </body>

@@ -1,7 +1,5 @@
-import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
 import ContactKeys from "@/components/ContactKeys";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getProfile } from "@/content";
 import { absolute, clip, SITE_OG_IMAGES } from "@/lib/seo";
@@ -23,18 +21,16 @@ export default async function ContactPage() {
     <div className="page contact">
       <section className="contact-head">
         <div className="contact-head-text">
-        <Breadcrumbs items={[{ name: "Contact", href: "/contact" }]} />
-        <h1 className="page-title contact-title">
-          Say <em>hi</em>
-          <span className="contact-wave" aria-hidden="true">👋</span>
-        </h1>
-        <p className="page-lede">
-          A new brand identity, a logo, packaging, illustration, or a coffee chat about
-          design. My inbox is open.
-        </p>
-        <CopyEmail email={site.email} className="contact-email" />
+          <h1 className="page-title contact-title">
+            Say <em>hi</em>
+            <span className="contact-wave" aria-hidden="true">👋</span>
+          </h1>
+          <p className="page-lede">
+            A new brand identity, a logo, packaging, illustration,<br className="contact-lede-br" />{" "}
+            or a chai chat about design. My inbox is open.
+          </p>
+          <CopyEmail email={site.email} className="contact-email" />
         </div>
-        <ContactForm email={site.email} />
       </section>
 
       <div className="contact-keys">

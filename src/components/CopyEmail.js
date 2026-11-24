@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function CopyEmail({ email, className = "", quiet = false }) {
+export default function CopyEmail({ email, className = "" }) {
   const [copied, setCopied] = useState(false);
 
   const copy = async (e) => {
@@ -21,9 +21,11 @@ export default function CopyEmail({ email, className = "", quiet = false }) {
   return (
     <a href={`mailto:${email}`} onClick={copy} className={`copy-email ${className}`} data-cursor={copied ? "copied!" : "copy"}>
       <span className="copy-email-addr">{email}</span>
-      <span className={`copy-email-tag${quiet && !copied ? " sr-only" : ""}${copied ? " is-copied" : ""}`} aria-live="polite">
-        {copied ? "Copied ✓" : "Click to copy"}
-      </span>
+      {copied && (
+        <span className="copy-email-tag is-copied" aria-live="polite">
+          Copied ✓
+        </span>
+      )}
     </a>
   );
 }

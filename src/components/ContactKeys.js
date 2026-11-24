@@ -320,7 +320,7 @@ export default function ContactKeys({ email, socials = [], resume }) {
   }, []);
 
   const keys = [
-    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "projects / collabs /\ncoffee chats ✿" },
+    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "projects / collabs /\nchai chats ✿" },
     ...socials.map((s) => {
       const meta = SOCIAL_META[s.label.toLowerCase()] ?? { icon: "link", tone: "aqua", shortcut: s.label.charAt(0).toUpperCase(), note: `find me on ${s.label}` };
       return { href: s.href, label: s.label, external: true, ...meta };

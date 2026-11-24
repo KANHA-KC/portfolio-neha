@@ -15,7 +15,7 @@ export const profile = {
   manifesto:
     "Good design looks good. Great design *tells a story*.\n\nPeople remember how it made them *feel*.",
   intro:
-    "a self-taught illustrator and brand designer based in Mumbai. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
+    "A self-taught illustrator and brand designer based in Mumbai. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
   bio: [
     "I started out as an interaction designer, obsessing over the tiny moments between taps. Somewhere along the way I fell for both sides of the craft: the messy, human research — and the quiet precision of a well-drawn logo.",
     "Today I lead projects end to end: framing problems with stakeholders, running research, prototyping, and building the design systems and brand guidelines that keep it all consistent.",
@@ -24,11 +24,11 @@ export const profile = {
   // About page story. Wrap words in *asterisks* to set them in the handwritten accent.
   storyTitle: "I came to design through *clothes*.",
   story: [
-    "I studied fashion design at [[Pearl Academy]] in [[Mumbai]] (2015 to 2019) and fell in love with the city. Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
+    "I studied fashion design in [[Mumbai]] (2015 to 2019). Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
     "Then Covid hit and left everything hanging. I moved back to my hometown and, since I can’t sit still, taught myself design software. Three graphic design internships later, I landed my first agency job in 2021.",
     "Five years on, I’ve worked at The Social Lions, Schbang and Webenza, on brands like HDFC Life, Amazon, Airtel Business and Salesforce. At Webenza I grew from Graphic Designer to Senior Graphic Designer over four years, produced around 120 creatives a month, trained three junior designers and stepped in as art director when needed. Alongside agency work, I also ran my own small design studio, The Design Bar, for three years, from 2020–2023.",
     "I’ve been designing since before AI. Today I use it daily for research and mockups, and the thinking is still mine.",
-    "*Off the screen:* 10K and half marathons in Bangalore and Kolkata, travel, chai, and anything that gets my hands dirty."
+    "*Off the screen:* 10K and [[half marathons]] in Bangalore and Kolkata, travel, chai, and anything that gets my hands dirty."
   ],
   storyStats: ["5+ | years in agencies", "~120 | creatives a month", "3 | junior designers trained", "1 | dog in a sherwani"],
   workWith: [
@@ -38,12 +38,12 @@ export const profile = {
   ],
   workProcess: [
     "Listen | A call to understand the brand: its values, what it does, its audience and how it wants to be seen.",
-    "Find the words | I brainstorm words that capture the brand and pick the 5 to 7 strongest routes.",
+    "Research | I brainstorm words that capture the brand and pick the 5 to 7 strongest routes.",
     "Sketch | Rough sketches of those routes, and the client shortlists 3 to 5.",
     "Develop | Detailed logos with the thinking behind each, plus a real-life mockup.",
     "Finalise | Minor tweaks, then clean files delivered."
   ],
-  email: "nehaondhia6@gmail.com",
+  email: "neha@nehaondhia.com",
   location: "Mumbai, India",
   timezone: "Asia/Kolkata",
   // availability: "Available for select projects",

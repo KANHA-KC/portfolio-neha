@@ -16,13 +16,12 @@ export default function Logo({ variant = "monogram", height = 32, color, gradien
       role={label ? "img" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
-      className={`logo-mask ${className}`}
+      className={`logo-mask ${gradient ? "is-gradient" : ""} ${className}`}
       style={{
         "--logo-src": `url(${m.src})`,
         width: typeof height === "number" ? height * m.ratio : `calc(${height} * ${m.ratio})`,
         height,
-        color,
-        ...(gradient && { background: LOGO_GRADIENT })
+        color
       }}
     />
   );

@@ -2,7 +2,6 @@ import Hero from "@/components/home/Hero";
 import HeroIntro from "@/components/home/HeroIntro";
 import Manifesto from "@/components/home/Manifesto";
 import SelectedWork from "@/components/home/SelectedWork";
-import BrandLogos from "@/components/home/BrandLogos";
 import Testimonials from "@/components/home/Testimonials";
 import { getCategories, getProfile, getProjects, getTestimonials } from "@/content";
 import { clip } from "@/lib/seo";
@@ -30,18 +29,6 @@ export default async function HomePage() {
     <>
       <Hero profile={profile} />
       <HeroIntro profile={profile} />
-      <section className="logo-band" aria-labelledby="brands-heading">
-        <div className="logo-band-head">
-          <p className="eyebrow">
-            Brands I’ve worked on
-          </p>
-          <h2 id="brands-heading" className="logo-band-title">
-            <span className="sr-only">Brands I’ve worked on, </span>
-            through <em>Schbang</em>, <em>Webenza</em> &amp; freelance.
-          </h2>
-        </div>
-        <BrandLogos />
-      </section>
       <Manifesto text={profile.manifesto} />
       <SelectedWork projects={featured} categories={categories} />
       <Testimonials items={testimonials} />

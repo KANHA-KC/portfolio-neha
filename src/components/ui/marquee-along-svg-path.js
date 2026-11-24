@@ -134,7 +134,14 @@ export default function MarqueeAlongSvgPath({
       if (!wrapper || !el) return;
       const sx = wrapper.clientWidth / vbW;
       const sy = wrapper.clientHeight / vbH;
-      const scale = fit === "cover" ? Math.max(sx, sy) : Math.min(sx, sy);
+      const scale =
+        fit === "contain-y"
+          ? sy
+          : fit === "none"
+            ? 1
+            : fit === "cover"
+              ? Math.max(sx, sy)
+              : Math.min(sx, sy);
       el.style.width = `${vbW}px`;
       el.style.height = `${vbH}px`;
       el.style.transformOrigin = "top left";

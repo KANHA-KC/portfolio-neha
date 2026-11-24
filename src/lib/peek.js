@@ -22,6 +22,9 @@ export function peekImage(slug) {
   if (s === "mumbai") {
     if (fs.existsSync(path.join(process.cwd(), "public", "story", "mumbai.jpg"))) return "/story/mumbai.jpg";
   }
+  if (s === "half-marathons" || s === "half-marathon" || s.includes("marathon")) {
+    if (fs.existsSync(path.join(process.cwd(), "public", "story", "half-marathons.jpg"))) return "/story/half-marathons.jpg";
+  }
   for (const ext of EXTS) {
     if (fs.existsSync(path.join(process.cwd(), "public", "story", `${slug}.${ext}`))) return `/story/${slug}.${ext}`;
     if (fs.existsSync(path.join(process.cwd(), "public", `${slug}.${ext}`))) return `/${slug}.${ext}`;

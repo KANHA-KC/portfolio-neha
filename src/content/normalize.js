@@ -148,14 +148,22 @@ export function normalizeProfile(raw, image) {
     headline: str(raw.headline),
     heroIntro: str(raw.heroIntro),
     manifesto: str(raw.manifesto),
-    intro: str(raw.intro),
+    intro: str(raw.intro).replace(/^a self-taught/i, "A self-taught"),
     bio: list(raw.bio),
     storyTitle: str(raw.storyTitle),
-    story: list(raw.story).map(String),
+    story: list(raw.story).map(String).map((para) =>
+      para.replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]")
+    ),
     storyStats: pairs(raw.storyStats, "value", "label"),
     workWith: pairs(raw.workWith, "title", "description"),
-    workProcess: pairs(raw.workProcess, "title", "description"),
-    email: str(raw.email),
+    workProcess: pairs(raw.workProcess, "title", "description").map((step) =>
+      step.title.toLowerCase() === "find the words" ? { ...step, title: "Research" } : step
+    ),
+    email: (() => {
+      const e = str(raw.email);
+      if (!e || e.toLowerCase() === "nehaondhia6@gmail.com") return "neha@nehaondhia.com";
+      return e;
+    })(),
     location: str(raw.location),
     timezone: str(raw.timezone, "Asia/Kolkata"),
     availability: str(raw.availability),

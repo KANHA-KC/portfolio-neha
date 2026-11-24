@@ -1,7 +1,4 @@
-import Link from "next/link";
 import WorkGallery from "@/components/work/WorkGallery";
-import DisciplineLinks from "@/components/work/DisciplineLinks";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getCategories, getProfile, getProjects } from "@/content";
 import { collectionSchema, clip, SITE_OG_IMAGES } from "@/lib/seo";
@@ -23,32 +20,16 @@ export default async function WorkPage() {
   return (
     <section className="page work-page">
       <header className="page-head work-head">
-        <Breadcrumbs items={[{ name: "Work", href: "/work" }]} />
-        <p className="eyebrow">Index — {projects.length} projects across {categories.length} disciplines</p>
         <h1 className="page-title">
           The <em>work</em>
-          <sup>({String(projects.length).padStart(2, "0")})</sup>
         </h1>
         <p className="page-lede">
           Logos, brand identities, packaging, marketing collateral, illustrations, and AI videos. Pick a lens below — or
           just wander.
         </p>
-        <span className="hand page-hand">tap a sticker to filter ↓</span>
       </header>
 
       <WorkGallery projects={projects} categories={categories} />
-
-      <div className="cat-foot">
-        <DisciplineLinks categories={categories} />
-      </div>
-
-      <aside className="nda-note">
-        <span className="sticker sticker--gold">psst</span>
-        <p>
-          Some of my favourite work lives behind NDAs. Happy to walk you through it on a call —{" "}
-          <Link href="/contact" className="link-underline">just ask</Link>.
-        </p>
-      </aside>
       <JsonLd
         data={collectionSchema({
           name: `Work — ${profile.name}`,

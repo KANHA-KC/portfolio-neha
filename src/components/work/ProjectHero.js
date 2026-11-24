@@ -1,17 +1,6 @@
-import Breadcrumbs from "@/components/Breadcrumbs";
-import { categoryPath, projectPath } from "@/lib/seo";
-
 export default function ProjectHero({ project: p, num, meta }) {
   return (
     <header className="case-hero">
-      <Breadcrumbs
-        className="case-crumbs"
-        items={[
-          { name: "Work", href: "/work" },
-          { name: p.categoryTitle, href: categoryPath(p.category) },
-          { name: p.title, href: projectPath(p.slug) }
-        ]}
-      />
       <div className={`case-hero-top${num ? "" : " case-hero-top--plain"}`}>
         {num && <span className="case-num">{num}</span>}
         <div>

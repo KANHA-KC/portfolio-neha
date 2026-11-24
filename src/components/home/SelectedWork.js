@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import Link from "next/link";
 import ProjectVisual from "@/components/ProjectVisual";
-import { categoryPath } from "@/lib/seo";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 export default function SelectedWork({ projects, categories }) {
@@ -29,24 +28,13 @@ export default function SelectedWork({ projects, categories }) {
 
   return (
     <section ref={root} className="work-scatter work-scatter--grid" aria-labelledby="work-title">
-      <header className="section-head section-head--split">
+      <header className="section-head">
         <div>
           <h2 id="work-title" className="section-title">
             Brands I’ve given a <em>voice</em>
-            <span className="hand section-hand">A few of the 50 ↓</span>
           </h2>
+          <span className="hand section-hand">A few of the 50 ↓</span>
         </div>
-        <nav className="disc-index" aria-label="Browse work by discipline">
-          <Link href="/work" className="disc-chip" data-cursor="browse">
-            All <sup>{categories.reduce((n, c) => n + c.count, 0) || projects.length}</sup>
-          </Link>
-          {categories.map((c) => (
-            <Link key={c.slug} href={categoryPath(c.slug)} className="disc-chip" data-cursor="browse">
-              {c.title}
-              {c.count > 0 && <sup>{c.count}</sup>}
-            </Link>
-          ))}
-        </nav>
       </header>
 
       <div className="work-field">
@@ -58,13 +46,12 @@ export default function SelectedWork({ projects, categories }) {
                   <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
                 </div>
                 <div className="wcard-body">
-                  <span className="wcard-num" style={{ color: p.palette.spark }}>
+                  <span className="wcard-num" style={{ color: "var(--neon)" }}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <p className="wcard-cat">
-                      {p.categoryTitle}
-                      {p.sector && <span className="wcard-sector"> · {p.sector}</span>}
+                      {p.sector || p.categoryTitle}
                     </p>
                     <h3 className="wcard-title">{p.title}</h3>
                     {p.workedOn && <p className="wcard-work">{p.workedOn}</p>}

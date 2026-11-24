@@ -145,8 +145,7 @@ export default function HoverPeek({ children, src, alt, position = "center top" 
     show(r.left + r.width / 2, r.top);
   };
 
-  const onClick = (e) => {
-    if (e.nativeEvent?.pointerType === "mouse") return;
+  const onClick = () => {
     anchor();
     const off = (ev) => {
       if (!termRef.current?.contains(ev.target)) {

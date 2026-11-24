@@ -28,7 +28,7 @@ const withSeedProfile = (raw = {}) => {
   const out = { ...raw };
   for (const [k, fallback] of Object.entries(seed.profile)) {
     const v = out[k];
-    if (v == null || v === "" || (Array.isArray(v) && !v.length)) {
+    if (v == null || v === "" || (Array.isArray(v) && !v.length) || (k === "email" && v === "nehaondhia6@gmail.com")) {
       out[k] = fallback;
     }
   }

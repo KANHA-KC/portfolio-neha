@@ -4,10 +4,8 @@ import { useEffect, useState } from "react";
 import MarqueeAlongSvgPath from "@/components/ui/marquee-along-svg-path";
 import { prefersReducedMotion } from "@/lib/gsap";
 
-// Flat palette swatches gliding along a straight line.
-// Copy comes from the Wix "Testimonials" collection (see src/content/seed.js for the fallback).
-const TILE = { gold: "var(--gold-wash)", aqua: "var(--light-aqua)", paprika: "var(--pap-wash)", teal: "var(--mist)" };
-const CYCLE = ["gold", "aqua", "paprika", "teal"];
+// Two alternating pastel brand colors: light teal and light neon
+const ALT_TILES = ["var(--light-aqua)", "var(--gold-wash)"];
 
 // A straight, level line (design space 1600 × 440); both ends run far off-screen so the cards space
 // out and glide in and out without tilting.
@@ -33,9 +31,13 @@ export default function Testimonials({ items = [] }) {
 
   if (!items.length) return null;
 
+  // Ensure an even sequence so the two alternating colors loop seamlessly without duplicate neighbors
+  const cards = items.length % 2 === 1 ? [...items, ...items] : items;
+
   return (
     <section className="testimonials-section" aria-labelledby="testimonials-title">
       <div className="testimonials-head">
+        <span className="hand testi-tag">Testimonials</span>
         <h2 id="testimonials-title" className="section-title">
           (They said it, <em>not me.</em>)
         </h2>
@@ -44,22 +46,22 @@ export default function Testimonials({ items = [] }) {
       <div className="testi-marquee">
         <MarqueeAlongSvgPath
           path={PATH}
-          viewBox="0 0 1600 440"
+          viewBox="0 0 1600 490"
           responsive
-          fit="cover"
+          fit="contain-y"
           baseVelocity={1.1}
           paused={still}
           slowdownOnHover
           slowDownFactor={0.08}
           draggable
-          repeat={items.length < 4 ? 3 : 2}
+          repeat={cards.length < 8 ? 2 : 1}
           dragSensitivity={0.06}
           grabCursor
           className="testi-track"
           itemClassName="testi-item"
         >
-          {items.map((t, i) => (
-            <Card key={`${t.author}-${i}`} {...t} bg={TILE[t.tile || CYCLE[i % CYCLE.length]]} />
+          {cards.map((t, i) => (
+            <Card key={`${t.author}-${i}`} {...t} bg={ALT_TILES[i % ALT_TILES.length]} />
           ))}
         </MarqueeAlongSvgPath>
       </div>

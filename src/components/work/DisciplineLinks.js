@@ -15,7 +15,7 @@ export default function DisciplineLinks({ categories, current, label = "Browse b
               </span>
             ) : (
               <Link href={categoryPath(c.slug)} className="disc-chip">
-                {c.title} <sup>{c.count}</sup>
+                {c.title}
               </Link>
             )}
           </li>

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import WorkGallery from "@/components/work/WorkGallery";
 import DisciplineLinks from "@/components/work/DisciplineLinks";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import JsonLd from "@/components/JsonLd";
 import { getCategories, getProfile, getProjects } from "@/content";
 import { categoryPath, collectionSchema, clip, SITE_OG_IMAGES } from "@/lib/seo";
@@ -52,13 +51,8 @@ async function Category({ params }) {
   return (
     <section className="page work-page">
       <header className="page-head work-head">
-        <Breadcrumbs items={[{ name: "Work", href: "/work" }, { name: category.title, href: categoryPath(slug) }]} />
-        <p className="eyebrow">
-          {projects.length} {projects.length === 1 ? "project" : "projects"}
-        </p>
         <h1 className="page-title">
           {category.title}
-          <sup>({String(projects.length).padStart(2, "0")})</sup>
         </h1>
         <p className="page-lede">
           {category.description} Selected {category.title.toLowerCase()} work by {profile.name}, {profile.location}.

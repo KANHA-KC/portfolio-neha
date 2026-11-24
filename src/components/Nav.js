@@ -70,7 +70,7 @@ export default function Nav({ profile }) {
   }
 
   // The home hero is teal, so the bar uses light ink until it gets its cream background on scroll.
-  const onDark = pathname === "/" && !scrolled && !open;
+  const onDark = (pathname === "/" || pathname === "/contact") && !scrolled && !open;
 
   const isActive = (href) => pathname === href || pathname.startsWith(href + "/");
 
@@ -79,14 +79,17 @@ export default function Nav({ profile }) {
       {pathname === "/" && <TopBanner />}
       <div className="nav-inner">
         <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home" onClick={onMarkClick}>
-          <Logo variant="monogram" height={32} gradient={onDark} />
+          <Logo variant="monogram" height={32} gradient />
         </Link>
 
         <nav aria-label="Main" className="nav-links">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className={`nav-link ${isActive(l.href) ? "is-active" : ""}`}>
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`nav-link ${l.href === "/contact" ? "nav-link--contact" : ""} ${isActive(l.href) ? "is-active" : ""}`}
+            >
               <span className="roll-wrap"><span className="roll">{l.label}</span></span>
-              {l.n && <sup>{l.n}</sup>}
             </Link>
           ))}
           <a
