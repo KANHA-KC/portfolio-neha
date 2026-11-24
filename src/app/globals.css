@@ -6631,3 +6631,15 @@ a:hover .media-icon {
   .wcard-title { font-size: 1.3rem; }
 }
 @media (max-width: 760px) { .home-brand-manifesto .manifesto { padding-bottom: 24px; } }
+
+/* about: bring the teal-hair note back on tablets and phones, sized down */
+@media (max-width: 1100px) {
+  .about-hair-note { display: block; top: 16%; left: 9%; }
+  .about-hair-note .about-hair-text { font-size: clamp(0.85rem, 3.4vw, 1.15rem); line-height: 1.25; }
+  .about-hair-note .about-hair-arrow { width: clamp(48px, 12vw, 80px); margin: 4px 0 0 clamp(36px, 10vw, 64px); }
+}
+@media (max-width: 1100px) {
+  .about-hair-note { top: 27%; left: 8%; }
+  .about-hair-note .about-hair-text { font-size: clamp(1rem, 4.2vw, 1.3rem); }
+  .about-hair-note .about-hair-arrow { width: clamp(56px, 14vw, 88px); margin-left: clamp(48px, 13vw, 80px); }
+}
