@@ -54,6 +54,47 @@ const BRAND_SWATCHES = [
   "#333333"  // ink
 ];
 
+// ---- background detection for the cursor colour ----
+// Colours from a computed style string: rgb()/rgba() and color(srgb …), the forms browsers report.
+const colorsIn = (str) => {
+  const out = [];
+  for (const m of String(str).matchAll(/rgba?\(([^)]+)\)/g)) {
+    const [r, g, b, a = 1] = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
+    out.push({ r, g, b, a });
+  }
+  for (const m of String(str).matchAll(/color\(srgb ([^)]+)\)/g)) {
+    const [r, g, b, a = 1] = m[1].split(/[\s/]+/).filter(Boolean).map(Number);
+    out.push({ r: r * 255, g: g * 255, b: b * 255, a });
+  }
+  return out;
+};
+const luminance = ({ r, g, b }) => {
+  const f = (c) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+};
+const SKIP = new Set(["IMG", "VIDEO", "CANVAS", "IFRAME", "PICTURE"]);
+// Teal (#056e7f) is ~0.13, the neon (#c7db0a) ~0.65, the page canvas ~0.9; 0.35 sits cleanly between.
+const DARK_BELOW = 0.35;
+function surfaceIsDark(x, y) {
+  if (typeof document === "undefined") return false;
+  for (const el of document.elementsFromPoint(x, y)) {
+    if (el.closest(".tc")) continue;
+    const forced = el.dataset?.surface;
+    if (forced === "light") return false;
+    if (forced === "dark") return true;
+    if (SKIP.has(el.tagName)) continue; // photos/videos: decide by what they sit on
+    const cs = getComputedStyle(el);
+    if (cs.visibility === "hidden" || Number(cs.opacity) < 0.3) continue;
+    // Filled SVG shapes (badges, discs, the logo) count as surfaces too.
+    const paints = el instanceof SVGGeometryElement ? colorsIn(cs.fill) : [];
+    if (cs.backgroundImage !== "none" && cs.backgroundImage.includes("gradient")) paints.push(...colorsIn(cs.backgroundImage));
+    paints.push(...colorsIn(cs.backgroundColor));
+    const solid = paints.filter((c) => c.a >= 0.5);
+    if (solid.length) return solid.reduce((sum, c) => sum + luminance(c), 0) / solid.length < DARK_BELOW;
+  }
+  return false; // nothing painted: the light page canvas
+}
+
 export default function Cursor() {
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
@@ -247,6 +288,17 @@ export default function Cursor() {
     const swallowClick = (e) => { e.preventDefault(); e.stopPropagation(); };
 
     let current = { tool: "select" };
+    // Cursor colour follows the real background under the pointer, for every cursor style:
+    // dark (teal) → neon cursor, light (neon, white, aqua) → teal cursor.
+    // It reads the painted stack at the pointer, so fixed/transparent layers like the nav see what's behind them.
+    let surfaceAt = { t: 0, target: null };
+    const updateSurface = (x, y, target, force = false) => {
+      const now = performance.now();
+      if (!force && target === surfaceAt.target && now - surfaceAt.t < 120) return;
+      surfaceAt = { t: now, target };
+      root.classList.toggle("is-on-dark", surfaceIsDark(x, y));
+    };
+
     const onMove = (e) => {
       if (e.pointerType && e.pointerType !== "mouse") return;
       state.x = e.clientX; state.y = e.clientY;
@@ -277,10 +329,7 @@ export default function Cursor() {
       const hex = current.tool === "eyedropper" ? sample(current.img, e.clientX, e.clientY) : null;
       if (current.tool === "eyedropper" && !hex) current = { tool: state.canvasTool };
       setTool(current.tool);
-      // Bright spots inside dark sections (e.g. the neon back-to-top disc) opt out with data-surface="light".
-      const onDark = Boolean(e.target?.closest?.(".hero, .hero4, .hero-intro, .case-stats, .menu-overlay, .footer, .tilt-band, .nav--on-dark, [data-theme='dark']")) &&
-        !e.target?.closest?.("[data-surface='light']");
-      root.classList.toggle("is-on-dark", onDark);
+      updateSurface(e.clientX, e.clientY, e.target);
       root.classList.toggle("is-link", Boolean(current.isLink));
       if (current.label) { tip.textContent = current.label; root.classList.add("has-tip"); } else root.classList.remove("has-tip");
       if (current.tool === "eyedropper") {
@@ -385,7 +434,10 @@ export default function Cursor() {
     };
 
     const onLeave = () => root.classList.add("is-gone");
-    const onScroll = () => { if (state.strokes.length) kick(); };
+    const onScroll = () => {
+      if (state.strokes.length) kick();
+      if (state.x >= 0) updateSurface(state.x, state.y, null, true); // content moved under a still pointer
+    };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onDown);

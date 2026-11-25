@@ -8,7 +8,9 @@ import HoverPeek from "@/components/HoverPeek";
 import { peekImage, peekSlug } from "@/lib/peek";
 import JsonLd from "@/components/JsonLd";
 import { absolute, categoryPath, clip, SITE_OG_IMAGES } from "@/lib/seo";
-import { getCategories, getExperience, getProfile } from "@/content";
+import { getCategories, getExperience, getProfile, getProjects } from "@/content";
+import AboutKpis from "@/components/AboutKpis";
+import { cacheLife } from "next/cache";
 
 export async function generateMetadata() {
   const p = await getProfile();
@@ -30,7 +32,10 @@ function tidyTypography(text) {
 
 // "*word*" in CMS copy → handwritten accent. "[[Name]]" or "[[Name|slug]]" → hover photo from /public/story/<slug>.*
 const rich = (text) => {
-  const str = String(text).replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]");
+  const str = String(text)
+    .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]")
+    .replace(/(?<!\[\[)\b(travel)\b(?!\]\])/gi, "[[$1]]")
+    .replace(/(?<!\[\[)\b(chai)\b(?!\]\])/gi, "[[$1]]");
   const lines = str.split("\n");
   return lines.map((line, lineIndex) => (
     <Fragment key={lineIndex}>
@@ -115,8 +120,35 @@ function Bloom({ className }) {
   );
 }
 
+// "+N more" tail for a list of names.
+const sample = (names, n = 2) => (names.length > n ? `${names.slice(0, n).join(", ")} +${names.length - n}` : names.join(", "));
+
+// The current year, cached for a day (a bare new Date() isn't allowed during prerender).
+async function thisYear() {
+  "use cache";
+  cacheLife("days");
+  return new Date().getFullYear();
+}
+
+// The "at a glance" numbers, all worked out from the CMS so they stay true as projects and roles are added.
+function glance(projects, experience, year) {
+  const years = projects.map((p) => Number(String(p.year).match(/\d{4}/)?.[0])).filter(Boolean);
+  const since = years.length ? Math.min(...years) : null;
+  const clients = [...new Set(projects.map((p) => p.client || p.title).filter(Boolean))];
+  const sectors = [...new Set(projects.map((p) => p.sector).filter(Boolean))];
+  // Design roles only (the early fashion job isn't an agency).
+  const agencies = [...new Set(experience.filter((e) => !/fashion/i.test(e.role)).map((e) => e.company?.replace(/\s+(India|Digital Solutions|Pvt\.? Ltd\.?|LLP)$/i, "")).filter(Boolean))];
+  return [
+    since && { value: year - since, suffix: "+", label: "years designing", detail: `since ${since}` },
+    clients.length && { value: clients.length, suffix: "", label: "brands in the portfolio", detail: sample(clients) },
+    sectors.length && { value: sectors.length, suffix: "", label: "industries", detail: sample(sectors) },
+    agencies.length && { value: agencies.length, suffix: "", label: agencies.length === 1 ? "agency" : "agencies", detail: agencies.join(" · ") }
+  ].filter(Boolean);
+}
+
 export default async function AboutPage() {
-  const [profile, experience, categories] = await Promise.all([getProfile(), getExperience(), getCategories()]);
+  const [profile, experience, categories, projects, year] = await Promise.all([getProfile(), getExperience(), getCategories(), getProjects(), thisYear()]);
+  const kpis = glance(projects, experience, year);
   const story = profile.story;
   const kits = [
     { key: "design", title: "Design Toolkit", items: profile.designTools },
@@ -137,11 +169,22 @@ export default async function AboutPage() {
           </h1>
           <p className="page-lede about-lede">{profile.intro}</p>
           {profile.availability && <span className="hand about-hand">{profile.availability.toLowerCase()} — say hi!</span>}
+          <AboutKpis items={kpis} />
         </div>
 
         <div className="about-photo">
-          <div className="about-sun" aria-hidden="true" />
-          <div className="about-card" aria-hidden="true" />
+          <div className="about-hair-note hand" aria-hidden="true">
+            <span className="about-hair-text">
+              teal hair color is a<br /><mark className="about-hair-mark">design decision</mark>
+            </span>
+            <svg className="about-hair-arrow" viewBox="0 0 160 140" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              {/* curve down from the note to the teal hair ends: white, with a soft shadow */}
+              <g stroke="#fff" strokeWidth="2.6" strokeOpacity="0.9">
+                <path d="M 12 6 C 6 70, 60 118, 146 120" />
+                <path d="M 126 106 L 148 120 L 126 134" />
+              </g>
+            </svg>
+          </div>
           <Image
             className="about-print"
             src="/brand/neha-mountains.webp"
@@ -166,18 +209,6 @@ export default async function AboutPage() {
             <div className="about-badge-mark">
               <Logo variant="monogram" height="clamp(20px, 2.2vw, 28px)" color="var(--teal)" />
             </div>
-          </div>
-          <div className="about-hair-note hand" aria-hidden="true">
-            <span className="about-hair-text">
-              teal hair color is a<br /><mark className="about-hair-mark">design decision</mark>
-            </span>
-            <svg className="about-hair-arrow" viewBox="0 0 160 140" fill="none" strokeLinecap="round" strokeLinejoin="round">
-              {/* curve down from the note to the teal hair ends: white, with a soft shadow */}
-              <g stroke="#fff" strokeWidth="2.6" strokeOpacity="0.9">
-                <path d="M 12 6 C 6 70, 60 118, 146 120" />
-                <path d="M 126 106 L 148 120 L 126 134" />
-              </g>
-            </svg>
           </div>
         </div>
       </section>

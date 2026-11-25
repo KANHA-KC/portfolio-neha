@@ -50,8 +50,19 @@ export function normalizeProject(raw, image) {
   const accent = palettes[raw.accent] ? raw.accent : "teal";
   const kind = raw.kind === "case-study" ? "case-study" : "showcase";
   const feeling = str(raw.feeling || raw.note);
+  const slug = str(raw.slug);
+  const client = slug === "sterling" && str(raw.client) === "Sterling" ? "Sterling Holidays" : str(raw.client);
+  const workedOn =
+    slug === "sterling"
+      ? str(raw.workedOn).replace(/for a holiday brand\.?/i, "for a hospitality chain.")
+      : str(raw.workedOn);
+  const rawSummary = str(raw.summary || raw.workedOn || raw.brief);
+  const summary =
+    slug === "sterling"
+      ? rawSummary.replace(/for a holiday brand\.?/i, "for a hospitality chain.")
+      : rawSummary;
   return {
-    slug: str(raw.slug),
+    slug,
     title: str(raw.title, "Untitled project"),
     kind,
     category: str(raw.category),
@@ -59,15 +70,15 @@ export function normalizeProject(raw, image) {
     order: num(raw.order, 99),
     year: str(raw.year),
     timeline: str(raw.timeline || raw.year),
-    client: str(raw.client),
+    client,
     role: str(raw.role),
     projectType: str(raw.projectType),
     cardName: str(raw.cardName),
     sector: str(raw.sector),
-    workedOn: str(raw.workedOn),
+    workedOn,
     feeling,
     platform: str(raw.platform),
-    summary: str(raw.summary || raw.workedOn || raw.brief),
+    summary,
     subtitle: str(raw.subtitle),
     note: feeling,
     accent,
@@ -169,16 +180,20 @@ export function normalizeProfile(raw, image) {
     storyTitle: str(raw.storyTitle)
       .replace(/I came to\s+design\s+through/gi, "I came to design\nthrough"),
     story: list(raw.story).map(String).map((para) => {
-      let p = para.replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]");
+      let p = para
+        .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]")
+        .replace(/(?<!\[\[)\b(travel)\b(?!\]\])/gi, "[[travel]]")
+        .replace(/(?<!\[\[)\b(chai)\b(?!\]\])/gi, "[[chai]]");
       p = p.replace(/\s*in Bangalore and Kolkata,?\s*/gi, ", ");
       // Map older CMS paragraphs to improved widow-free phrasing if present
       if (p.includes("left everything hanging") && p.includes("2021")) {
         p = "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.";
       } else if (p.includes("The Social Lions, Schbang") && p.includes("2020–2023")) {
-        p = "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over four years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.";
+        p = "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over two years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.";
       } else if (p.includes("designing since before AI") && p.includes("is still mine")) {
         p = "I’ve been designing since before the wave of AI. Today I use it daily to accelerate research and mockups, while the visual thinking, taste, and craft remain entirely mine.";
       }
+      p = p.replace(/Senior Graphic Designer over four years/gi, "Senior Graphic Designer over two years");
       return tidyTypography(p);
     }),
     storyStats: pairs(raw.storyStats, "value", "label"),
@@ -188,7 +203,9 @@ export function normalizeProfile(raw, image) {
     ),
     email: (() => {
       const e = str(raw.email);
-      if (!e || e.toLowerCase() === "nehaondhia6@gmail.com") return "neha@nehaondhia.com";
+      if (!e || e.toLowerCase() === "nehaondhia6@gmail.com" || e.toLowerCase() === "neha@nehaondhia.com") {
+        return "nehaondhiadesign@gmail.com";
+      }
       return e;
     })(),
     location: str(raw.location),

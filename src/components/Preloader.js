@@ -53,7 +53,7 @@ const finish = () => {
   window.dispatchEvent(new Event("intro:done"));
 };
 
-// First-visit intro: golden spirals grow into the "no" mark, it fills with the brand gradient,
+// First-visit intro (the video in public/intro; the vector fallback below mirrors it): golden spirals grow into the "no" mark, it fills with the brand gradient,
 // then settles into the "neha ondhia" lockup and the screen lifts away. Tap or press a key to skip.
 // Easter egg: anything can replay it by dispatching `intro:replay` (the nav logo does, on 4+ quick clicks).
 export default function Preloader() {
@@ -131,16 +131,76 @@ export default function Preloader() {
         .add(finish, "+=0.35")
         .to(root, { clipPath: "inset(0 0 100% 0)", duration: 0.9, ease: "expo.inOut" }, "<");
     };
-    // Wait (briefly) for the wordmark font so the lockup is measured at its real width.
-    Promise.race([document.fonts?.ready, new Promise((r) => setTimeout(r, 700))]).then(start);
+    // The designed intro is a pre-rendered video (public/intro, made from the frame sequence).
+    // If it can't autoplay quickly (Low Power Mode, data saver, slow network) the vector version above plays instead.
+    const video = root.querySelector(".pre-video");
+    let mode = "video";
+    let lifted = false;
+    let wait = null;
+    let hold = null;
 
-    // Tap / key to fast-forward.
-    const skip = () => tl?.timeScale(6);
+    const lift = () => {
+      if (lifted || cancelled) return;
+      lifted = true;
+      finish();
+      tl = gsap.to(root, { clipPath: "inset(0 0 100% 0)", duration: 0.9, ease: "expo.inOut", onComplete: () => setGone(true) });
+    };
+    const useSvg = () => {
+      if (mode !== "video" || cancelled) return;
+      mode = "svg";
+      clearTimeout(wait);
+      video.pause();
+      root.classList.remove("is-video");
+      root.classList.add("is-svg");
+      root.style.backgroundColor = "";
+      // Wait (briefly) for the wordmark font so the lockup is measured at its real width.
+      Promise.race([document.fonts?.ready, new Promise((r) => setTimeout(r, 700))]).then(start);
+    };
+    // Browsers colour-manage video slightly differently (Safari especially), so read the teal the video
+    // actually renders with and paint the screen behind it the same.
+    const matchBackground = () => {
+      try {
+        const c = document.createElement("canvas");
+        c.width = c.height = 4;
+        const ctx = c.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(video, 0, 0, 16, 16, 0, 0, 4, 4); // top-left corner is always plain background
+        const [r, g, b] = ctx.getImageData(1, 1, 1, 1).data;
+        root.style.backgroundColor = `rgb(${r} ${g} ${b})`;
+      } catch {}
+    };
+    const onPlaying = () => {
+      clearTimeout(wait);
+      matchBackground();
+    };
+    const onEnded = () => {
+      if (mode === "video") hold = setTimeout(lift, 250);
+    };
+
+    root.classList.remove("is-svg");
+    root.classList.add("is-video");
+    root.style.backgroundColor = "";
+    video.addEventListener("playing", onPlaying);
+    video.addEventListener("ended", onEnded);
+    video.addEventListener("error", useSvg);
+    wait = setTimeout(useSvg, 1800);
+    try {
+      video.currentTime = 0;
+    } catch {}
+    video.play()?.catch?.(useSvg);
+
+    // Tap / key: the video skips straight to the page; the vector version fast-forwards.
+    const skip = () => (mode === "video" ? lift() : tl?.timeScale(6));
     root.addEventListener("pointerdown", skip);
     window.addEventListener("keydown", skip);
     return () => {
       cancelled = true;
+      clearTimeout(wait);
+      clearTimeout(hold);
       tl?.kill();
+      video.pause();
+      video.removeEventListener("playing", onPlaying);
+      video.removeEventListener("ended", onEnded);
+      video.removeEventListener("error", useSvg);
       root.removeEventListener("pointerdown", skip);
       window.removeEventListener("keydown", skip);
     };
@@ -150,6 +210,11 @@ export default function Preloader() {
 
   return (
     <div ref={ref} className="preloader" aria-hidden="true">
+      {/* 4K for large screens, 1080p for phones/tablets (it's shown wider than the screen there, cropped to the middle). */}
+      <video className="pre-video" muted playsInline preload="auto" poster="/intro/intro-first.jpg" disablePictureInPicture tabIndex={-1}>
+        <source src="/intro/intro-1080.mp4" type="video/mp4" media="(max-width: 1100px)" />
+        <source src="/intro/intro-4k.mp4" type="video/mp4" />
+      </video>
       <div className="pre-lockup">
         <svg className="pre-mark" viewBox={`0 0 ${W} ${H}`} overflow="visible">
           <defs>

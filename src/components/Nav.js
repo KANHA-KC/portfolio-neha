@@ -69,8 +69,9 @@ export default function Nav({ profile }) {
     setOpen(false);
   }
 
-  // The home hero is teal, so the bar uses light ink until it gets its cream background on scroll.
-  const onDark = (pathname === "/" || pathname === "/contact") && !scrolled && !open;
+  // The home, about, contact, and project heroes are teal, so the bar uses light ink until it gets its cream background on scroll.
+  const isProjectPage = pathname.startsWith("/work/") && !pathname.startsWith("/work/category");
+  const onDark = (pathname === "/" || pathname === "/contact" || pathname === "/about" || isProjectPage) && !scrolled && !open;
 
   const isActive = (href) => pathname === href || pathname.startsWith(href + "/");
 
@@ -98,7 +99,6 @@ export default function Nav({ profile }) {
             className="nav-link"
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor="resume"
           >
             <span className="roll-wrap"><span className="roll">Resume</span></span>
           </a>

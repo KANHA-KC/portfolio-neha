@@ -79,7 +79,7 @@ export default function Footer({ site, categories = [] }) {
             </a>
           ))}
           {!site?.socials?.some((s) => /email|mail/i.test(s.label)) && (
-            <a href={`mailto:${site?.email || "neha@nehaondhia.com"}`}>
+            <a href={`mailto:${site?.email || "nehaondhiadesign@gmail.com"}`}>
               Email ↗
             </a>
           )}

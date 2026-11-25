@@ -26,9 +26,9 @@ export const profile = {
   story: [
     "I studied fashion design in [[Mumbai]] (2015 to 2019). Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
     "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.",
-    "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over four years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.",
+    "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over two years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.",
     "I’ve been designing since before the wave of AI. Today I use it daily to accelerate research and mockups, while the visual thinking, taste, and craft remain entirely mine.",
-    "*Off the screen:* 10K and [[half marathons]], travel, chai, and anything that gets my hands dirty."
+    "*Off the screen:* 10K and [[half marathons]], [[travel]], [[chai]], and anything that gets my hands dirty."
   ],
   storyStats: ["5+ | years in agencies", "~120 | creatives a month", "3 | junior designers trained", "1 | dog in a sherwani"],
   workWith: [
@@ -43,7 +43,7 @@ export const profile = {
     "Develop | Detailed logos with the thinking behind each, plus a real-life mockup.",
     "Finalise | Minor tweaks, then clean files delivered."
   ],
-  email: "neha@nehaondhia.com",
+  email: "nehaondhiadesign@gmail.com",
   location: "Mumbai, India",
   timezone: "Asia/Kolkata",
   // availability: "Available for select projects",
@@ -202,8 +202,8 @@ export const projects = [
     order: 2,
     title: "Sterling",
     subtitle: "Online and offline brand assets that feel homely",
-    summary: "Logo, brochures, banners, email, social and AI videos for a holiday brand.",
-    client: "Sterling",
+    summary: "Logo, brochures, banners, email, social and AI videos for a hospitality chain.",
+    client: "Sterling Holidays",
     sector: "Hospitality",
     projectType: "Via Webenza",
     year: "2023–2026",
@@ -218,7 +218,7 @@ export const projects = [
     brief:
       "Online and offline assets that feel homely, with realistic visuals and clean, elegant type.",
     workedOn:
-      "Logo, brochures, banners, email, social and AI videos for a holiday brand.",
+      "Logo, brochures, banners, email, social and AI videos for a hospitality chain.",
     videos: [
       reel("alleppey-family", "Alleppey · Family"),
       reel("gangtok-family", "Gangtok · Family"),
@@ -331,7 +331,8 @@ export const projects = [
     role: "Social & Digital Designer",
     tags: ["Insurance", "Social Media", "Email Design", "Video Frames"],
     accent: "teal",
-    cover: null,
+    cover: shot("hdfc-life-insurance", "1.jpg"),
+    thumbnail: thumb("hdfc-life-insurance"),
     aspect: "landscape",
     feeling: "Trustworthy · Caring",
     note: "Trustworthy · Caring",
@@ -339,7 +340,7 @@ export const projects = [
       "Social, email and video assets that sit inside the brand guidelines but feel relatable.",
     workedOn:
       "Social, email and video frames for a national insurer.",
-    gallery: slots(["Social Creatives", "wide"], ["Email Design", "portrait"], ["Video Frames", "landscape"], ["Campaign Suite", "square"])
+    gallery: shots("hdfc-life-insurance", ["2.jpg", "Contest alert social creatives"], ["3.jpg", "The Memory Project album"], ["4.jpg", "Album spreads and cards"])
   },
   {
     slug: "bricx",
@@ -386,7 +387,8 @@ export const projects = [
     role: "Digital & Ad Designer",
     tags: ["Water Purification", "Google Ads", "Social Media", "Creatives"],
     accent: "aqua",
-    cover: null,
+    cover: shot("drink-prime", "1.jpg"),
+    thumbnail: thumb("drink-prime"),
     aspect: "landscape",
     feeling: "Fresh · Clean",
     note: "Fresh · Clean",
@@ -394,7 +396,7 @@ export const projects = [
       "A fresh set of Google Ads creatives to bring more visitors to their website.",
     workedOn:
       "Social media collateral and ads.",
-    gallery: slots(["Google Ads Suite", "wide"], ["Social Assets", "square"], ["Ad Variations", "landscape"], ["Landing Creatives", "portrait"])
+    gallery: shots("drink-prime", ["2.jpg", "Rental ads and social creatives"])
   },
   {
     slug: "the-design-bar",
@@ -440,7 +442,8 @@ export const projects = [
     role: "Logo & Signage Designer",
     tags: ["Hospitality", "Logo Design", "Signage", "Heritage"],
     accent: "teal",
-    cover: null,
+    cover: shot("twisted-tree-homestay", "1.jpg"),
+    thumbnail: thumb("twisted-tree-homestay"),
     aspect: "square",
     feeling: "Homely · Rooted",
     note: "Homely · Rooted",
@@ -448,7 +451,7 @@ export const projects = [
       "A logo for a homestay in Ooty. The property has an old, twisted tree planted by the client’s great-grandfather, and he wanted it in the mark.",
     workedOn:
       "Logo and Signage Design",
-    gallery: slots(["Final Mark", "square"], ["Property Signage", "landscape"], ["Sketches & Grid", "square"], ["Homestay Collateral", "wide"])
+    gallery: shots("twisted-tree-homestay", ["2.jpg", "Stationery and guest amenities"], ["3.jpg", "Guest slippers"], ["4.jpg", "Towel bands"])
   },
   {
     slug: "creamland-and-annn",
@@ -467,7 +470,8 @@ export const projects = [
     role: "Packaging & Brand Designer",
     tags: ["F&B", "Packaging", "Logo Design", "Print Collateral"],
     accent: "gold",
-    cover: null,
+    cover: shot("creamland-and-annn", "1.jpg"),
+    thumbnail: thumb("creamland-and-annn"),
     aspect: "landscape",
     feeling: "Sweet · Playful",
     note: "Sweet · Playful",
@@ -475,6 +479,6 @@ export const projects = [
       "Easy-to-remember logos for the sister brands, for everyday packaging.",
     workedOn:
       "Logo Design, Print Collateral, Packaging",
-    gallery: slots(["Packaging Range", "wide"], ["Logo Marks", "square"], ["Print Collateral", "landscape"], ["Pack Details", "portrait"])
+    gallery: shots("creamland-and-annn", ["2.jpg", "Annn by Creamland takeaway packaging"], ["3.jpg", "Ice cream cups"])
   }
 ];

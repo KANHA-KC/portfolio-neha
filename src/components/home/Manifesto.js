@@ -62,8 +62,25 @@ export default function Manifesto({ text }) {
       const off = afterIntro(refresh);
       document.fonts?.ready.then(refresh);
       window.addEventListener("load", refresh);
+      // The pin reserves this section's height when it's measured; if the section later grows
+      // (late fonts, spacing changes), measure again so the next section can't slide up over it.
+      // (The pin freezes the section's own height, so watch the blocks inside it.)
+      const parts = [...el.children];
+      const contentH = () => parts.reduce((sum, p) => sum + p.offsetHeight, 0);
+      let lastH = contentH();
+      let timer = 0;
+      const ro = new ResizeObserver(() => {
+        const h = contentH();
+        if (Math.abs(h - lastH) < 2) return;
+        lastH = h;
+        clearTimeout(timer);
+        timer = setTimeout(refresh, 150);
+      });
+      parts.forEach((p) => ro.observe(p));
 
       return () => {
+        ro.disconnect();
+        clearTimeout(timer);
         off();
         window.removeEventListener("load", refresh);
         mm.revert();
