@@ -11,7 +11,7 @@ export const contentType = "image/jpeg";
 // Rendered as PNG, then re-encoded as JPEG: a photo card drops from ~1 MB to ~150 KB.
 export default async function Image({ params }) {
   const { slug } = await params;
-  const [profile, found] = await Promise.all([getProfile(), getProject(slug)]);
+  const [profile, found, logo] = await Promise.all([getProfile(), getProject(slug), ogImageSrc("/brand/icon-192.png")]);
   const p = found?.project;
   const photo = await ogImageSrc((p?.cover || p?.thumbnail)?.src);
   const pal = p?.palette || { wash: C.canvas, ink: C.teal, spark: C.gold };
@@ -20,6 +20,7 @@ export default async function Image({ params }) {
     photo ? (
       <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: C.teal }}>
         <img src={photo} alt="" width={1200} height={630} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        {logo ? <img src={logo} alt="" width={84} height={84} style={{ position: "absolute", top: 40, right: 48, borderRadius: 16 }} /> : null}
         <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", padding: "40px 64px", background: "linear-gradient(transparent, rgba(6,54,65,0.92))", color: C.canvas, fontFamily: "Montreal" }}>
           <div style={{ display: "flex", fontSize: 64, lineHeight: 1.05 }}>{p.title}</div>
           <div style={{ display: "flex", fontSize: 28, color: C.aqua, marginTop: 10 }}>{`${p.categoryTitle} · ${profile.name}`}</div>
@@ -27,7 +28,10 @@ export default async function Image({ params }) {
       </div>
     ) : (
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: pal.wash, color: pal.ink, padding: "72px 80px", fontFamily: "Montreal" }}>
-        <div style={{ display: "flex", fontSize: 28, letterSpacing: 4, textTransform: "uppercase" }}>{p?.categoryTitle || "Portfolio"}</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+          <div style={{ display: "flex", fontSize: 28, letterSpacing: 4, textTransform: "uppercase" }}>{p?.categoryTitle || "Portfolio"}</div>
+          {logo ? <img src={logo} alt="" width={84} height={84} style={{ borderRadius: 16 }} /> : null}
+        </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 104, lineHeight: 1, letterSpacing: -3, color: C.teal }}>{p?.title || profile.name}</div>
           {p?.subtitle ? <div style={{ display: "flex", fontSize: 40, fontFamily: "Montreal", fontStyle: "italic", marginTop: 20 }}>{p.subtitle}</div> : null}

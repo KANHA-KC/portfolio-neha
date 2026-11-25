@@ -3,7 +3,7 @@ import { getProfile } from "@/content";
 export default async function manifest() {
   const p = await getProfile();
   return {
-    name: `${p.name} — ${p.role}`,
+    name: "Neha Ondhia - Brand, Graphic Designer, Illustrator",
     short_name: p.name,
     description: p.intro,
     start_url: "/",

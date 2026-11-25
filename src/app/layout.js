@@ -56,7 +56,7 @@ const patrick = Patrick_Hand({
 
 export async function generateMetadata() {
   const p = await getProfile();
-  const title = `${p.name} — ${p.role}`;
+  const title = "Neha Ondhia - Brand, Graphic Designer, Illustrator";
   return {
     metadataBase: new URL(SITE_URL),
     title: { default: title, template: `%s — ${p.name}` },

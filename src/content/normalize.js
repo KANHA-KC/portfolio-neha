@@ -160,7 +160,8 @@ export function normalizeProfile(raw, image) {
     headline: str(raw.headline),
     heroIntro: str(raw.heroIntro),
     manifesto: str(raw.manifesto)
-      .replace(/People remember how it(?:\s+|\n)made\s+them/gi, "People remember how it made\nthem"),
+      .replace(/Good design looks good\.?\s+Great design\s+\*?tells a story\*?\.?/gi, "Good design looks good\nGreat design *tells a story*.")
+      .replace(/People remember(?:\s+|\n)how it(?:\s+|\n)(?:made\s+them\s+\*?feel\*?\.?|\*?made them feel\*?\.?)/gi, "People remember\nhow it *made them feel*."),
     intro: str(raw.intro)
       .replace(/^a self-taught/i, "A self-taught")
       .replace(/based in Mumbai/gi, "based in India"),

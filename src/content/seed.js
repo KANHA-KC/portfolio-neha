@@ -13,7 +13,7 @@ export const profile = {
   heroIntro:
     "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
-    "Good design looks good. Great design *tells a story*.\n\nPeople remember how it made\nthem *feel*.",
+    "Good design looks good\nGreat design *tells a story*.\n\nPeople remember\nhow it *made them feel*.",
   intro:
     "A self-taught illustrator and brand designer based in India. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
   bio: [
