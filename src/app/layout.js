@@ -35,7 +35,18 @@ const aubrey = localFont({
   display: "swap"
 });
 
-// Handwritten notes font (Patrick Hand)
+// Handwritten notes font: Marydale (the brand's highlight font).
+const marydale = localFont({
+  src: "../fonts/marydale/Marydale-Regular.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-marydale",
+  display: "swap",
+  // Marydale draws small for its size, so every use of it is scaled up 20% here, in one place.
+  declarations: [{ prop: "size-adjust", value: "120%" }]
+});
+
+// Patrick Hand stays as the fallback for symbols Marydale doesn't have (✦ ✿ arrows); browsers only fetch it when needed.
 const patrick = Patrick_Hand({
   weight: "400",
   subsets: ["latin", "latin-ext"],
@@ -92,7 +103,7 @@ export const viewport = {
 export default async function RootLayout({ children }) {
   const [profile, projects, categories] = await Promise.all([getProfile(), getProjects(), getCategories()]);
   return (
-    <html lang="en" className={`${montreal.variable} ${aubrey.variable} ${patrick.variable}`}>
+    <html lang="en" className={`${montreal.variable} ${aubrey.variable} ${marydale.variable} ${patrick.variable}`}>
       <body>
         <a href="#main" className="skip">Skip to content</a>
         <Preloader />

@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import CaseStudy from "@/components/work/CaseStudy";
 import Showcase from "@/components/work/Showcase";
-import RelatedWork from "@/components/work/RelatedWork";
 import JsonLd from "@/components/JsonLd";
 import { getProfile, getProject, getProjects } from "@/content";
 import { clip, projectPath, projectSchema } from "@/lib/seo";
@@ -45,18 +44,10 @@ async function Project({ params }) {
   if (!found) notFound();
   const { project, next } = found;
 
-  // Internal links: same discipline first, then other featured work.
-  const all = await getProjects();
-  const related = [
-    ...all.filter((p) => p.category === project.category && p.slug !== slug),
-    ...all.filter((p) => p.featured && p.category !== project.category)
-  ].slice(0, 3);
-
   const View = project.kind === "case-study" ? CaseStudy : Showcase;
   return (
     <>
       <View project={project} next={next} />
-      <RelatedWork projects={related} category={project} />
       <JsonLd data={projectSchema(project)} />
     </>
   );

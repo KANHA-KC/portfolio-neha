@@ -80,14 +80,11 @@ export default function WorkGallery({ projects, categories, showFilters = true }
             <Link href={`/work/${p.slug}`} className="gcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
               <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw" />
               <div className="gcard-cap">
-                <div>
-                  <p className="gcard-cat">
-                    {p.sector || p.categoryTitle}
-                    {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
-                  </p>
-                  <h2 className="gcard-title">{p.title}</h2>
-                  {p.workedOn && <p className="gcard-work">{p.workedOn}</p>}
-                </div>
+                <p className="gcard-cat">
+                  {p.sector || p.categoryTitle}
+                  {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
+                </p>
+                <h2 className="gcard-title">{p.title}</h2>
                 <p className="gcard-meta">
                   {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
                 </p>

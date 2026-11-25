@@ -48,9 +48,11 @@
   --f-sans: var(--font-montreal), "Helvetica Neue", Arial, sans-serif;
   --f-display: var(--f-audrey);
   --f-alt: var(--f-sans);
-  --f-hand: var(--font-patrick), var(--f-sans); /* handwritten notes font (Patrick Hand) */
+  --f-hand: var(--font-marydale), var(--font-patrick), var(--f-sans); /* handwritten notes: Marydale, Patrick Hand for missing symbols */
   --f-aubrey: var(--font-aubrey), "Audrey", "Aubrey", var(--font-montreal), "Helvetica Neue", Arial, sans-serif; /* display / hero */
   --f-audrey: var(--f-aubrey);
+  /* One letter-spacing for every Aubrey use, so all display type is spaced the same */
+  --aubrey-tracking: normal;
 
   --g: clamp(16px, 4vw, 56px);
   --max: 1440px;
@@ -121,8 +123,8 @@ h4,
 h5,
 h6 {
   font-family: var(--f-audrey);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
-  letter-spacing: -0.015em;
   margin: 0;
 }
 p,
@@ -203,6 +205,7 @@ em {
   font-family: var(--f-hand);
   font-weight: 500;
   line-height: 1.1;
+  font-style: normal;
 }
 .eyebrow {
   font-family: var(--f-alt);
@@ -217,9 +220,9 @@ em {
 }
 .eyebrow-num {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-weight: 400;
-  letter-spacing: 0;
   text-transform: none;
   font-size: 0.95rem;
   color: var(--teal);
@@ -415,10 +418,10 @@ em {
 }
 .section-title {
   font-family: var(--f-audrey);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
   font-size: clamp(2.2rem, 5.2vw, 5.2rem);
   line-height: 1.05;
-  letter-spacing: -0.02em;
   color: var(--teal);
   margin-top: 14px;
   position: relative;
@@ -434,13 +437,13 @@ em {
   font-size: clamp(1.2rem, 2vw, 1.7rem);
   color: var(--burnt);
   letter-spacing: 0;
-  transform: rotate(-4deg) translateY(-1.2em);
+  transform: translateY(-0.8em);
   margin-left: 12px;
   white-space: nowrap;
 }
 .work-scatter .section-hand {
   display: inline-block;
-  transform: rotate(-3deg);
+  transform: none;
   margin: 10px 0 0 0;
 }
 
@@ -506,50 +509,42 @@ em {
   stroke: var(--neon);
 }
 
-/* default select tool: deep brand teal arrow with vibrant neon stroke */
+/* default select tool: deep brand teal arrow with no outline stroke */
 .tc[data-tool="select"] .tc-tool svg {
   fill: var(--teal-0);
-  stroke: var(--neon);
-  stroke-width: 1.5;
+  stroke: none;
 }
-/* on dark teal surfaces (like the hero in the screenshot): luminous neon fill with deep teal stroke */
+/* on dark teal surfaces: luminous neon fill with no outline stroke */
 .tc.is-on-dark[data-tool="select"] .tc-tool svg {
   fill: var(--neon);
-  stroke: var(--teal-0);
-  stroke-width: 1.5;
+  stroke: none;
 }
 
-/* interactive move pointer (on links and buttons): brand pearl/cyan fill on light, neon on dark */
+/* interactive move pointer (on links and buttons): clean fill with no outline stroke */
 .tc[data-tool="move"] .tc-tool svg {
   fill: var(--pearl);
-  stroke: var(--teal-0);
-  stroke-width: 1.5;
+  stroke: none;
 }
 .tc.is-on-dark[data-tool="move"] .tc-tool svg {
   fill: var(--neon);
-  stroke: var(--teal-0);
-  stroke-width: 1.5;
+  stroke: none;
 }
 
-/* type tool (I-beam on text and fields): a dark beam with a light halo on light pages,
-   a neon beam with a deep-teal halo on dark sections, so it stays visible over any text colour */
+/* type tool (I-beam on text and fields): crisp beam with no halo or drop-shadow */
 .tc[data-tool="type"] .tc-tool svg {
   fill: none;
   stroke: var(--teal-0);
   stroke-width: 2.2;
 }
-.tc[data-tool="type"] .tc-tool svg .tc-halo {
-  stroke: #fff;
-  stroke-width: 5.2;
+.tc[data-tool="type"] .tc-tool svg .tc-halo,
+.tc.is-on-dark[data-tool="type"] .tc-tool svg .tc-halo {
+  display: none;
 }
 .tc.is-on-dark[data-tool="type"] .tc-tool svg {
   stroke: var(--neon);
 }
-.tc.is-on-dark[data-tool="type"] .tc-tool svg .tc-halo {
-  stroke: #022a31;
-}
 .tc[data-tool="type"] .tc-tool {
-  filter: drop-shadow(0 1px 2px rgba(2, 42, 49, 0.35));
+  filter: none;
   animation: tc-blink 1.1s steps(2, start) infinite;
 }
 @keyframes tc-blink {
@@ -984,9 +979,9 @@ html.is-marqueeing * {
 }
 .pre-word {
   font-family: var(--f-aubrey);
+  letter-spacing: var(--aubrey-tracking);
   font-size: clamp(42px, 5.4vw, 76px);
   line-height: 1;
-  letter-spacing: 0.005em;
   color: var(--light-aqua);
   white-space: nowrap;
   padding-bottom: 0.08em;
@@ -1037,8 +1032,8 @@ html.is-marqueeing * {
   overflow: hidden;
   display: flex;
   align-items: center;
-  mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 44px), transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 44px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 28px, black calc(100% - 28px), transparent);
 }
 .top-banner-track {
   display: flex;
@@ -1306,10 +1301,10 @@ html.is-marqueeing * {
   align-items: flex-start;
   gap: 14px;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-size: clamp(3.4rem, 16vw, 7rem);
   line-height: 1;
-  letter-spacing: -0.04em;
   padding: clamp(8px, 1.6vh, 16px) 0;
 }
 .menu-foot {
@@ -1504,10 +1499,10 @@ html.is-marqueeing * {
   z-index: 3;
   margin: 0;
   font-family: var(--f-aubrey);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
   font-size: var(--hw);
   line-height: 0.86;
-  letter-spacing: -0.01em;
   color: var(--canvas);
   white-space: nowrap;
   text-shadow: 0 18px 40px rgba(3, 65, 75, 0.35);
@@ -1617,12 +1612,12 @@ html.is-marqueeing * {
 .hw-input.has-name,
 .hw-input:not(:placeholder-shown) {
   font-family: var(--f-display);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
 }
 .hw-mirror.has-name {
   font-family: var(--f-display);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
 }
 .hero4-role {
@@ -1856,6 +1851,7 @@ html.is-marqueeing * {
 }
 .marquee-item {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-style: italic;
   font-size: clamp(1.1rem, 2vw, 1.75rem);
@@ -1909,9 +1905,9 @@ html.is-marqueeing * {
 }
 .hero-intro-lead {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   line-height: 1.15;
-  letter-spacing: -0.02em;
   color: var(--neon); /* neon on the intro's teal: 3.8:1, fine at this display size */
 }
 .hero-intro-aside {
@@ -1976,14 +1972,16 @@ html.is-marqueeing * {
 }
 .logo-band-head .eyebrow {
   justify-content: center;
+  font-size: clamp(0.85rem, 1vw, 0.95rem);
+  letter-spacing: 0.1em;
 }
 .logo-band-title {
   margin: 10px 0 0;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
-  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+  font-size: clamp(1.45rem, 2.3vw, 2.2rem);
   line-height: 1.25;
-  letter-spacing: -0.01em;
   color: var(--teal);
 }
 .logo-band-title mark,
@@ -2138,12 +2136,11 @@ html.is-marqueeing * {
 }
 .manifesto-text {
   margin-top: 0;
-  font-family: var(--f-display);
-  font-variation-settings: "SOFT" 100, "opsz" 72;
-  font-weight: 350;
+  font-family: var(--f-sans);
+  font-weight: 400;
   font-size: clamp(1.53rem, 3.23vw, 3.23rem);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: var(--teal);
   max-width: 25ch;
 }
@@ -2161,6 +2158,9 @@ html.is-marqueeing * {
   text-indent: 0;
 }
 .manifesto-text em {
+  font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
+  font-style: italic;
   color: var(--accent-ink);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72;
 }
@@ -2263,7 +2263,7 @@ html.is-marqueeing * {
   background: var(--soft-gold);
   padding: 4px 18px 8px;
   border-radius: 12px;
-  transform: rotate(6deg);
+  transform: none;
   box-shadow: var(--shadow);
   white-space: nowrap;
 }
@@ -2325,9 +2325,9 @@ html.is-marqueeing * {
 }
 .pc-big {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: 4.6cqw;
   line-height: 1.1;
-  letter-spacing: -0.03em;
   color: var(--teal);
   font-variation-settings: "SOFT" 100;
 }
@@ -2441,6 +2441,7 @@ html.is-marqueeing * {
 }
 .pc-float--d b {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: 5cqw;
   line-height: 1;
   color: var(--teal);
@@ -2532,6 +2533,7 @@ html.is-marqueeing * {
 }
 .pc-tile--type b {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-size: 12cqw;
   line-height: 0.9;
@@ -2741,19 +2743,19 @@ html.is-marqueeing * {
 }
 .wcard-num {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-size: 3.4rem;
   line-height: 0.85;
-  letter-spacing: -0.04em;
   color: var(--neon);
 }
 .wcard-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100;
   font-weight: 400;
   font-size: clamp(1.5rem, 2.4vw, 2.2rem);
   line-height: 1.05;
-  letter-spacing: -0.02em;
   color: var(--teal);
 }
 .wcard-meta {
@@ -2821,6 +2823,7 @@ html.is-marqueeing * {
 }
 .work-all span {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-size: 2rem;
   line-height: 1;
@@ -2869,7 +2872,7 @@ html.is-marqueeing * {
 .pin-hint {
   font-size: 1.7rem;
   color: var(--deep-aqua);
-  transform: rotate(-3deg);
+  transform: none;
 }
 .board {
   position: relative;
@@ -2909,17 +2912,18 @@ html.is-marqueeing * {
 }
 .note-num {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   color: var(--teal);
   font-size: 1.1rem;
 }
 .note h3 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-weight: 500;
   font-size: 1.9rem;
   line-height: 1.05;
-  letter-spacing: -0.02em;
   color: var(--teal);
   margin: 6px 0 10px;
 }
@@ -2933,7 +2937,7 @@ html.is-marqueeing * {
   bottom: 0;
   font-size: 1.5rem;
   color: var(--muted);
-  transform: rotate(-2deg);
+  transform: none;
 }
 
 /* ---------- experience ---------- */
@@ -2976,11 +2980,11 @@ html.is-marqueeing * {
 }
 .exp-role {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100;
   font-size: clamp(1.4rem, 2.6vw, 2.2rem);
   line-height: 1.1;
   color: var(--teal);
-  letter-spacing: -0.02em;
   transition: transform 0.6s var(--ease), color 0.3s;
 }
 .exp-row:hover .exp-role {
@@ -3020,10 +3024,10 @@ html.is-marqueeing * {
 }
 .footer-title {
   font-family: var(--f-aubrey);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
   font-size: clamp(2rem, 5.7vw, 5.4rem);
   line-height: 1.05;
-  letter-spacing: -0.01em;
   color: var(--canvas);
   white-space: nowrap;
   width: 100%;
@@ -3031,6 +3035,10 @@ html.is-marqueeing * {
 .footer-title em {
   color: var(--gold);
   font-style: normal;
+}
+.footer-end-wrap {
+  position: relative;
+  display: inline-block;
 }
 .footer-smile {
   display: inline-block;
@@ -3041,7 +3049,102 @@ html.is-marqueeing * {
 }
 .footer-reach {
   display: block;
-  margin-top: clamp(24px, 3vw, 36px);
+  margin-top: clamp(38px, 4vw, 52px);
+}
+
+/* round back-to-top: a neon disc with an up arrow, centred on the footer's divider line at the right;
+   on hover "BACK TO TOP" spins round it */
+.footer-grid {
+  position: relative;
+}
+.footer-grid .to-top-orb {
+  --orb: clamp(104px, 9vw, 132px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  translate: 0 -50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--orb);
+  height: var(--orb);
+  border-radius: 50%;
+  color: var(--light-aqua);
+  -webkit-tap-highlight-color: transparent;
+}
+.to-top-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  opacity: 0;
+  scale: 0.72;
+  transition: opacity 0.35s var(--ease), scale 0.5s var(--ease);
+}
+.to-top-ring text {
+  fill: currentColor;
+  font-family: var(--f-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.to-top-core {
+  display: grid;
+  place-items: center;
+  width: 52%;
+  height: 52%;
+  border-radius: 50%;
+  background: var(--neon);
+  color: var(--teal-0);
+  box-shadow: 0 0 0 0 rgba(199, 219, 10, 0.45);
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.to-top-core svg {
+  width: 44%;
+  height: 44%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.45s var(--ease);
+}
+.footer-grid .to-top-orb:hover {
+  transform: none; /* footer links nudge right on hover; the button stays put */
+}
+.to-top-orb:hover .to-top-ring,
+.to-top-orb:focus-visible .to-top-ring {
+  opacity: 1;
+  scale: 1;
+}
+.to-top-orb:hover .to-top-core,
+.to-top-orb:focus-visible .to-top-core {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 10px rgba(199, 219, 10, 0.12);
+}
+.to-top-orb:hover .to-top-core svg {
+  transform: translateY(-3px);
+}
+.to-top-orb:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .to-top-orb:hover .to-top-ring,
+  .to-top-orb:focus-visible .to-top-ring {
+    animation: to-top-spin 9s linear infinite;
+  }
+}
+@keyframes to-top-spin {
+  to { rotate: 360deg; }
+}
+/* touch screens have no hover: show the ring, still */
+@media (hover: none) {
+  .to-top-ring {
+    opacity: 1;
+    scale: 1;
+  }
 }
 .footer-reach .footer-lede {
   margin-top: 0;
@@ -3100,12 +3203,12 @@ html.is-marqueeing * {
 }
 .footer-hand {
   position: absolute;
-  right: clamp(4px, 1.5vw, 24px);
-  top: -1.3em;
+  right: 0;
+  top: calc(100% + 4px);
   font-family: var(--f-hand);
   font-size: clamp(1.1rem, 1.5vw, 1.45rem);
   color: var(--pearl);
-  transform: rotate(-5deg);
+  transform: none;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -3115,9 +3218,9 @@ html.is-marqueeing * {
 }
 .copy-email-addr {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: clamp(1.4rem, 3vw, 2.4rem);
   color: var(--canvas);
-  letter-spacing: -0.02em;
   background: linear-gradient(var(--gold), var(--gold)) 0 100% / 0 2px no-repeat;
   transition: background-size 0.6s var(--ease);
   line-height: 1.25;
@@ -3231,11 +3334,11 @@ html.is-marqueeing * {
 }
 .page-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 400;
   font-size: clamp(3.6rem, 13vw, 12rem);
   line-height: 0.88;
-  letter-spacing: -0.05em;
   color: var(--teal);
   margin-top: 16px;
 }
@@ -3267,7 +3370,7 @@ html.is-marqueeing * {
   bottom: 0;
   font-size: 1.6rem;
   color: var(--burnt);
-  transform: rotate(-4deg);
+  transform: none;
 }
 
 /* ---------- work index ---------- */
@@ -3291,7 +3394,7 @@ html.is-marqueeing * {
   padding-top: 0;
 }
 .case-hero {
-  background: var(--wash);
+  background: var(--aqua-wash);
   padding: clamp(84px, 8vw, 108px) var(--g) clamp(36px, 4.5vw, 56px);
   position: relative;
   border-radius: 0 0 clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px);
@@ -3327,25 +3430,26 @@ html.is-marqueeing * {
   font-weight: 500;
   letter-spacing: 0.01em;
   font-size: 0.85rem;
+  color: var(--deep-aqua);
 }
 .case-hero-top--plain {
   grid-template-columns: 1fr;
 }
 .case-num {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-size: clamp(5rem, 14vw, 13rem);
   line-height: 0.75;
   color: var(--spark);
-  letter-spacing: -0.06em;
 }
 .case-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 400;
   font-size: clamp(2.4rem, 5.8vw, 5.8rem);
   line-height: 1.02;
-  letter-spacing: -0.04em;
   color: var(--teal);
   margin-top: 14px;
   max-width: 100%;
@@ -3370,7 +3474,7 @@ html.is-marqueeing * {
   font-size: 1.6rem;
   font-weight: 600;
   letter-spacing: 0;
-  transform: rotate(6deg);
+  transform: none;
   padding: 6px 20px 10px;
 }
 .case-meta {
@@ -3434,18 +3538,18 @@ html.is-marqueeing * {
 }
 .case-label span {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-size: 2rem;
   color: var(--spark);
-  letter-spacing: -0.03em;
 }
 .case-lead {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "opsz" 48;
   font-weight: 350;
   font-size: clamp(1.4rem, 2.6vw, 2.25rem);
   line-height: 1.3;
-  letter-spacing: -0.015em;
   color: var(--ink);
 }
 .case-insight {
@@ -3488,6 +3592,7 @@ html.is-marqueeing * {
 }
 .process-k {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-size: 1.8rem;
   color: var(--teal);
@@ -3518,10 +3623,10 @@ html.is-marqueeing * {
 }
 .stat-val {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "opsz" 144;
   font-size: clamp(3rem, 7vw, 6rem);
   line-height: 1;
-  letter-spacing: -0.04em;
   color: var(--gold);
   font-variant-numeric: tabular-nums;
 }
@@ -3557,6 +3662,7 @@ html.is-marqueeing * {
 }
 .quote-mark {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: clamp(8rem, 18vw, 16rem);
   line-height: 0.6;
   color: var(--spark);
@@ -3565,12 +3671,12 @@ html.is-marqueeing * {
 }
 .case-quote p {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72;
   font-style: italic;
   font-weight: 350;
   font-size: clamp(1.7rem, 3.6vw, 3.2rem);
   line-height: 1.18;
-  letter-spacing: -0.02em;
   color: var(--teal);
 }
 .case-quote cite {
@@ -3605,10 +3711,10 @@ html.is-marqueeing * {
 }
 .case-next-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-size: clamp(2.6rem, 8vw, 7.5rem);
   line-height: 0.95;
-  letter-spacing: -0.045em;
   color: var(--teal);
   max-width: 14ch;
 }
@@ -3637,10 +3743,16 @@ html.is-marqueeing * {
 .about-title {
   position: relative;
   font-size: clamp(3.6rem, 10.5vw, 10rem);
+  line-height: 1.06;
+  letter-spacing: var(--aubrey-tracking);
+  word-spacing: 0.08em;
 }
 .about-title-line {
   display: block;
   white-space: nowrap;
+}
+.about-title-line + .about-title-line {
+  margin-top: 0.08em;
 }
 .about-title em {
   font-style: italic;
@@ -3777,7 +3889,7 @@ html.is-marqueeing * {
   margin-top: 26px;
   font-size: 1.6rem;
   color: var(--burnt);
-  transform: rotate(-2deg);
+  transform: none;
 }
 
 /* portrait: a teal arch with her head popping out of the top */
@@ -3863,7 +3975,7 @@ html.is-marqueeing * {
   top: 24%;
   z-index: 3;
   color: var(--teal);
-  transform: rotate(-6deg);
+  transform: none;
   pointer-events: none;
   display: flex;
   flex-direction: column;
@@ -3908,11 +4020,11 @@ html.is-marqueeing * {
 }
 .story-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
   font-weight: 400;
   font-size: clamp(2rem, 3.8vw, 3.6rem);
   line-height: 1.02;
-  letter-spacing: -0.03em;
   color: var(--teal);
   margin-top: 0;
   text-wrap: balance;
@@ -3944,12 +4056,12 @@ html.is-marqueeing * {
 .story-stat--4 { --tint: var(--pap-wash); --rot: -1deg; }
 .story-stat b {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(2rem, 3vw, 2.6rem);
   line-height: 1;
   color: var(--teal);
-  letter-spacing: -0.02em;
 }
 .story-stat--4 b {
   color: var(--deep-pap);
@@ -3974,11 +4086,11 @@ html.is-marqueeing * {
 }
 .story-body p:first-child {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "opsz" 72;
   font-weight: 350;
   font-size: clamp(1.35rem, 2.1vw, 1.85rem);
   line-height: 1.38;
-  letter-spacing: -0.01em;
   color: var(--teal);
 }
 .story-body em {
@@ -3991,13 +4103,14 @@ html.is-marqueeing * {
   white-space: nowrap;
 }
 .story-body p:first-child em {
-  font-size: 1.1em;
+  font-size: 0.99em; /* "(Yes, really.)": 10% smaller than the 1.1em it used to be */
 }
 .story-body p:last-child:not(:first-child) {
   margin-top: 2em;
   padding-top: 1.6em;
   border-top: 1.5px dashed var(--line);
   color: var(--muted);
+  font-family: var(--f-hand); /* the "Off the screen" note is handwritten throughout */
 }
 
 /* ---- story: hover-peek names ---- */
@@ -4060,6 +4173,7 @@ html.is-marqueeing * {
   padding: 16px;
   text-align: center;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: 1.6rem;
   line-height: 1.1;
   color: var(--accent-ink);
@@ -4152,28 +4266,32 @@ html.is-marqueeing * {
   rotate: -0.6deg;
 }
 .notepad-tag {
-  font-size: 1.4rem;
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1.2;
   color: var(--deep-pap);
 }
 .notepad-steps h3 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 400;
   font-size: clamp(2.4rem, 4vw, 3.6rem);
   line-height: 1;
-  letter-spacing: -0.03em;
   color: var(--teal);
   margin: 4px 0 18px;
 }
 .notepad-stickies {
   position: relative;
-  padding-top: 12px;
+  padding-top: 0;
 }
 .notepad-stickies-label {
+  display: block;
   font-size: 1.35rem;
+  line-height: 1.2;
   color: var(--burnt);
-  rotate: -3deg;
-  margin-bottom: 14px;
+  rotate: 0deg;
+  margin: 0 0 14px 0;
 }
 .notepad-stickies ul {
   list-style: none;
@@ -4211,6 +4329,7 @@ html.is-marqueeing * {
 .sticky b {
   display: block;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-weight: 500;
   font-size: 1.35rem;
@@ -4234,18 +4353,20 @@ html.is-marqueeing * {
   padding: 16px 0;
 }
 .process-n {
-  font-family: var(--f-hand);
-  font-weight: 600;
+  font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  font-weight: 400;
   font-size: clamp(1.8rem, 2.4vw, 2.3rem);
   line-height: 1;
   color: var(--accent-text);
 }
 .process-steps b {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-weight: 500;
   font-size: clamp(1.25rem, 1.6vw, 1.5rem);
-  letter-spacing: -0.01em;
   color: var(--teal);
 }
 .process-steps p {
@@ -4271,6 +4392,7 @@ html.is-marqueeing * {
   padding: 12px 22px;
   border-radius: 999px;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100;
   font-size: clamp(1.1rem, 2vw, 1.6rem);
   color: var(--ink);
@@ -4436,6 +4558,7 @@ html.is-marqueeing * {
 }
 .form-done h2 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-weight: 400;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
@@ -4666,6 +4789,24 @@ html.is-marqueeing * {
   --cap: #17708a;
   --cap-hi: #3f9ab0;
   --cap-lo: #07404d;
+  --glyph: #ffffff;
+}
+.ckey--teal .ckey-top {
+  color: #ffffff;
+}
+.ckey--teal .ckey-top svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)) drop-shadow(0 -0.5px 0 rgba(255, 255, 255, 0.25));
+}
+.ckey--teal .ckey-engraved {
+  color: #ffffff;
+  opacity: 0.75;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.ckey--teal .ckey-btn:hover .ckey-engraved {
+  opacity: 1;
+}
+.ckey--teal .ckey-btn:focus-visible {
+  outline-color: #17708a;
 }
 .ckey--aqua .ckey-cap {
   --cap: var(--soft-pap);
@@ -4756,6 +4897,14 @@ html.is-marqueeing * {
   --cap-lo: #9aab00;
   --glyph: var(--teal-0);
 }
+.ckey--gold .ckey-engraved {
+  color: #ffffff;
+  opacity: 0.85;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.ckey--gold .ckey-btn:hover .ckey-engraved {
+  opacity: 1;
+}
 
 /* handwritten notes */
 .ckey-note {
@@ -4790,10 +4939,10 @@ html.is-marqueeing * {
   flex-direction: column-reverse;
 }
 .ckey:nth-child(3n) .ckey-note {
-  rotate: -2deg;
+  rotate: 0deg;
 }
 .ckey:nth-child(3n + 1) .ckey-note {
-  rotate: 1.5deg;
+  rotate: 0deg;
 }
 
 @media (max-width: 1100px) {
@@ -4843,11 +4992,11 @@ html.is-marqueeing * {
 }
 .nf-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 400;
   font-size: clamp(6rem, 22vw, 18rem);
   line-height: 0.85;
-  letter-spacing: -0.06em;
   color: var(--teal);
 }
 .nf-title em {
@@ -4859,7 +5008,7 @@ html.is-marqueeing * {
 .nf-hand {
   font-size: 1.5rem;
   color: var(--burnt);
-  transform: rotate(-3deg);
+  transform: none;
 }
 
 /* ---------- breadcrumbs (removed) ---------- */
@@ -5150,11 +5299,11 @@ a:hover .media-icon {
 }
 .hat h3 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1;
   font-weight: 500;
   font-size: 1.7rem;
   line-height: 1.05;
-  letter-spacing: -0.02em;
   margin: 4px 0 14px;
 }
 .hat li {
@@ -5223,8 +5372,7 @@ a:hover .media-icon {
   font-family: var(--f-hand);
   font-size: clamp(1.25rem, 1.8vw, 1.55rem);
   color: var(--burnt);
-  transform: rotate(-2deg);
-  transform-origin: left bottom;
+  transform: none;
   margin: 0 0 6px 2px;
   display: block;
 }
@@ -5279,9 +5427,7 @@ a:hover .media-icon {
 }
 .gcard-cap {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
+  flex-direction: column;
   padding: 16px 8px 0;
 }
 .gcard-cat {
@@ -5305,11 +5451,11 @@ a:hover .media-icon {
 }
 .gcard-title {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100;
   font-weight: 400;
   font-size: clamp(1.25rem, 1.8vw, 1.75rem);
   line-height: 1.08;
-  letter-spacing: -0.02em;
   color: var(--teal);
   margin-top: 4px;
 }
@@ -5328,6 +5474,8 @@ a:hover .media-icon {
   font-size: 0.8rem;
   color: var(--muted);
   white-space: nowrap;
+  align-self: flex-end;
+  margin-top: 6px;
 }
 .gcard-note {
   position: absolute;
@@ -5396,6 +5544,7 @@ a:hover .media-icon {
 }
 .reels-head h2 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-weight: 400;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   color: var(--teal);
@@ -5509,11 +5658,11 @@ a:hover .media-icon {
 }
 .hat-big h3 {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 400;
   font-size: clamp(2.2rem, 4.4vw, 3.8rem);
   line-height: 0.95;
-  letter-spacing: -0.035em;
 }
 .hat-big ol {
   display: grid;
@@ -5535,6 +5684,7 @@ a:hover .media-icon {
 }
 .hat-n {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-style: italic;
   opacity: 0.7;
 }
@@ -5573,6 +5723,7 @@ a:hover .media-icon {
   display: grid;
   place-items: center;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: 2.6rem;
   border: 1.5px solid var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
@@ -5620,7 +5771,7 @@ a:hover .media-icon {
   letter-spacing: 0;
   text-transform: none;
   color: var(--accent-text);
-  rotate: -2deg;
+  rotate: 0deg;
 }
 .toolkit--ai .toolkit-title {
   color: var(--accent-text);
@@ -5682,7 +5833,7 @@ a:hover .media-icon {
   padding: 2px 7px 3px;
   border-radius: 999px;
   border: 1px solid var(--soft-gold);
-  rotate: 6deg;
+  rotate: 0deg;
   white-space: nowrap;
 }
 
@@ -5921,7 +6072,7 @@ a:hover .media-icon {
   }
   .section-hand {
     display: block;
-    transform: rotate(-3deg);
+    transform: none;
     margin: 8px 0 0;
   }
   .work-field {
@@ -5973,12 +6124,6 @@ a:hover .media-icon {
   .footer-title {
     white-space: normal;
   }
-  .footer-hand {
-    position: static;
-    display: inline-block;
-    margin-top: 8px;
-    transform: rotate(-3deg);
-  }
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px 20px;
@@ -6029,8 +6174,7 @@ a:hover .media-icon {
   color: var(--neon);
   line-height: 1;
   letter-spacing: -0.01em;
-  transform: rotate(-1.5deg);
-  transform-origin: left bottom;
+  transform: none;
 }
 .testimonials-head .section-title {
   margin-top: 6px;
@@ -6081,6 +6225,7 @@ a:hover .media-icon {
 .testi-mark {
   display: block;
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-size: 6.2rem;
   line-height: 0.65;
   height: 0.52em;
@@ -6109,12 +6254,12 @@ a:hover .media-icon {
 }
 .testi-name {
   font-family: var(--f-display);
+  letter-spacing: var(--aubrey-tracking);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 72;
   font-style: italic;
   font-weight: 400;
   font-size: 1.48rem;
   line-height: 1.1;
-  letter-spacing: -0.01em;
   color: var(--teal);
 }
 .testi-role {
@@ -6318,6 +6463,12 @@ a:hover .media-icon {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px 20px;
   }
+  .footer-grid .to-top-orb {
+    --orb: 72px;
+  }
+  .footer:not(.footer--contact) .footer-grid {
+    padding-top: 52px; /* labels start below the button's lower half */
+  }
   .footer-bottom {
     flex-direction: column;
     align-items: flex-start;
@@ -6330,7 +6481,7 @@ a:hover .media-icon {
   left: -16%;
   right: auto;
   top: 4%;
-  transform: rotate(-4deg);
+  transform: none;
   align-items: flex-start;
 }
 .about-hair-text {
@@ -6431,7 +6582,7 @@ a:hover .media-icon {
   top: 17%;
   right: auto;
   z-index: 4;
-  transform: rotate(-4deg);
+  transform: none;
 }
 .about-hair-note .about-hair-text {
   display: inline-block;
@@ -6531,7 +6682,7 @@ a:hover .media-icon {
 }
 .page.contact .contact-head-text {
   display: grid;
-  grid-template-columns: minmax(0, 44ch);
+  grid-template-columns: minmax(0, 78ch);
   justify-content: center;
   justify-items: center;
   text-align: center;
@@ -6542,8 +6693,17 @@ a:hover .media-icon {
   margin: 0 0 clamp(16px, 2.4vw, 36px);
   font-size: clamp(84px, 11vw, 190px);
   line-height: 0.82;
+  letter-spacing: var(--aubrey-tracking);
   white-space: nowrap;
   color: var(--mist);
+}
+.page.contact .contact-title em {
+  font-style: normal;
+  letter-spacing: var(--aubrey-tracking);
+  margin-left: 0.06em;
+}
+.page.contact .contact-title .contact-wave {
+  margin-left: clamp(12px, 1.2vw, 22px);
 }
 .page.contact .page-lede {
   margin: 0;
@@ -6602,7 +6762,7 @@ a:hover .media-icon {
     padding-top: clamp(100px, 15vw, 136px);
   }
   .page.contact .contact-head-text {
-    grid-template-columns: minmax(0, 40ch);
+    grid-template-columns: minmax(0, 72ch);
   }
   .page.contact .contact-title {
     font-size: clamp(72px, 18vw, 140px);
@@ -6638,7 +6798,7 @@ a:hover .media-icon {
   .hero-intro-lead { font-size: 1.3rem; line-height: 1.2; }
   .hero-intro-stats { font-size: 0.85rem; }
 
-  .logo-band-title { font-size: 1.15rem; }
+  .logo-band-title { font-size: 1.35rem; }
 
   /* manifesto: drop the floating badge/line/sticker so the text breathes */
   .mf-side-wrap { display: none; }
@@ -6662,3 +6822,34 @@ a:hover .media-icon {
   .about-hair-note .about-hair-text { font-size: clamp(1rem, 4.2vw, 1.3rem); }
   .about-hair-note .about-hair-arrow { width: clamp(56px, 14vw, 88px); margin-left: clamp(48px, 13vw, 80px); }
 }
+
+/* ---------- footer: sign-off and link columns centred ---------- */
+.footer-top {
+  text-align: center;
+}
+.footer-grid > div,
+.footer-grid > nav {
+  justify-items: center;
+  text-align: center;
+}
+.footer-grid a:hover {
+  transform: translateY(-2px);
+}
+@media (max-width: 760px) {
+  .footer-grid > :last-child {
+    grid-column: 1 / -1; /* the third column wraps onto its own row, centred under the other two */
+  }
+}
+
+/* footer: the contact keycaps under the closing line, compact, no notes */
+.footer-keys { display: flex; justify-content: center; margin-top: clamp(20px, 2.5vw, 36px); }
+.footer-keys .ckeys { margin: 0; padding: 0; }
+.footer-keys .ckeys-row { gap: clamp(14px, 2.2vw, 32px); }
+.footer-keys .ckey-note { display: none; }
+.footer-keys .ckey-btn { --size: clamp(64px, 5.6vw, 84px); }
+.footer-keys .ckey { flex-direction: row; }
+@media (max-width: 760px) {
+  .footer-keys .ckeys-row { display: flex; flex-wrap: nowrap; justify-content: center; gap: 14px; }
+  .footer-keys .ckey-btn { --size: 64px; }
+}
+.footer-keys { margin-top: clamp(48px, 5.6vw, 80px); }

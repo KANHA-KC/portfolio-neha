@@ -1,8 +1,8 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
-import Marquee from "@/components/Marquee";
 import Experience from "@/components/home/Experience";
 import HoverPeek from "@/components/HoverPeek";
 import { peekImage, peekSlug } from "@/lib/peek";
@@ -29,20 +29,25 @@ function tidyTypography(text) {
 }
 
 // "*word*" in CMS copy → handwritten accent. "[[Name]]" or "[[Name|slug]]" → hover photo from /public/story/<slug>.*
-const rich = (text) =>
-  tidyTypography(
-    String(text)
-      .replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]")
-  )
-    .split(/(\*[^*]+\*|\[\[[^\]]+\]\])/)
-    .map((part, i) => {
-      if (part.startsWith("[[") && part.endsWith("]]")) {
-        const [label, slug] = part.slice(2, -2).split("|").map((x) => x.trim());
-        const imageSrc = peekImage(slug || peekSlug(label));
-        return <HoverPeek key={i} src={imageSrc} alt={label}>{label}</HoverPeek>;
-      }
-      return part.length > 2 && part.startsWith("*") && part.endsWith("*") ? <em key={i}>{part.slice(1, -1)}</em> : part;
-    });
+const rich = (text) => {
+  const str = String(text).replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[$1]]");
+  const lines = str.split("\n");
+  return lines.map((line, lineIndex) => (
+    <Fragment key={lineIndex}>
+      {lineIndex > 0 && <br />}
+      {tidyTypography(line)
+        .split(/(\*[^*]+\*|\[\[[^\]]+\]\])/)
+        .map((part, i) => {
+          if (part.startsWith("[[") && part.endsWith("]]")) {
+            const [label, slug] = part.slice(2, -2).split("|").map((x) => x.trim());
+            const imageSrc = peekImage(slug || peekSlug(label));
+            return <HoverPeek key={i} src={imageSrc} alt={label}>{label}</HoverPeek>;
+          }
+          return part.length > 2 && part.startsWith("*") && part.endsWith("*") ? <em key={i}>{part.slice(1, -1)}</em> : part;
+        })}
+    </Fragment>
+  ));
+};
 
 // Logos in /public/tools, named by slug ("Kling AI" → kling-ai.svg). Unknown tools get an initial.
 const TOOL_LOGOS = new Set(["photoshop", "illustrator", "indesign", "figma", "wix-com", "claude", "chatgpt", "recraft", "kling-ai", "leonardo-ai", "midjourney", "adobe-firefly", "gemini"]);
@@ -250,32 +255,6 @@ export default async function AboutPage() {
           </Reveal>
         </section>
       )}
-
-      <div className="about-banner-marquee tilt-band" aria-hidden="true">
-        <div className="top-banner-marquee">
-          <div className="top-banner-track">
-            {[0, 1, 2, 3].map((setIndex) => (
-              <div key={setIndex} className="top-banner-row">
-                {(profile.marquee?.length ? profile.marquee : [
-                  "Logo Design",
-                  "Brand Identity",
-                  "Corporate Collateral",
-                  "Social Media Graphics",
-                  "Print & Digital Media",
-                  "Packaging & Labels",
-                  "Presentation Design",
-                  "Signage & Spatial Visuals"
-                ]).map((item, idx) => (
-                  <span key={idx} className="top-banner-item">
-                    <span className="top-banner-text">{item}</span>
-                    <span className="top-banner-dot" aria-hidden="true">·</span>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* ---- toolbox ---- */}
       <section className="desk" aria-label="Tools">

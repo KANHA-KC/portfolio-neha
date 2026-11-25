@@ -38,28 +38,20 @@ export default function SelectedWork({ projects, categories }) {
       </header>
 
       <div className="work-field">
-        {projects.map((p, i) => {
+        {projects.map((p) => {
           return (
             <article key={p.slug} className={`wcard wcard--${p.kind}`}>
-              <Link href={`/work/${p.slug}`} className="wcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
-                <div className="wcard-media">
-                  <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
-                </div>
-                <div className="wcard-body">
-                  <span className="wcard-num" style={{ color: "var(--neon)" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <p className="wcard-cat">
-                      {p.sector || p.categoryTitle}
-                    </p>
-                    <h3 className="wcard-title">{p.title}</h3>
-                    {p.workedOn && <p className="wcard-work">{p.workedOn}</p>}
-                    <p className="wcard-meta">
-                      {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
-                    </p>
-                  </div>
-                  <span className="wcard-arrow" aria-hidden="true">↗</span>
+              <Link href={`/work/${p.slug}`} className="gcard-inner" data-cursor={p.kind === "case-study" ? "read case" : "view"}>
+                <ProjectVisual project={p} card aspect="landscape" sizes="(max-width: 900px) 100vw, 45vw" />
+                <div className="gcard-cap">
+                  <p className="gcard-cat">
+                    {p.sector || p.categoryTitle}
+                    {p.kind === "case-study" && <span className="gcard-badge">Case study</span>}
+                  </p>
+                  <h3 className="gcard-title">{p.title}</h3>
+                  <p className="gcard-meta">
+                    {[p.client !== p.title ? p.client : null, p.projectType, p.year].filter(Boolean).join(" · ")}
+                  </p>
                 </div>
               </Link>
             </article>
@@ -67,7 +59,6 @@ export default function SelectedWork({ projects, categories }) {
         })}
         <Link href="/work" className="work-all" data-cursor="all work">
           <span>All work</span>
-          <small>{categories.reduce((n, c) => n + c.count, 0)} projects</small>
         </Link>
       </div>
     </section>

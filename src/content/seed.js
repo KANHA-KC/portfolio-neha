@@ -13,22 +13,22 @@ export const profile = {
   heroIntro:
     "Hi 👋, I am Neha Ondhia.\nA fashion designer turned self learnt graphic designer. I’ve worked with major Indian and global brands in the last 6years.\nI love everything fun, quirky and bright. I am not a minimal design person.",
   manifesto:
-    "Good design looks good. Great design *tells a story*.\n\nPeople remember how it made them *feel*.",
+    "Good design looks good. Great design *tells a story*.\n\nPeople remember how it made\nthem *feel*.",
   intro:
-    "A self-taught illustrator and brand designer based in Mumbai. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
+    "A self-taught illustrator and brand designer based in India. Agency-sharpened and designing since before AI, I work across illustration, brand identity, and graphic design to give ideas a distinct personality and bring brands to life.",
   bio: [
     "I started out as an interaction designer, obsessing over the tiny moments between taps. Somewhere along the way I fell for both sides of the craft: the messy, human research — and the quiet precision of a well-drawn logo.",
     "Today I lead projects end to end: framing problems with stakeholders, running research, prototyping, and building the design systems and brand guidelines that keep it all consistent.",
     "Outside of work you’ll find me hunting for hand-lettered shop signs, filling notebooks with diagrams nobody asked for, and mentoring younger designers who are just finding their voice."
   ],
   // About page story. Wrap words in *asterisks* to set them in the handwritten accent.
-  storyTitle: "I came to design through *clothes*.",
+  storyTitle: "I came to design\nthrough *clothes*.",
   story: [
     "I studied fashion design in [[Mumbai]] (2015 to 2019). Afterwards I designed formal menswear at Bellani S for high-end clients, including the late [[Mr. Ratan Tata]]. Another client was a groom’s [[Shih Tzu]], who needed the same outfits as his owner, so I made a sherwani and a two-piece suit for a [[dog]]. *(Yes, really.)*",
     "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.",
     "Over the last five years, I’ve designed for brands like HDFC Life, Amazon, Airtel Business, and Salesforce across agencies including The Social Lions, Schbang, and Webenza. At Webenza, I grew to Senior Graphic Designer over four years — producing around 120 creatives a month, mentoring junior designers, and stepping in as art director. Alongside agency work, I also ran my own design studio, The Design Bar, from 2020 to 2023.",
     "I’ve been designing since before the wave of AI. Today I use it daily to accelerate research and mockups, while the visual thinking, taste, and craft remain entirely mine.",
-    "*Off the screen:* 10K and [[half marathons]] in Bangalore and Kolkata, travel, chai, and anything that gets my hands dirty."
+    "*Off the screen:* 10K and [[half marathons]], travel, chai, and anything that gets my hands dirty."
   ],
   storyStats: ["5+ | years in agencies", "~120 | creatives a month", "3 | junior designers trained", "1 | dog in a sherwani"],
   workWith: [
@@ -282,7 +282,7 @@ export const projects = [
       "Modern creatives for an NRI audience, indirect in their imagery, with typography doing much of the work.",
     workedOn:
       "Social media collateral for a financial services firm.",
-    gallery: shots("lighthouse-canton", ["2.jpg", "Social carousel creatives"], ["3.jpg", "Website"], ["4.jpg", "Business cards"])
+    gallery: shots("lighthouse-canton", ["2.jpg", "Social carousel creatives"], ["3.jpg", "Pitch deck"], ["4.jpg", "Business cards"])
   },
   {
     slug: "unhumble",

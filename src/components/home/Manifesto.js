@@ -84,7 +84,7 @@ export default function Manifesto({ text }) {
           </p>
           <h2 id="brands-heading" className="logo-band-title">
             <span className="sr-only">Brands I’ve worked on, </span>
-            through <mark className="logo-band-highlight">Schbang, Webenza</mark> &amp; freelance.
+            through <mark className="logo-band-highlight">Schbang, Webenza</mark> &amp; <mark className="logo-band-highlight">freelance</mark>
           </h2>
         </div>
         <BrandLogos />
@@ -117,7 +117,7 @@ export default function Manifesto({ text }) {
                 </defs>
                 <text className="mf-badge-text">
                   <textPath href="#mf-text-path" textLength="455" lengthAdjust="spacing">
-                    Logo Designer - Brand Designer - Marketing -{" "}
+                    Brand - Graphic Designer - Illustrator -{" "}
                   </textPath>
                 </text>
               </svg>

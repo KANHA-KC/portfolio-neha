@@ -163,7 +163,6 @@ export default function Hero({ profile }) {
       </p>
 
       <div className={`hw hw--right hw--name ${name.trim() ? "has-name" : ""}`} data-depth="-16">
-        <span className="hw-cue hand" aria-hidden="true">{name ? "Nice to meet you" : "Type your name"}</span>
         <label htmlFor="hero-name" className="sr-only">Your name</label>
         <input
           ref={field}

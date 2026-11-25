@@ -28,8 +28,7 @@ const ICONS = {
   move:
     '<svg viewBox="0 0 24 24"><path d="M3 2.5v15.2l4-3.8 2.6 6 2.8-1.2-2.6-5.9 5.6-.3Z"/><path d="M17.5 13v8M13.5 17h8M17.5 13l-1.4 1.4M17.5 13l1.4 1.4M17.5 21l-1.4-1.4M17.5 21l1.4-1.4"/></svg>',
   type:
-    // I-beam drawn twice: a thick contrasting halo underneath, the crisp beam on top, so it reads on any colour.
-    '<svg viewBox="0 0 24 24"><path class="tc-halo" d="M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/><path d="M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M12 4.2c-.6-.8-1.6-1.2-2.8-1.2M12 4.2c.6-.8 1.6-1.2 2.8-1.2M12 4.2v15.6M12 19.8c-.6.8-1.6 1.2-2.8 1.2M12 19.8c.6.8 1.6 1.2 2.8 1.2M9.5 12h5"/></svg>',
   zoom:
     '<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6M10 7v6M7 10h6"/></svg>',
   hand:
@@ -278,7 +277,9 @@ export default function Cursor() {
       const hex = current.tool === "eyedropper" ? sample(current.img, e.clientX, e.clientY) : null;
       if (current.tool === "eyedropper" && !hex) current = { tool: state.canvasTool };
       setTool(current.tool);
-      const onDark = Boolean(e.target?.closest?.(".hero, .hero4, .footer, .tilt-band, .nav--on-dark, [data-theme='dark']"));
+      // Bright spots inside dark sections (e.g. the neon back-to-top disc) opt out with data-surface="light".
+      const onDark = Boolean(e.target?.closest?.(".hero, .hero4, .footer, .tilt-band, .nav--on-dark, [data-theme='dark']")) &&
+        !e.target?.closest?.("[data-surface='light']");
       root.classList.toggle("is-on-dark", onDark);
       root.classList.toggle("is-link", Boolean(current.isLink));
       if (current.label) { tip.textContent = current.label; root.classList.add("has-tip"); } else root.classList.remove("has-tip");

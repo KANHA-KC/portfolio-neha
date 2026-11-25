@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import CopyEmail from "@/components/CopyEmail";
 import { categoryPath } from "@/lib/seo";
+import ContactKeys from "@/components/ContactKeys";
 
 export default function Footer({ site, categories = [] }) {
   const pathname = usePathname();
@@ -15,34 +15,49 @@ export default function Footer({ site, categories = [] }) {
         <div className="footer-top">
           <div className="footer-title-row">
             <h2 className="footer-title">
-              That&apos;s the end of the <em>portfolio.</em>
+              That&apos;s the end of the{" "}
+              <span className="footer-end-wrap">
+                <em>portfolio.</em>
+                <span className="hand footer-hand" aria-hidden="true">
+                  (Sad, I know.)
+                </span>
+              </span>
             </h2>
-            <span className="hand footer-hand" aria-hidden="true">
-              (Sad, I know.)
-            </span>
           </div>
           <div className="footer-reach">
             <div className="footer-reach-text">
               <p className="footer-lede">
                 But the conversation doesn’t have to be. If something here caught your eye, let’s talk it over a cup of chai.
               </p>
-              <div className="footer-actions">
-                <div className="footer-book">
-                  <a href={site?.calendly || "https://calendly.com/nehaondhia/chai-chat"} target="_blank" rel="noopener noreferrer" className="btn btn--aqua" data-cursor="book">
-                    Book a chai chat <span aria-hidden="true">↗</span>
-                  </a>
-                  <span className="hand footer-book-note">(20 minutes, no pressure)</span>
-                </div>
-                <div className="footer-write">
-                  <CopyEmail email={site?.email || "neha@nehaondhia.com"} />
-                </div>
-              </div>
+            </div>
+            <div className="footer-keys">
+              <ContactKeys email={site?.email} socials={site?.socials} resume={site?.resume} />
             </div>
           </div>
         </div>
       )}
 
       <div className="footer-grid">
+        {/* Neon up-arrow button sitting on the divider line; "back to top" circles round it on hover */}
+        {!isContact && (
+          <a href="#main" className="to-top-orb" aria-label="Back to top">
+            <svg className="to-top-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <path id="to-top-path" d="M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0" />
+              </defs>
+              <text>
+                <textPath href="#to-top-path" textLength="290" lengthAdjust="spacing">
+                  BACK TO TOP · BACK TO TOP ·
+                </textPath>
+              </text>
+            </svg>
+            <span className="to-top-core" data-surface="light" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" />
+              </svg>
+            </span>
+          </a>
+        )}
         <nav aria-label="Footer">
           <p className="footer-label">Pages</p>
           <Link href="/">Home</Link>
@@ -84,7 +99,8 @@ export default function Footer({ site, categories = [] }) {
       <div className="footer-bottom">
         <span>© 2026 {site?.name || "Neha Ondhia"}.</span>
         <span>Stealing is illegal, hiring is highly encouraged.</span>
-        <a href="#main" className="to-top">Back to top ↗</a>
+        {/* Contact has no footer headline (and so no round button): keep the text link there */}
+        {isContact && <a href="#main" className="to-top">Back to top ↗</a>}
       </div>
     </footer>
   );

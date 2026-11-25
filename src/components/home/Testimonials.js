@@ -37,7 +37,6 @@ export default function Testimonials({ items = [] }) {
   return (
     <section className="testimonials-section" aria-labelledby="testimonials-title">
       <div className="testimonials-head">
-        <span className="hand testi-tag">Testimonials</span>
         <h2 id="testimonials-title" className="section-title">
           (They said it, <em>not me.</em>)
         </h2>

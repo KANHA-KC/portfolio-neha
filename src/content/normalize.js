@@ -83,9 +83,13 @@ export function normalizeProject(raw, image) {
     brief: str(raw.brief),
     gallery: list(raw.gallery).map((g) => {
       const img = image(g.src ?? g.image, g.description || g.title || g.alt || raw.title);
+      let caption = str(g.title ?? g.caption);
+      if (raw.slug === "lighthouse-canton" && caption.toLowerCase() === "website") {
+        caption = "Pitch deck";
+      }
       return {
         image: img,
-        caption: str(g.title ?? g.caption),
+        caption,
         aspect: aspects[g.aspect] ? g.aspect : aspectFromSize(img) || "landscape",
         // optional layout override: "full" (whole row) or "half" (two per row)
         size: ["full", "half"].includes(g.size) ? g.size : ""
@@ -155,12 +159,17 @@ export function normalizeProfile(raw, image) {
     role: str(raw.role, "Illustrator, Brand and Graphic Designer"),
     headline: str(raw.headline),
     heroIntro: str(raw.heroIntro),
-    manifesto: str(raw.manifesto),
-    intro: str(raw.intro).replace(/^a self-taught/i, "A self-taught"),
+    manifesto: str(raw.manifesto)
+      .replace(/People remember how it(?:\s+|\n)made\s+them/gi, "People remember how it made\nthem"),
+    intro: str(raw.intro)
+      .replace(/^a self-taught/i, "A self-taught")
+      .replace(/based in Mumbai/gi, "based in India"),
     bio: list(raw.bio),
-    storyTitle: str(raw.storyTitle),
+    storyTitle: str(raw.storyTitle)
+      .replace(/I came to\s+design\s+through/gi, "I came to design\nthrough"),
     story: list(raw.story).map(String).map((para) => {
       let p = para.replace(/(?<!\[\[)\b(half marathons?)\b(?!\]\])/gi, "[[half marathons]]");
+      p = p.replace(/\s*in Bangalore and Kolkata,?\s*/gi, ", ");
       // Map older CMS paragraphs to improved widow-free phrasing if present
       if (p.includes("left everything hanging") && p.includes("2021")) {
         p = "Then Covid hit and put everything on pause. I moved back home and, restless to create, taught myself design software from scratch. Three internships later, I landed my first agency role in 2021.";

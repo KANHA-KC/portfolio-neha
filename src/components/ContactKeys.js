@@ -320,12 +320,12 @@ export default function ContactKeys({ email, socials = [], resume }) {
   const modSymbol = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const keys = [
-    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "projects / collabs /\nchai chats ✿" },
+    { href: `mailto:${email}`, label: "Email", icon: "mail", tone: "mail", shortcut: "M", note: "drop me a line,\nI reply fast" },
     ...socials.map((s) => {
       const meta = SOCIAL_META[s.label.toLowerCase()] ?? { icon: "link", tone: "aqua", shortcut: s.label.charAt(0).toUpperCase(), note: `find me on ${s.label}` };
       return { href: s.href, label: s.label, external: true, ...meta };
     }),
-    ...(resume ? [{ href: resume, label: "Download resume", icon: "download", tone: "gold", download: true, shortcut: "R", note: "download resume /\nATS & AI friendly" }] : [])
+    ...(resume ? [{ href: resume, label: "Download resume", icon: "download", tone: "gold", download: true, shortcut: "R", note: "download resume" }] : [])
   ];
 
   return (

@@ -8,7 +8,7 @@ import TopBanner from "@/components/TopBanner";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 const baseLinks = [
-  { href: "/work", label: "Works" },
+  { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
 ];
