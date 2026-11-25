@@ -278,7 +278,7 @@ export default function Cursor() {
       if (current.tool === "eyedropper" && !hex) current = { tool: state.canvasTool };
       setTool(current.tool);
       // Bright spots inside dark sections (e.g. the neon back-to-top disc) opt out with data-surface="light".
-      const onDark = Boolean(e.target?.closest?.(".hero, .hero4, .footer, .tilt-band, .nav--on-dark, [data-theme='dark']")) &&
+      const onDark = Boolean(e.target?.closest?.(".hero, .hero4, .hero-intro, .case-stats, .menu-overlay, .footer, .tilt-band, .nav--on-dark, [data-theme='dark']")) &&
         !e.target?.closest?.("[data-surface='light']");
       root.classList.toggle("is-on-dark", onDark);
       root.classList.toggle("is-link", Boolean(current.isLink));

@@ -21,7 +21,7 @@ export default function HeroIntro({ profile }) {
         <span><b>20+</b> industries</span>
       </p>
       <div className="hero-intro-actions">
-        <Link href="/work" className="btn btn--aqua" data-cursor="peek">
+        <Link href="/work" className="btn btn--aqua" data-cursor="peek" data-surface="light">
           See the work <span aria-hidden="true">↘</span>
         </Link>
         <a

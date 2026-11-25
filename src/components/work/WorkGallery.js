@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import ProjectVisual from "@/components/ProjectVisual";
-import { gsap, Flip, useGSAP, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, Flip, ScrollTrigger, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 
 // The active filter lives in the URL hash (#type=branding) so filtered views can be shared and linked to.
 const subscribe = (cb) => {
@@ -20,7 +20,12 @@ export default function WorkGallery({ projects, categories, showFilters = true }
   const visible = filter === "all" ? projects : projects.filter((p) => p.category === filter);
 
   const choose = (slug) => {
-    if (!prefersReducedMotion()) flipState.current = Flip.getState(root.current.querySelectorAll(".gcard"));
+    if (!prefersReducedMotion()) {
+      flipState.current = {
+        state: Flip.getState(root.current.querySelectorAll(".gcard")),
+        height: root.current.querySelector(".wall").offsetHeight
+      };
+    }
     const url = slug === "all" ? window.location.pathname : `#type=${slug}`;
     history.replaceState(null, "", url);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -29,7 +34,17 @@ export default function WorkGallery({ projects, categories, showFilters = true }
   // Animate cards from their old spots to the new layout after a filter change.
   useLayoutEffect(() => {
     if (!flipState.current) return;
-    Flip.from(flipState.current, {
+    const { state, height } = flipState.current;
+    const wall = root.current.querySelector(".wall");
+    // Flip lifts the cards out of flow while they move, which would collapse the grid and let the
+    // footer jump up over them. Hold the grid open and ease it from its old height to the new one.
+    const next = wall.offsetHeight;
+    gsap.fromTo(
+      wall,
+      { minHeight: height },
+      { minHeight: next, duration: 0.8, ease: "expo.out", clearProps: "minHeight", onComplete: () => ScrollTrigger.refresh() }
+    );
+    Flip.from(state, {
       duration: 0.8,
       ease: "expo.out",
       stagger: 0.02,
