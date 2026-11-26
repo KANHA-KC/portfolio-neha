@@ -46,24 +46,50 @@ export function normalizeCategory(raw) {
   };
 }
 
+// Short industry labels the CMS may use, shown spelled out on the site.
+const SECTOR_NAMES = { "f&b": "Food & Beverage" };
+const spellOut = (v) => SECTOR_NAMES[String(v).trim().toLowerCase()] || v;
+
+// Editorial fixes that apply even while the Wix item still has the older value.
+const PROJECT_FIXES = {
+  "lighthouse-canton": { year: "2025–2026" },
+  unhumble: { sector: "Toys, Games & Entertainment" },
+  "creamland-and-annn": { year: "2020–Current" },
+  // the second line of the brief starts at "budget-friendly"
+  "the-design-bar": {
+    brief: "There was no brief. I wanted premium-feeling gifts that were customised,\nbudget-friendly and open to everyone.",
+    role: "Founder"
+  }
+};
+// Industry reads "Food and Beverage" on project pages (tags keep the short "&" form).
+const sectorName = (v) => (/^(f&b|food\s*(&|and)\s*beverages?)$/i.test(String(v).trim()) ? "Food and Beverage" : spellOut(v));
+
 export function normalizeProject(raw, image) {
+  const fix = PROJECT_FIXES[str(raw.slug)];
+  if (fix) raw = { ...raw, ...fix };
+  // Twisted Tree is in Coorg, not Ooty: fix every text field even while Wix still says Ooty
+  if (str(raw.slug) === "twisted-tree-homestay") {
+    raw = Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.replace(/\ban Ooty\b/g, "a Coorg").replace(/\bOoty\b/g, "Coorg") : v]));
+  }
   const accent = palettes[raw.accent] ? raw.accent : "teal";
   const kind = raw.kind === "case-study" ? "case-study" : "showcase";
   const feeling = str(raw.feeling || raw.note);
   const slug = str(raw.slug);
+  const title = slug === "sterling" && str(raw.title) === "Sterling" ? "Sterling Holidays" : str(raw.title, "Untitled project");
   const client = slug === "sterling" && str(raw.client) === "Sterling" ? "Sterling Holidays" : str(raw.client);
   const workedOn =
     slug === "sterling"
-      ? str(raw.workedOn).replace(/for a holiday brand\.?/i, "for a hospitality chain.")
+      ? str(raw.workedOn).replace(/for a holiday brand\.?/i, "for a hospitality chain.").replace(/\bAI videos\b/g, "AI Videos")
       : str(raw.workedOn);
   const rawSummary = str(raw.summary || raw.workedOn || raw.brief);
   const summary =
     slug === "sterling"
-      ? rawSummary.replace(/for a holiday brand\.?/i, "for a hospitality chain.")
+      ? rawSummary.replace(/for a holiday brand\.?/i, "for a hospitality chain.").replace(/\bAI videos\b/g, "AI Videos")
       : rawSummary;
   return {
     slug,
-    title: str(raw.title, "Untitled project"),
+    // Sterling's full name is the title everywhere (cards, case study, SEO), even while Wix still says "Sterling"
+    title,
     kind,
     category: str(raw.category),
     featured: bool(raw.featured),
@@ -74,26 +100,28 @@ export function normalizeProject(raw, image) {
     role: str(raw.role),
     projectType: str(raw.projectType),
     cardName: str(raw.cardName),
-    sector: str(raw.sector),
+    // UnHumble is a card game, so it reads as Games & Entertainment even while Wix says Gifting
+    sector: slug === "unhumble" && /^gifting$/i.test(str(raw.sector)) ? "Toys, Games & Entertainment" : sectorName(str(raw.sector)),
     workedOn,
     feeling,
     platform: str(raw.platform),
     summary,
-    subtitle: str(raw.subtitle),
+    subtitle: str(raw.subtitle).replace(/\bF&B\b/g, "food & beverage"),
     note: feeling,
     accent,
     palette: palettes[accent],
     illustration: str(raw.illustration) || null,
     // Cover = top of the project page; thumbnail = card image on Home / Work / related projects.
     // Each falls back to the other, so uploading just one is enough.
-    cover: image(raw.cover, raw.title) || image(raw.thumbnail, raw.title),
-    thumbnail: image(raw.thumbnail, raw.title) || image(raw.cover, raw.title),
+    cover: image(raw.cover, title) || image(raw.thumbnail, title),
+    coverCaption: str(raw.coverCaption),
+    thumbnail: image(raw.thumbnail, title) || image(raw.cover, title),
     aspect: aspectOf(raw.aspect),
-    tags: list(raw.tags).map(String),
+    tags: list(raw.tags).map(String).map(spellOut).map((t) => (slug === "unhumble" && /^gifting$/i.test(t) ? "Games & Entertainment" : t)),
     // showcase
     brief: str(raw.brief),
     gallery: list(raw.gallery).map((g) => {
-      const img = image(g.src ?? g.image, g.description || g.title || g.alt || raw.title);
+      const img = image(g.src ?? g.image, g.description || g.title || g.alt || title);
       let caption = str(g.title ?? g.caption);
       if (raw.slug === "lighthouse-canton" && caption.toLowerCase() === "website") {
         caption = "Pitch deck";

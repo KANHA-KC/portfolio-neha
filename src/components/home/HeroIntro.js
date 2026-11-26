@@ -1,4 +1,6 @@
+import { Fragment } from "react";
 import Link from "next/link";
+import { TOTALS } from "@/content/totals";
 
 // Centred intro under the hero: who Neha is, the numbers, and the two calls to action.
 export default function HeroIntro({ profile }) {
@@ -14,11 +16,12 @@ export default function HeroIntro({ profile }) {
         <span className="hero-intro-aside--mobile">(Back when CTRL+Z was my best friend.)</span>
       </p>
       <p className="hero-intro-stats">
-        <span><b>5+</b> years</span>
-        <span aria-hidden="true">·</span>
-        <span><b>50</b> brands</span>
-        <span aria-hidden="true">·</span>
-        <span><b>20+</b> industries</span>
+        {[TOTALS.years, TOTALS.brands, TOTALS.industries].map((t, i) => (
+          <Fragment key={t.label}>
+            {i > 0 && <span aria-hidden="true">·</span>}
+            <span><b>{t.value}{t.suffix}</b> {t.label}</span>
+          </Fragment>
+        ))}
       </p>
       <div className="hero-intro-actions">
         <Link href="/work" className="btn btn--aqua" data-cursor="peek" data-surface="light">

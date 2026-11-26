@@ -26,6 +26,7 @@ const withSeedMedia = (input = {}) => {
   const out = { ...raw };
   if (!out.cover) out.cover = local.cover;
   if (!out.thumbnail) out.thumbnail = local.thumbnail;
+  if (!out.coverCaption) out.coverCaption = local.coverCaption;
   if (!hasMedia(out.gallery) && hasMedia(local.gallery)) out.gallery = local.gallery;
   if (!(Array.isArray(out.videos) && out.videos.length) && local.videos) out.videos = local.videos;
   return out;

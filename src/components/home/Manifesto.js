@@ -101,7 +101,8 @@ export default function Manifesto({ text }) {
           </p>
           <h2 id="brands-heading" className="logo-band-title">
             <span className="sr-only">Brands I’ve worked on, </span>
-            through <mark className="logo-band-highlight">Schbang, Webenza</mark> &amp; <mark className="logo-band-highlight">freelance</mark>
+            through <mark className="logo-band-highlight">Schbang, Webenza</mark>{" "}
+            <span style={{ whiteSpace: "nowrap" }}>&amp; <mark className="logo-band-highlight">freelance</mark></span>
           </h2>
         </div>
         <BrandLogos />
@@ -156,7 +157,7 @@ export default function Manifesto({ text }) {
             </svg>
           </div>
 
-          <span className="mf-pop mf-pop--b hand">since 2018</span>
+          <span className="mf-pop mf-pop--b hand">since 2020</span>
         </div>
       </section>
     </div>

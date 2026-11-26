@@ -1,9 +1,9 @@
 // The logo files are transparent PNGs used as CSS masks, so the mark can take any brand colour.
 // `gradient` paints the mark in the brand's neon → cyan gradient (for dark/teal backgrounds).
 // The vector original is /brand/mark.svg; the favicon/app icons are /brand/icon-*.png.
-const V = "?v=2026-11"; // bump when the files change so browsers drop the old mark
+const V = "?v=2026-11b"; // bump when the files change so browsers drop the old mark
 const marks = {
-  monogram: { src: `/brand/monogram.png${V}`, ratio: 414 / 256 },
+  monogram: { src: `/brand/monogram.png${V}`, ratio: 404 / 256 },
   wordmark: { src: "/brand/wordmark.png", ratio: 249 / 127 },
   full: { src: `/brand/logo-full.png${V}`, ratio: 1009 / 256 }
 };

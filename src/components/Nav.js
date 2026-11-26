@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
 import TopBanner from "@/components/TopBanner";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { surfaceIsDark } from "@/lib/surface";
 
 const baseLinks = [
   { href: "/work", label: "Work" },
@@ -18,6 +19,8 @@ export default function Nav({ profile }) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [overDark, setOverDark] = useState(false); // is the section right under the bar dark (teal)?
+  const headerRef = useRef(null);
   const [open, setOpen] = useState(false);
   const overlayRef = useRef(null);
   // Easter egg: 4+ quick clicks on the logo replay the intro loader.
@@ -36,16 +39,30 @@ export default function Nav({ profile }) {
 
   useEffect(() => {
     let last = window.scrollY;
+    let frame = 0;
+    // Look at what's just under the bar's bottom edge (skipping the bar itself and the cursor).
+    const probe = () => {
+      frame = 0;
+      // Height, not position: the bar may be mid-slide (hidden on scroll down) when this runs.
+      const h = headerRef.current?.querySelector(".nav-inner")?.offsetHeight ?? 64;
+      setOverDark(surfaceIsDark(window.innerWidth / 2, Math.min(h + 2, window.innerHeight - 1), ".nav, .tc"));
+    };
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 20);
       setHidden(y > 240 && y > last);
       last = y;
+      if (!frame) frame = requestAnimationFrame(probe);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", open);
@@ -71,12 +88,15 @@ export default function Nav({ profile }) {
 
   // The home, about, contact, and project heroes are teal, so the bar uses light ink until it gets its cream background on scroll.
   const isProjectPage = pathname.startsWith("/work/") && !pathname.startsWith("/work/category");
-  const onDark = (pathname === "/" || pathname === "/contact" || pathname === "/about" || isProjectPage) && !scrolled && !open;
+  const heroDark = (pathname === "/" || pathname === "/contact" || pathname === "/about" || isProjectPage) && !scrolled;
+  // Scrolled over a dark section: the bar turns to deep-teal glass with light ink instead of the light glass.
+  const glassDark = scrolled && overDark && !open;
+  const onDark = (heroDark || glassDark) && !open;
 
   const isActive = (href) => pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <header className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""} ${onDark ? "nav--on-dark" : ""}`}>
+    <header ref={headerRef} className={`nav ${hidden && !open ? "is-hidden" : ""} ${scrolled ? "is-scrolled" : ""} ${onDark ? "nav--on-dark" : ""} ${glassDark ? "nav--glass-dark" : ""}`}>
       {pathname === "/" && <TopBanner />}
       <div className="nav-inner">
         <Link href="/" className="nav-mark" aria-label={`${profile.name} — home`} data-cursor="home" onClick={onMarkClick}>

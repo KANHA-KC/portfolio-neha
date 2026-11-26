@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // A strip of portrait videos. Each plays muted while on screen; clicking one turns its sound on (and the others off).
-export default function Reels({ videos, title, heading = "AI videos" }) {
+export default function Reels({ videos, title, heading = "AI Videos" }) {
   const listRef = useRef(null);
   const [loud, setLoud] = useState(-1);
 
@@ -36,7 +36,13 @@ export default function Reels({ videos, title, heading = "AI videos" }) {
     <section className="reels" aria-label={`${title} videos`}>
       <div className="reels-head">
         <h2>{heading}</h2>
-        <span className="hand">tap one for sound</span>
+        <span className="hand reels-hint">
+          <svg className="reels-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" />
+            <path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a7.8 7.8 0 0 1 0 11" />
+          </svg>
+          tap one for sound
+        </span>
       </div>
       <ul className="reels-list" ref={listRef}>
         {videos.map((v, i) => (

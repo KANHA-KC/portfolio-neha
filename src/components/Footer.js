@@ -73,7 +73,7 @@ export default function Footer({ site, categories = [] }) {
         </nav>
         <div>
           <p className="footer-label">Elsewhere</p>
-          {site?.socials?.map((s) => (
+          {site?.socials?.filter((s) => !/calendly|chai|chat/i.test(`${s.label} ${s.href}`)).map((s) => (
             <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">
               {s.label} ↗
             </a>
@@ -81,11 +81,6 @@ export default function Footer({ site, categories = [] }) {
           {!site?.socials?.some((s) => /email|mail/i.test(s.label)) && (
             <a href={`mailto:${site?.email || "nehaondhiadesign@gmail.com"}`}>
               Email ↗
-            </a>
-          )}
-          {!site?.socials?.some((s) => /calendly|chat/i.test(s.label)) && (
-            <a href={site?.calendly || "https://calendly.com/nehaondhia/chai-chat"} target="_blank" rel="noopener noreferrer">
-              Book a chai chat ↗
             </a>
           )}
           {!site?.socials?.some((s) => /resume/i.test(s.label)) && (

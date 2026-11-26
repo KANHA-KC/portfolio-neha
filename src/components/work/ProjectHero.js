@@ -1,3 +1,9 @@
+// Hyphenated words ("budget-friendly") never split across lines: the whole word wraps instead.
+const keepCompounds = (text) =>
+  String(text)
+    .split(/(\S+-\S+)/)
+    .map((part, i) => (i % 2 ? <span key={i} style={{ whiteSpace: "nowrap" }}>{part}</span> : part));
+
 export default function ProjectHero({ project: p, num, meta }) {
   return (
     <header className="case-hero">
@@ -9,7 +15,17 @@ export default function ProjectHero({ project: p, num, meta }) {
           </p>
           <h1 className="case-title">{p.title}</h1>
           {(p.brief || p.subtitle || p.summary) && (
-            <p className="case-sub">{p.brief || p.subtitle || p.summary}</p>
+            <p className="case-sub">
+              {/* a line break in the CMS text starts a new line on the page */}
+              {String(p.brief || p.subtitle || p.summary)
+                .split("\n")
+                .map((line, i) => (
+                  <span key={i}>
+                    {i > 0 && <br />}
+                    {keepCompounds(line)}
+                  </span>
+                ))}
+            </p>
           )}
         </div>
       </div>

@@ -25,8 +25,8 @@ export default async function ContactPage() {
             <span className="contact-wave" aria-hidden="true">👋</span>
           </h1>
           <p className="page-lede">
-            Vacant seat in your team, need a new brand identity, a logo, illustration,<br className="contact-lede-br" />{" "}
-            or a chai chat about design. My inbox is open.
+            Vacant seat in your team? Need a new brand identity, a logo, illustration?<br className="contact-lede-br" />{" "}
+            Or a chai chat about design? My inbox is open.
           </p>
         </div>
       </section>

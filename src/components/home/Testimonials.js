@@ -38,7 +38,7 @@ export default function Testimonials({ items = [] }) {
     <section className="testimonials-section" aria-labelledby="testimonials-title">
       <div className="testimonials-head">
         <h2 id="testimonials-title" className="section-title">
-          (They said it, <em>not me.</em>)
+          (They said it, <span style={{ whiteSpace: "nowrap" }}><em>not me.</em>)</span>
         </h2>
       </div>
 

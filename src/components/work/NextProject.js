@@ -8,7 +8,7 @@ export default function NextProject({ next }) {
       data-cursor="next"
       style={{ "--next-wash": next.palette.wash, "--next-spark": next.palette.spark }}
     >
-      <span className="eyebrow">Next — {next.categoryTitle}</span>
+      <span className="eyebrow">Next</span>
       <span className="case-next-title">{next.title}</span>
       <span className="case-next-arrow" aria-hidden="true">→</span>
     </Link>

@@ -13,7 +13,7 @@ const LOGOS = [
   { name: "Airtel Business", file: "airtel-business", w: 859, h: 274 },
   { name: "Lighthouse Canton", file: "lighthouse-canton", w: 859, h: 210 },
   { name: "Drink Prime", file: "drink-prime", w: 701, h: 500 },
-  { name: "Sterling", file: "sterling", w: 860, h: 310 },
+  { name: "Sterling Holidays", file: "sterling", w: 860, h: 310 },
   { name: "Orion Uptown", file: "orion-uptown", w: 859, h: 230 }
 ].map((l) => ({
   src: `/logo-marquee/${l.file}.png`,

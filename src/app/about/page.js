@@ -10,7 +10,7 @@ import JsonLd from "@/components/JsonLd";
 import { absolute, categoryPath, clip, SITE_OG_IMAGES } from "@/lib/seo";
 import { getCategories, getExperience, getProfile, getProjects } from "@/content";
 import AboutKpis from "@/components/AboutKpis";
-import { cacheLife } from "next/cache";
+import { TOTALS } from "@/content/totals";
 
 export async function generateMetadata() {
   const p = await getProfile();
@@ -46,7 +46,9 @@ const rich = (text) => {
           if (part.startsWith("[[") && part.endsWith("]]")) {
             const [label, slug] = part.slice(2, -2).split("|").map((x) => x.trim());
             const imageSrc = peekImage(slug || peekSlug(label));
-            return <HoverPeek key={i} src={imageSrc} alt={label}>{label}</HoverPeek>;
+            // Ratan Tata photo: show its bottom edge so the empty ceiling is cropped, not zoomed
+            const position = imageSrc.includes("ratan-tata") ? "center bottom" : undefined;
+            return <HoverPeek key={i} src={imageSrc} alt={label} position={position}>{label}</HoverPeek>;
           }
           return part.length > 2 && part.startsWith("*") && part.endsWith("*") ? <em key={i}>{part.slice(1, -1)}</em> : part;
         })}
@@ -120,35 +122,22 @@ function Bloom({ className }) {
   );
 }
 
-// "+N more" tail for a list of names.
-const sample = (names, n = 2) => (names.length > n ? `${names.slice(0, n).join(", ")} +${names.length - n}` : names.join(", "));
-
-// The current year, cached for a day (a bare new Date() isn't allowed during prerender).
-async function thisYear() {
-  "use cache";
-  cacheLife("days");
-  return new Date().getFullYear();
-}
-
-// The "at a glance" numbers, all worked out from the CMS so they stay true as projects and roles are added.
-function glance(projects, experience, year) {
-  const years = projects.map((p) => Number(String(p.year).match(/\d{4}/)?.[0])).filter(Boolean);
-  const since = years.length ? Math.min(...years) : null;
+// The "at a glance" row: lifetime totals (shared with the home intro).
+// The hover lines name real examples from the CMS.
+function glance(projects) {
   const clients = [...new Set(projects.map((p) => p.client || p.title).filter(Boolean))];
   const sectors = [...new Set(projects.map((p) => p.sector).filter(Boolean))];
-  // Design roles only (the early fashion job isn't an agency).
-  const agencies = [...new Set(experience.filter((e) => !/fashion/i.test(e.role)).map((e) => e.company?.replace(/\s+(India|Digital Solutions|Pvt\.? Ltd\.?|LLP)$/i, "")).filter(Boolean))];
+  const { years, brands, industries } = TOTALS;
   return [
-    since && { value: year - since, suffix: "+", label: "years designing", detail: `since ${since}` },
-    clients.length && { value: clients.length, suffix: "", label: "brands in the portfolio", detail: sample(clients) },
-    sectors.length && { value: sectors.length, suffix: "", label: "industries", detail: sample(sectors) },
-    agencies.length && { value: agencies.length, suffix: "", label: agencies.length === 1 ? "agency" : "agencies", detail: agencies.join(" · ") }
+    { ...years, detail: "agency & freelance" },
+    { ...brands, detail: clients.length ? `incl. ${clients.slice(0, 3).join(", ")}` : "" },
+    { ...industries, detail: sectors.length ? `${sectors.slice(0, 2).join(", ")} & more` : "" }
   ].filter(Boolean);
 }
 
 export default async function AboutPage() {
-  const [profile, experience, categories, projects, year] = await Promise.all([getProfile(), getExperience(), getCategories(), getProjects(), thisYear()]);
-  const kpis = glance(projects, experience, year);
+  const [profile, experience, categories, projects] = await Promise.all([getProfile(), getExperience(), getCategories(), getProjects()]);
+  const kpis = glance(projects);
   const story = profile.story;
   const kits = [
     { key: "design", title: "Design Toolkit", items: profile.designTools },
@@ -167,7 +156,13 @@ export default async function AboutPage() {
               <Bloom className="about-wave" />
             </span>
           </h1>
-          <p className="page-lede about-lede">{profile.intro}</p>
+          <p className="page-lede about-lede">
+            {/* set line breaks, as Neha wants them read */}
+            <span className="about-lede-line">A self-taught illustrator and brand designer based in India.</span>{" "}
+            <span className="about-lede-line">Agency-sharpened and designing since before AI. I work</span>{" "}
+            <span className="about-lede-line">across illustration, brand identity, and graphic design to</span>{" "}
+            <span className="about-lede-line">give ideas a distinct personality and bring brands to life.</span>
+          </p>
           {profile.availability && <span className="hand about-hand">{profile.availability.toLowerCase()} — say hi!</span>}
           <AboutKpis items={kpis} />
         </div>
@@ -271,7 +266,7 @@ export default async function AboutPage() {
               )}
               {profile.workWith.length > 0 && (
                 <aside className="notepad-stickies" aria-label="What it’s like to work with me">
-                  <p className="hand notepad-stickies-label">what it’s like to work with me ↓</p>
+                  <p className="hand notepad-stickies-label">what it’s like to work with me</p>
                   <ul>
                     {profile.workWith.map((w, i) => (
                       <li key={w.title} className={`sticky sticky--${(i % 3) + 1}`}>

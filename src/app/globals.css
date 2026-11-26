@@ -37,7 +37,7 @@
   --accent-text: var(--teal);
   --burnt: var(--accent-text);
   --gold: var(--neon);
-  --soft-gold: #dce86a;
+  --soft-gold: var(--neon); /* one neon everywhere */
   --gold-wash: #f6fad6;
   --deep-pap: var(--accent-text);
   --pap: var(--neon);
@@ -2198,7 +2198,7 @@ html.is-marqueeing * {
   font-family: var(--f-hand);
   font-style: normal;
   font-weight: 500;
-  font-size: 1.15em;
+  font-size: 1.035em; /* 10% smaller than the earlier 1.15em */
   line-height: 1;
   letter-spacing: 0.01em;
   color: var(--teal);
@@ -3975,12 +3975,11 @@ html.is-marqueeing * {
   padding: 18px 20px 20px;
   border-radius: var(--r-lg);
   background: var(--tint);
-  rotate: var(--rot);
 }
-.story-stat--1 { --tint: var(--gold-wash); --rot: -1.5deg; }
-.story-stat--2 { --tint: var(--aqua-wash); --rot: 1deg; }
-.story-stat--3 { --tint: var(--mist); --rot: 0.6deg; }
-.story-stat--4 { --tint: var(--pap-wash); --rot: -1deg; }
+.story-stat--1 { --tint: var(--gold-wash); }
+.story-stat--2 { --tint: var(--aqua-wash); }
+.story-stat--3 { --tint: var(--aqua-wash); }
+.story-stat--4 { --tint: var(--pap-wash); }
 .story-stat b {
   font-family: var(--f-display);
   letter-spacing: var(--aubrey-tracking);
@@ -3999,7 +3998,6 @@ html.is-marqueeing * {
   color: var(--muted);
 }
 .story-body {
-  padding-top: clamp(0px, 3vw, 44px);
   max-width: 60ch;
 }
 .story-body p {
@@ -5425,8 +5423,12 @@ a:hover .media-icon {
 /* ---- project reels (portrait videos) ---- */
 .reels {
   max-width: 1200px;
-  margin: clamp(24px, 4vw, 48px) auto 0;
+  /* same gap above (after the cover) and below (before the gallery) */
+  margin: clamp(48px, 7vw, 96px) auto;
   padding: 0 var(--g);
+}
+.reels + .mosaic-wrap {
+  margin-top: 0;
 }
 .reels-head {
   display: flex;
@@ -5446,6 +5448,24 @@ a:hover .media-icon {
   font-size: 1.3rem;
   color: var(--muted);
 }
+.reels-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.reels-hint-icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.reels-hint-icon path:first-child {
+  fill: currentColor;
+}
 .reels-list {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -5454,9 +5474,6 @@ a:hover .media-icon {
 .reel {
   position: relative;
   margin: 0;
-}
-.reel:nth-child(even) {
-  transform: translateY(22px);
 }
 .reel-frame {
   position: relative;
@@ -6697,13 +6714,16 @@ a:hover .media-icon {
   .hw-cue { font-size: 1rem; }
   .hero-intro { padding-top: 28px; padding-bottom: 40px; gap: 10px; }
   .hero-intro-lead { font-size: 1.3rem; line-height: 1.2; }
-  .hero-intro-stats { font-size: 0.85rem; }
+  .hero-intro-aside { font-size: 0.95rem; line-height: 1.4; }
+  /* small labels, big numbers: the figures carry the row */
+  .hero-intro-stats { font-size: 0.75rem; align-items: baseline; gap: 4px 10px; }
+  .hero-intro-stats b { font-size: 1.35rem; line-height: 1; }
 
   .logo-band-title { font-size: 1.35rem; }
 
   /* manifesto: drop the floating badge/line/sticker so the text breathes */
   .mf-side-wrap { display: none; }
-  .manifesto-text { font-size: 1.45rem; line-height: 1.2; max-width: none; }
+  .manifesto-text { font-size: 1.45rem; line-height: 1.2; max-width: none; text-align: center; }
   .home-brand-manifesto .manifesto-text { margin-top: 8px; }
 
   .section-title { font-size: clamp(2rem, 9vw, 2.4rem); line-height: 1.05; }
@@ -6736,9 +6756,24 @@ a:hover .media-icon {
 .footer-grid a:hover {
   transform: translateY(-2px);
 }
+/* phones: Pages · Disciplines · Elsewhere stay as three columns, with smaller type so they fit */
 @media (max-width: 760px) {
-  .footer-grid > :last-child {
-    grid-column: 1 / -1; /* the third column wraps onto its own row, centred under the other two */
+  .footer .footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px 10px;
+    font-size: 0.82rem;
+  }
+  .footer-grid .footer-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  .footer-grid a {
+    width: auto;
+    line-height: 1.3;
+  }
+  .footer .footer-bottom {
+    align-items: center;
+    text-align: center;
   }
 }
 
@@ -6950,4 +6985,140 @@ a:hover .media-icon {
 /* the note's words are hit-testable so the cursor reads the neon highlight under it (the arrow still ignores the mouse) */
 .about-hair-note .about-hair-text {
   pointer-events: auto;
+}
+
+/* home hero: name sits a little lower than "Hi" on desktop */
+@media (min-width: 761px) { .hw--name { top: 30%; } }
+
+/* manifesto: handwritten phrases sit on a neon marker */
+.manifesto-text em {
+  color: var(--teal-0);
+  background: linear-gradient(transparent 14%, var(--neon) 14% 90%, transparent 90%);
+  padding: 0 0.18em;
+  border-radius: 4px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* the marker rides on each split word, so it fades in with the text (and closes over the gaps) */
+.manifesto-text em:has(.mw) { background: none; padding: 0; }
+.manifesto-text em .mw {
+  background: linear-gradient(transparent 14%, var(--neon) 14% 90%, transparent 90%);
+  padding: 0 0.62em 0 0.06em;
+  margin-right: -0.6em;
+}
+.manifesto-text em .mw:first-child { padding-left: 0.18em; }
+.manifesto-text em .mw:last-child { padding-right: 0.18em; margin-right: 0; }
+/* manifesto layout: first line flush left */
+.manifesto-p:first-child { text-indent: 0; }
+/* manifesto: staggered — second paragraph steps in to the right */
+@media (min-width: 761px) {
+  .manifesto-p + .manifesto-p { margin-left: clamp(72px, 13vw, 200px); }
+}
+
+/* home: the same gap above "They said it, not me." (from the work cards) and below the testimonials (to the footer) */
+@media (min-width: 681px) {
+  :root {
+    --testi-gap: clamp(72px, 7vw, 112px);
+  }
+  .work-scatter {
+    padding-bottom: 0;
+  }
+  .testimonials-section {
+    padding-top: calc(var(--testi-gap) - 6px); /* the heading's line box adds ~6px above the letters */
+    padding-bottom: calc(var(--testi-gap) - 45px); /* + the footer's 40px top margin and the track's leftover ~5px */
+  }
+  /* the card track is 490px tall but the cards end ~60px earlier: pull that empty band back */
+  .testi-marquee {
+    margin-bottom: -86px; /* 30px shadow room + 56px empty track */
+  }
+}
+
+/* project page: caption under the cover image, in the same hand as the gallery captions */
+.showcase-cover .cover-caption {
+  font-size: 1.25rem;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+/* nav scrolled over a dark (teal) section: deep-teal frosted glass instead of the light one */
+.nav.nav--glass-dark::before {
+  background: rgba(3, 65, 75, 0.72);
+  border-bottom-color: rgba(142, 234, 243, 0.16);
+}
+.nav::before {
+  transition: opacity 0.4s, background-color 0.35s ease, border-color 0.35s ease;
+}
+/* "Off the screen:" matches the rest of its line */
+.story-body p:last-child:not(:first-child) em,
+.story-body p:last-child:not(:first-child) .peek { font-size: 1em; }
+.page.about .about-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 540px; }
+/* About intro: four set lines on wider screens, natural wrapping on phones */
+@media (min-width: 761px) {
+  .page.about .about-lede { max-width: none; }
+  .page.about .about-lede-line { display: block; white-space: nowrap; }
+}
+
+/* home hero on phones: the four words stacked on the left, the portrait on the right */
+@media (max-width: 760px) {
+  .hero4,
+  .hero4 .hero-cutout-wrap {
+    --cut-w: 60vw;
+  }
+  .hero4 {
+    --hw: 15vw;
+    --hero-center: calc(100% - var(--cut-w) / 2 + 2vw); /* portrait hugs the right edge */
+  }
+  .hero.hero4 {
+    height: calc(var(--cut-w) * 1.332 + 140px);
+  }
+  /* the glow behind her fades out before the hero's bottom edge, so it doesn't stop in a hard line above the intro */
+  .hero.hero4::before {
+    background:
+      radial-gradient(42% 40% at var(--hero-center, 50%) 55%, rgba(142, 234, 243, 0.24), transparent 70%),
+      radial-gradient(45% 50% at 100% 0%, rgba(3, 65, 75, 0.7), transparent 70%),
+      radial-gradient(circle at 1px 1px, rgba(142, 234, 243, 0.14) 1.2px, transparent 1.6px) 0 0 / 22px 22px;
+  }
+  .hw--left,
+  .hw--right {
+    left: var(--g);
+    right: auto;
+    bottom: auto;
+    text-align: left;
+  }
+  .hw--hi { top: 118px; }
+  .hw--name { top: calc(118px + 16vw); }
+  .hw--im { top: calc(118px + 40vw); }
+  .hw--me { top: calc(118px + 56vw); }
+  .hw-cue {
+    left: 0.1em;
+    right: auto;
+  }
+  .hw--name .hw-input {
+    margin-left: 0;
+    max-width: 50vw;
+  }
+}
+/* phones, revised: bigger portrait pushed further right (it may run off the edge), words a bit lower */
+@media (max-width: 760px) {
+  .hero4,
+  .hero4 .hero-cutout-wrap {
+    --cut-w: 74vw;
+  }
+  .hero4 {
+    --hero-center: calc(100% - var(--cut-w) / 2 + 12vw);
+  }
+  .hero.hero4 {
+    height: calc(var(--cut-w) * 1.332 + 110px);
+  }
+  .hw--hi { top: 150px; }
+  .hw--name { top: calc(150px + 17vw); }
+  .hw--im { top: calc(150px + 44vw); }
+  .hw--me { top: calc(150px + 61vw); }
+}
+/* phones: the four hero words on an even 18vw rhythm, starting a little lower */
+@media (max-width: 760px) {
+  .hw--hi { top: 175px; }
+  .hw--name { top: calc(175px + 18vw); }
+  .hw--im { top: calc(175px + 36vw); }
+  .hw--me { top: calc(175px + 54vw); }
 }

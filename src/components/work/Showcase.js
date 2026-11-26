@@ -20,9 +20,10 @@ export default function Showcase({ project: p, next }) {
       />
 
       {/* Not wrapped in <Reveal>: this is the page's largest image, so it must paint immediately. */}
-      <div className="case-cover showcase-cover">
+      <figure className="case-cover showcase-cover">
         <ProjectVisual project={p} sizes="(max-width: 1200px) 100vw, 1200px" preload />
-      </div>
+        {p.coverCaption && p.cover && <figcaption className="hand cover-caption">{p.coverCaption}</figcaption>}
+      </figure>
 
       {p.videos.length > 0 && <Reels videos={p.videos} title={p.title} />}
       {p.gallery.length > 0 && <Gallery project={p} />}

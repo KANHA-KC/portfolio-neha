@@ -18,7 +18,7 @@ export default async function Image() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 124, lineHeight: 1, letterSpacing: -4 }}>{p.name}</div>
-          <div style={{ display: "flex", fontSize: 48, fontFamily: "Montreal", fontStyle: "italic", color: "#cfdf0b", marginTop: 18 }}>Brand, Graphic Designer, Illustrator</div>
+          <div style={{ display: "flex", fontSize: 48, fontFamily: "Montreal", fontStyle: "italic", color: "#c7db0a", marginTop: 18 }}>Brand, Graphic Designer, Illustrator</div>
         </div>
         <div style={{ display: "flex", fontSize: 30, color: C.aqua }}>Logo design · Brand identity · Packaging · UX</div>
       </div>

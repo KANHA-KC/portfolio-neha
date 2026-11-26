@@ -31,7 +31,7 @@ export default function SelectedWork({ projects, categories }) {
       <header className="section-head">
         <div>
           <h2 id="work-title" className="section-title">
-            Brands I’ve given a <em>voice</em>
+            Brands I’ve given <span style={{ whiteSpace: "nowrap" }}>a <em>voice</em></span>
           </h2>
           <span className="hand section-hand">A few of the 50 ↓</span>
         </div>

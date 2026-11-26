@@ -76,13 +76,11 @@ export async function generateMetadata() {
       "design systems"
     ],
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
+    // One favicon everywhere: public/favicon.ico
     icons: {
-      icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
-        { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" }
-      ],
-      apple: { url: "/brand/apple-icon.png", sizes: "180x180" }
+      icon: [{ url: "/favicon.ico", sizes: "any" }],
+      shortcut: "/favicon.ico",
+      apple: "/favicon.ico"
     },
     openGraph: {
       title,
