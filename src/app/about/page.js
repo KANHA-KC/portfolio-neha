@@ -125,12 +125,12 @@ function Bloom({ className }) {
 // The "at a glance" row: lifetime totals (shared with the home intro).
 // The hover lines name real examples from the CMS.
 function glance(projects) {
-  const clients = [...new Set(projects.map((p) => p.client || p.title).filter(Boolean))];
   const sectors = [...new Set(projects.map((p) => p.sector).filter(Boolean))];
   const { years, brands, industries } = TOTALS;
   return [
     { ...years, detail: "agency & freelance" },
-    { ...brands, detail: clients.length ? `incl. ${clients.slice(0, 3).join(", ")}` : "" },
+    // the big names she worked on at agencies, rather than the first few case studies
+    { ...brands, detail: "incl. Salesforce, Amazon, Airtel Business, TCS" },
     { ...industries, detail: sectors.length ? `${sectors.slice(0, 2).join(", ")} & more` : "" }
   ].filter(Boolean);
 }
@@ -177,6 +177,13 @@ export default async function AboutPage() {
               <g stroke="#fff" strokeWidth="2.6" strokeOpacity="0.9">
                 <path d="M 12 6 C 6 70, 60 118, 146 120" />
                 <path d="M 126 106 L 148 120 L 126 134" />
+              </g>
+            </svg>
+            {/* phones/tablets: a tall, narrow arrow that drops down the photo to the hair */}
+            <svg className="about-hair-arrow about-hair-arrow--tall" viewBox="0 0 100 220" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <g stroke="#fff" strokeWidth="2.6" strokeOpacity="0.9">
+                <path d="M 20 4 C 4 80, 20 170, 86 206" />
+                <path d="M 76 190 L 86 206 L 68 208" />
               </g>
             </svg>
           </div>

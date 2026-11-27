@@ -212,7 +212,7 @@ export const projects = [
     tags: ["Hospitality", "AI Videos", "Brand Assets", "Brochures"],
     accent: "gold",
     cover: shot("sterling", "1.jpg"),
-    coverCaption: "Instagram travel campaign",
+    coverCaption: "Instagram campaign statics",
     thumbnail: thumb("sterling"),
     aspect: "landscape",
     feeling: "Warm · Welcoming",

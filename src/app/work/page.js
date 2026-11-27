@@ -24,7 +24,7 @@ export default async function WorkPage() {
           The <em>work</em>
         </h1>
         <p className="page-lede">
-          Logos, brand identities, packaging, marketing collateral, illustrations, and AI videos.
+          Logos, brand identities, packaging, illustrations, and much more.
           <br />
           Pick a lens below — or just wander.
         </p>

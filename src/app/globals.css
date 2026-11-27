@@ -1358,11 +1358,11 @@ html.is-marqueeing * {
 }
 .menu-bg-mark {
   position: absolute;
-  right: -14vw;
+  right: var(--g); /* fully on screen, not cut by the right edge */
   bottom: 10vh;
   color: var(--teal-0);
   opacity: 0.7;
-  transform: rotate(-12deg);
+  transform: none; /* straight, like the logo everywhere else */
 }
 
 /* ---------- hero ---------- */
@@ -2985,7 +2985,7 @@ html.is-marqueeing * {
 .footer {
   background: var(--teal-0);
   color: var(--light-aqua);
-  padding: clamp(80px, 12vw, 160px) var(--g) 24px;
+  padding: clamp(64px, 7vw, 112px) var(--g) 24px;
   position: relative;
   overflow: hidden;
   border-radius: clamp(28px, 4vw, 56px) clamp(28px, 4vw, 56px) 0 0;
@@ -7121,4 +7121,124 @@ a:hover .media-icon {
   .hw--name { top: calc(175px + 18vw); }
   .hw--im { top: calc(175px + 36vw); }
   .hw--me { top: calc(175px + 54vw); }
+}
+
+/* work page: a proper gap between the last row of cards and the footer (+ the footer's 40px top margin) */
+.work-page {
+  padding-bottom: calc(clamp(72px, 7vw, 112px) - 40px);
+}
+
+/* about hero on phones: the photo sits right under "Hello, I'm Neha", then the intro and the numbers */
+@media (max-width: 900px) {
+  .page.about .about-hero {
+    row-gap: 0;
+  }
+  .page.about .about-hero-copy {
+    display: contents;
+  }
+  .page.about .about-title { order: 1; }
+  .page.about .about-photo {
+    order: 2;
+    margin-top: 28px;
+    margin-bottom: 12px;
+  }
+  .page.about .about-lede,
+  .page.about .about-hand { order: 3; }
+  .page.about .about-kpis { order: 4; }
+}
+/* the numbers stay three across on phones, so the third one keeps its divider */
+@media (max-width: 640px) {
+  .about-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .about-kpis .kpi:nth-child(3) {
+    border-left: 1.5px solid color-mix(in srgb, var(--teal) 14%, transparent);
+    padding-left: clamp(12px, 1.4vw, 18px);
+    border-top: 0;
+  }
+}
+
+/* about, phones/tablets: hair note sits over the photo's top edge (half on teal, half on the photo), with a big arrow into the hair */
+@media (max-width: 900px) {
+  .about-hair-note {
+    position: absolute;
+    top: -3%;
+    left: 3%;
+    right: auto;
+    z-index: 5;
+    margin: 0;
+    align-items: flex-start;
+  }
+  .about-hair-note .about-hair-text {
+    text-shadow: 0 1px 3px rgba(3, 32, 38, 0.8), 0 0 12px rgba(3, 32, 38, 0.45); /* reads over sky and clouds */
+  }
+  .about-hair-note .about-hair-arrow {
+    width: clamp(130px, 40vw, 220px);
+    margin: 2px 0 0 clamp(36px, 10vw, 70px);
+  }
+}
+/* about, phones/tablets (revised): words sit just above the photo (5px gap); the arrow starts at the photo's
+   top edge and runs down to the teal ends of the hair */
+@media (max-width: 900px) {
+  .about-hair-note {
+    top: var(--hair-top, 0px);
+    left: 6%;
+  }
+  .about-hair-note .about-hair-text {
+    position: absolute;
+    left: -3%;
+    bottom: calc(100% + 5px);
+    white-space: nowrap;
+    text-shadow: none;
+  }
+  .about-hair-note .about-hair-arrow {
+    width: clamp(200px, 64vw, 340px);
+    margin: 0;
+    transform-origin: 7.5% 4.3%; /* the arrow's tail */
+    transform: rotate(24deg);
+  }
+}
+@media (max-width: 900px) {
+  .about-hair-note {
+    top: 0;
+    margin-top: 4%; /* same as the photo's top padding, so the note starts exactly at the photo's top edge */
+  }
+  .about-hair-note .about-hair-arrow {
+    width: clamp(180px, 55vw, 300px);
+    transform: rotate(11deg);
+  }
+}
+@media (max-width: 900px) {
+  /* room above the photo for the hair note, so it clears "I'm Neha" */
+  .page.about .about-photo {
+    margin-top: 64px;
+  }
+  /* shorter, steeper arrow: ends just left of the teal hair ends */
+  .about-hair-note .about-hair-arrow {
+    width: clamp(160px, 48vw, 260px);
+    transform: rotate(24deg);
+  }
+}
+@media (max-width: 900px) {
+  /* arrow sits inside the photo: starts a little in from the left edge and drops to just left of the hair */
+  .about-hair-note .about-hair-arrow {
+    margin-left: 8vw;
+    transform: rotate(32deg);
+  }
+}
+/* the tall arrow replaces the wide one on phones/tablets */
+.about-hair-note .about-hair-arrow--tall {
+  display: none;
+}
+@media (max-width: 900px) {
+  .about-hair-note .about-hair-arrow:not(.about-hair-arrow--tall) {
+    display: none;
+  }
+  .about-hair-note .about-hair-arrow--tall {
+    display: block;
+    width: 25vw;
+    max-width: 150px;
+    margin: 0 0 0 4.5vw;
+    transform: none;
+  }
 }
