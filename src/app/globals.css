@@ -2295,15 +2295,19 @@ html.is-marqueeing * {
 }
 .mf-pop--b {
   position: absolute;
-  top: 405px;
-  right: 72px;
+  top: 409px;
+  right: 82px;
   font-size: 2.3rem;
-  color: var(--ink);
-  background: var(--soft-gold);
-  padding: 4px 18px 8px;
-  border-radius: 12px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--teal-0);
+  background: linear-gradient(transparent 14%, var(--neon) 14% 90%, transparent 90%);
+  padding: 0 0.18em;
+  border-radius: 4px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   transform: none;
-  box-shadow: var(--shadow);
+  box-shadow: none;
   white-space: nowrap;
 }
 
